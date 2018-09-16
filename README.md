@@ -1,2 +1,2 @@
-# jonathanchung.xyz
-Personal website
+# chjonsite
+Personal website: http://jonathanchung.xyz
