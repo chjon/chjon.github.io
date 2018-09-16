@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Jonathan Chung</title>
+		<link rel = "stylesheet" type = "text/css" href = "stylesheets/default.css"/>
+		<link rel = "stylesheet" type = "text/css" href = "stylesheets/sandpiles.css"/>
+	</head>
+	
+	<body>
+		<div id = "header">
+			<!-- Page Title -->
+			<h1>
+				<a href = "index.html">Jonathan Chung</a> /
+				<a href = "sandpiles.html">Sandpiles</a>
+			</h1>
+		</div>
+		
+		<div id = "content">
+			<!-- Sandpiles -->
+			<table id = "layout-table"><tr>
+				<!-- Graphic controls -->
+				<td class = "control-box">
+					<table class = "controls">
+						<tr><td>
+						<h2>Graphical Controls</h2>
+						</td></tr>
+						
+						<tr class = "scrollpane-wrapper"><td>
+							<div class = "scrollpane">
+								<table id = "color-selector-table" class = "input-container">
+									<tr>
+										<td><p class = "input-text">Colours: </p></td>
+									</tr>
+								</table>
+								
+								<br/>
+								<table class = "input-container">
+									<tr>
+										<td><input id = "input-rand" type = "button" value = "Randomize colours"></td>
+									</tr>
+								</table>
+								</td>
+							</div>
+						</td></tr>
+					</table>
+				</td>
+			
+				<!-- Canvas -->
+				<td>
+					<canvas id = "canvas"></canvas>
+				</td>
+				
+				<!-- Sandpile controls -->
+				<td class = "control-box">
+					<table class = "controls">
+						<tr><td>
+						<h2>System Controls</h2>
+						</td></tr>
+						
+						<tr class = "scrollpane-wrapper"><td>
+							<div class = "scrollpane">
+								<table class = "input-container">
+									<tr>
+										<td><p class = "input-text">Grid size: </p></td>
+										<td><input id = "text-grid-size" class = "text-input" type = "text"></td>
+									</tr>
+									
+									<tr>
+										<td><input id = "slider-grid-size" class = "slider" type = "range"></td>
+									</tr>
+								</table>
+								
+								<table class = "input-container">
+									<tr>
+										<td><p class = "input-text">Initial pile size: </p></td>
+										<td><input id = "text-init-size" class = "text-input" type = "text"></td>
+									</tr>
+									
+									<tr>
+										<td><input id = "slider-init-size" class = "slider" type = "range"></td>
+									</tr>
+								</table>
+
+								<br/>
+								<table class = "input-container">
+									<tr>
+										<td><input id = "input-run" type = "button" value = "Apply rules"></td>
+									</tr>
+								</td>
+							</div>
+						</td></tr>
+					</table>
+				</td>
+			</tr></table>
+			
+			<script src = "javascript/sandpiles/sandpiles.js"></script>
+		</div>
+	</body>
+</html>

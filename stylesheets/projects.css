@@ -1,0 +1,22 @@
+/* Class styles */
+img.link-icon {position: relative; top: 18px}
+
+/* Link styles*/
+a {text-decoration: none; color: #01DF01}
+a:visited {text-decoration: none; color: #01DF01}
+a:hover {color: #088A08}
+a.paragraph {text-decoration: underline; color: #ffffff}
+a.paragraph:visited {text-decoration: underline; color: #ffffff}
+a.paragraph:hover {text-decoration: underline; color: #01DF01}
+a.link-target {position:absolute}
+
+#L-Systems {margin-top: -65px}
+#BlockGame {margin-top: -40px}
+#DeltaT {margin-top: -60px}
+#Molecularize {margin-top: -60px}
+
+/* Image styles */
+#L-Systems_1 {float: left; margin-right: 25px}
+#BlockGame_1 {float: right; margin-left: 25px}
+#DeltaT_1 {float: left; margin-right: 25px}
+#Molecularize_1 {float:left; margin-right: 25px}

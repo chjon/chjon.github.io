@@ -1,0 +1,157 @@
+Leafy Koch Snowflake:
+	Axiom:
+		XDDXDDX
+	Production rules:
+		X to XDYA
+		Y to YDXD
+	Definitions:
+		X: step and draw
+		Y: step and draw
+		A: turn left
+		D: turn right
+	Angle:
+		60
+	Iterations:
+		10
+		
+Erratic Cubes:
+	Axiom:
+		X
+	Production rules:
+		X to XDYA
+		Y to YDXD
+	Definitions:
+		X: step and draw
+		Y: step and draw
+		A: turn left
+		D: turn right
+	Angle:
+		60
+	Iterations:
+		10
+		
+Loops:
+	Axiom:
+		X
+	Production rules:
+		X to XAYD
+		Y to YAXD
+	Definitions:
+		X: step and draw
+		Y: step and draw
+		A: turn left
+		D: turn right
+	Angle:
+		60
+	Iterations:
+		10
+		
+Binary tree:
+	Axiom:
+		X
+	Production rules:
+		X to YSAXLDX
+		Y to YY
+	Definitions:
+		X: step and draw
+		Y: step and draw
+		A: turn left
+		D: turn right
+		S: save
+		L: load
+	Angle:
+		45
+	Iterations:
+		9
+	
+Sierpinski's triangle:
+	Axiom:
+		XAYAY
+	Production rules:
+		X to XAYDXDYAX
+		Y to YY
+	Definitions:
+		X: step and draw
+		Y: step and draw
+		A: turn left
+		D: turn right
+	Angle:
+		120
+	Iterations:
+		9
+	
+Ternary tree Sierpinski's triangle:
+	Axiom:
+		X
+	Production rules:
+		X to YSAXLSXLDX
+		Y to YY
+	Definitions:
+		X: step and draw
+		Y: step and draw
+		A: turn left
+		D: turn right
+		S: save
+		L: load
+	Angle:
+		120
+	Iterations:
+		9
+		
+Koch snowflake:
+	Axiom:
+		XDDXDDX
+	Production rules:
+		X to XAXDDXAX
+	Definitions:
+		X: step and draw
+		A: turn left
+		D: turn right
+	Angle:
+		60
+	Iterations:
+		5
+		
+Koch crosses - Sierpinski's triangle:
+	Axiom:
+		X
+	Production rules:
+		X to XAXDXDXAX
+	Definitions:
+		X: step and draw
+		A: turn left
+		D: turn right
+	Angle:
+		90 - 120
+	Iterations:
+		5
+		
+Tri-Dragon curve
+	Axiom:
+		X
+	Production rules:
+		X to XAXDX
+	Definitions:
+		X: step and draw
+		A: turn left
+		D: turn right
+	Angle:
+		120
+	Iterations:
+		9
+		
+Sierpinski's Triangle Tree
+		Axiom:
+		X
+	Production rules:
+		X to XSAXDXLX
+	Definitions:
+		X: step and draw
+		A: turn left
+		D: turn right
+		S: save
+		L: load
+	Angle:
+		120
+	Iterations:
+		9
