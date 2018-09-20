@@ -1,0 +1,104 @@
+html {
+	overflow-x: hidden;
+}
+
+body {
+	overflow-x: hidden;
+	background-color: #FFFFFF;
+	margin: 0;
+}
+
+/* Canvas */
+#game-of-life-canvas {
+	height: 100%;
+	opacity: 1;
+	margin: 0;
+}
+
+#canvas-overlay {
+	position: absolute;
+	text-align: center;
+	height: 100%;
+}
+
+/* Text */
+.display-1 {
+	color: #FFFFFF;
+}
+
+.section-wrapper > .title-wrapper > .display-4 {
+	color: #FFFFFF;
+}
+
+.paragraph {
+	font-size: 18px;
+}
+
+.section-wrapper.text-wrapper {
+	width: 50%;
+}
+
+.text-wrapper {
+	padding-top: 5%;
+	padding-bottom: 5%;
+}
+
+/* Images */
+.project-image {
+	height: 50%;
+}
+
+/* Section wrappers */
+header, footer {
+	overflow-x: hidden;
+	text-align: center;
+	background-color: #000000;
+}
+
+.section-wrapper {
+	padding-top: 5%;
+	padding-bottom: 5%;
+}
+
+.section-odd {
+	background-color: #FFFFFF;
+}
+
+.section-even {
+	text-align: center;
+	background-color: #1B1B1B;
+}
+
+/* Carousel */
+.img-carousel {
+	padding-top: 5%;
+}
+
+.carousel-item-overlay {
+	position: absolute;
+	text-align: center;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-item-wrapper {
+	height: 100%;
+}
+
+.carousel-item-btn {
+	padding-top: 2%;
+	padding-bottom: 2%;
+	background-color: rgba(0, 0, 0, 0);
+	color: rgba(255, 255, 255, 0.3);
+	border: solid rgba(255, 255, 255, 0.3);
+}
+
+.carousel-item-btn:hover {
+	background-color: rgba(0, 0, 0, 1);
+	color: rgba(255, 255, 255, 1);
+	border: solid rgba(255, 255, 255, 1);
+}
+
+#project-image-carousel {
+	width: 70%;
+}
