@@ -4,7 +4,7 @@ canvas.width  = innerWidth * 0.9;
 canvas.height = innerHeight;
 
 // Constants
-const SCALE_FACTOR = 0.06;
+const SCALE_FACTOR = 0.1;
 const MAX_OPACITY = 0.4;
 const FRAME_DELAY = 100;
 const INITIAL_PROBABILITY = 0.7;
