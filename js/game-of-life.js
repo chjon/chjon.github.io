@@ -1,18 +1,19 @@
 // Set up canvas
 var canvas = document.getElementById("game-of-life-canvas");
-canvas.width = innerWidth * 0.9;
+canvas.width  = innerWidth * 0.9;
 canvas.height = innerHeight;
 
 // Constants
 const SCALE_FACTOR = 0.06;
-const GAME_WIDTH  = Math.floor(canvas.width * SCALE_FACTOR);
+const MAX_OPACITY = 0.4;
+const FRAME_DELAY = 100;
+const INITIAL_PROBABILITY = 0.6;
+
+const GAME_WIDTH = Math.floor(canvas.width * SCALE_FACTOR);
 const GAME_HEIGHT = Math.floor(canvas.height * SCALE_FACTOR);
 const PIXEL_SIZE = canvas.width / GAME_WIDTH;
 const MID_X = GAME_WIDTH / 2;
 const MID_Y = GAME_HEIGHT / 2;
-const MAX_OPACITY = 0.3;
-const FRAME_DELAY = 100;
-const INITIAL_PROBABILITY = 0.6;
 
 // Initialization
 let cells = [];

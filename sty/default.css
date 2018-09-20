@@ -20,21 +20,44 @@ body {
 	color: #FFFFFF;
 }
 
+.paragraph {
+	font-size: 18px;
+}
+
 /* Buttons */
 .title-btn {
 
 }
 
 /* Containers */
-header {
+header, footer {
 	overflow-x: hidden;
 	text-align: center;
 	background-color: #000000;
 }
 
-footer {
-	overflow-x: hidden;
+.section-odd {
+	background-color: #FFFFFF;
+}
+
+.section-even {
 	text-align: center;
+	background-color: #1B1B1B;
+}
+
+.title-wrapper {
+	padding-top: 5%;
+	padding-bottom: 5%;
+}
+
+.text-wrapper {
+	padding-top: 5%;
+	padding-bottom: 5%;
+	width: 50%;
+}
+
+.section-even > .title-wrapper > .display-4 {
+	color: #FFFFFF;
 }
 
 #canvas-overlay {
