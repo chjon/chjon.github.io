@@ -1,0 +1,44 @@
+html {
+	overflow-x: hidden;
+}
+
+body {
+	overflow-x: hidden;
+	background-color: #FFFFFF;
+	margin: 0;
+}
+
+/* Canvas */
+#game-of-life-canvas {
+	height: 100%;
+	opacity: 1;
+	margin: 0;
+}
+
+/* Text */
+.display-1 {
+	color: #FFFFFF;
+}
+
+/* Buttons */
+.title-btn {
+
+}
+
+/* Containers */
+header {
+	overflow-x: hidden;
+	text-align: center;
+	background-color: #000000;
+}
+
+footer {
+	overflow-x: hidden;
+	text-align: center;
+}
+
+#canvas-overlay {
+	position: absolute;
+	text-align: center;
+	height: 100%;
+}
