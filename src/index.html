@@ -40,7 +40,7 @@
 	
 		<!-- Section wrapper -->
 		<section class="container-fluid section-odd">
-			<div class="container text-wrapper">
+			<div class="container section-wrapper text-wrapper">
 				<h4 class="display-4"> Hi! </h1>
 				
 				<!-- Text block -->
@@ -51,13 +51,56 @@
 				<p class="paragraph">
 					Apart from coding, I spend my free time reading, watching YouTube videos, and playing video games.
 				</p>
+				
+				<p class="paragraph">
+					I'm currently looking for my next internship, so please feel free to <a href="mailto:jt2chung@uwaterloo.ca">contact me</a> if you'd like to speak about anything. 
+				</p>
 			</div>
 		</section>
 		
 		<!-- Section wrapper -->
 		<section id="projects" class="container-fluid section-even">
-			<div class="container title-wrapper">
-				<h4 class="display-4"> Projects </h1>
+			<div class="section-wrapper">
+				<div class="container title-wrapper">
+					<h4 class="display-4"> Projects </h1>
+				</div>
+				
+				<!-- Project image carousel -->
+				<div id="project-image-carousel" class="container carousel slide img-carousel" data-pause=true>
+					<!-- Image index indicators -->
+					<ol class="carousel-indicators">
+						<li data-target="#project-image-carousel" data-slide-to="0" class="active"></li>
+						<li data-target="#project-image-carousel" data-slide-to="1"></li>
+						<li data-target="#project-image-carousel" data-slide-to="2"></li>
+						<li data-target="#project-image-carousel" data-slide-to="3"></li>
+					</ol>
+					
+					<!-- Carousel items -->
+					<div class="carousel-inner">
+						<div class="carousel-item active">
+							<img class="d-block w-100" src="../res/BlockGame_1.png" alt="BlockGame">
+						</div>
+						<div class="carousel-item">
+							<img class="d-block w-100" src="../res/DeltaT_1.jpg" alt="DeltaT">
+						</div>
+						<div class="carousel-item">
+							<img class="d-block w-100" src="../res/L-Systems_1.png" alt="L-Systems">
+						</div>
+						<div class="carousel-item">
+							<img class="d-block w-100" src="../res/Molecularize_1.png" alt="Molecularize">
+						</div>
+					</div>
+					
+					<!-- Control buttons -->
+					<a class="carousel-control-prev" href="#project-image-carousel" role="button" data-slide="prev">
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					</a>
+					<a class="carousel-control-next" href="#project-image-carousel" role="button" data-slide="next">
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>
 			</div>
 		</section>
 	

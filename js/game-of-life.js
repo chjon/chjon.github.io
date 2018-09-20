@@ -7,7 +7,7 @@ canvas.height = innerHeight;
 const SCALE_FACTOR = 0.06;
 const MAX_OPACITY = 0.4;
 const FRAME_DELAY = 100;
-const INITIAL_PROBABILITY = 0.6;
+const INITIAL_PROBABILITY = 0.7;
 
 const GAME_WIDTH = Math.floor(canvas.width * SCALE_FACTOR);
 const GAME_HEIGHT = Math.floor(canvas.height * SCALE_FACTOR);
