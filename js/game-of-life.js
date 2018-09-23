@@ -5,7 +5,7 @@ canvas.height = innerHeight;
 
 // Constants
 const SCALE_FACTOR = 0.1;
-const MAX_OPACITY = 0.4;
+const MAX_OPACITY = 0.5;
 const FRAME_DELAY = 100;
 const INITIAL_PROBABILITY = 0.7;
 
@@ -43,73 +43,76 @@ function nextFrame () {
 /**
  * Update the cells for the game of life
  */
- function update () {
-	 // Create new array to represent the next state
-	 let newCells = [];
+function update () {
+	// Create new array to represent the next state
+	let newCells = [];
 	 
-	 for (let i = 0; i < GAME_WIDTH; i++) {
-		 newCells[i] = [];
+	for (let i = 0; i < GAME_WIDTH; i++) {
+		newCells[i] = [];
 		 
-		 for (let j = 0; j < GAME_HEIGHT; j++) {
-			 var numNeigbours = countNeighbours(i, j);
-			 if (numNeigbours == 2) {
-				 newCells[i][j] = cells[i][j];
-			 } else if (numNeigbours == 3) {
-				 newCells[i][j] = true;
-			 } else {
-				 newCells[i][j] = false;
-			 }
-		 }
-	 }
+		for (let j = 0; j < GAME_HEIGHT; j++) {
+			var numNeigbours = countNeighbours(i, j);
+			if (numNeigbours == 2) {
+				newCells[i][j] = cells[i][j];
+			} else if (numNeigbours == 3) {
+				newCells[i][j] = true;
+			} else {
+				newCells[i][j] = false;
+			}
+		}
+	}
 	 
-	 cells = newCells;
- }
+	cells = newCells;
+}
  
- function countNeighbours (x, y) {
-	 var count = 0;
-	 
-	 // Check left
-	 if (x > 0) {
-		 if (cells[x - 1][y]) count++;
-		 
-		 // Check up
-		 if (y > 0) {
-			 if (cells[x - 1][y - 1]) count++;
-		 }
-		 
-		 // Check down
-		 if (y < GAME_HEIGHT - 1) {
-			 if (cells[x - 1][y + 1]) count++;
-		 }
-	 }
-	 
-	 // Check right
-	 if (x < GAME_WIDTH - 1) {
-		 if (cells[x + 1][y]) count++;
-		 
-		 // Check up
-		 if (y > 0) {
-			 if (cells[x + 1][y - 1]) count++;
-		 }
-		 
-		 // Check down
-		 if (y < GAME_HEIGHT - 1) {
-			 if (cells[x + 1][y + 1]) count++;
-		 }
-	 }
-	 
-	 // Check up
-	 if (y > 0) {
-		 if (cells[x][y - 1]) count++;
-	 }
-	 
-	 // Check down
-	 if (y < GAME_HEIGHT - 1) {
-		 if (cells[x][y + 1]) count++;
-	 }
-	 
-	 return count;
- }
+/**
+ * Count the number of living neighbouring cells
+ */
+function countNeighbours (x, y) {
+	var count = 0;
+
+	// Check left
+	if (x > 0) {
+		if (cells[x - 1][y]) count++;
+
+		// Check up
+		if (y > 0) {
+			if (cells[x - 1][y - 1]) count++;
+		}
+
+		// Check down
+		if (y < GAME_HEIGHT - 1) {
+			if (cells[x - 1][y + 1]) count++;
+		}
+	}
+
+	// Check right
+	if (x < GAME_WIDTH - 1) {
+		if (cells[x + 1][y]) count++;
+
+		// Check up
+		if (y > 0) {
+			if (cells[x + 1][y - 1]) count++;
+		}
+
+		// Check down
+		if (y < GAME_HEIGHT - 1) {
+			if (cells[x + 1][y + 1]) count++;
+		}
+	}
+
+	// Check up
+	if (y > 0) {
+		if (cells[x][y - 1]) count++;
+	}
+
+	// Check down
+	if (y < GAME_HEIGHT - 1) {
+		if (cells[x][y + 1]) count++;
+	}
+
+	return count;
+}
 
 /**
  * Draw all the cells
@@ -127,7 +130,7 @@ function draw () {
 				var distX = Math.abs(MID_X - x);
 				var distY = Math.abs(MID_Y - y);
 				var alpha = MAX_OPACITY * (1 - (distX / MID_X)) * (1 - (distY / MID_Y));
-				
+
 				// Draw the cell
 				ctx.fillStyle = "rgba(0, 255, 0," + alpha + ")";
 				ctx.fillRect(PIXEL_SIZE * x, PIXEL_SIZE * y, PIXEL_SIZE, PIXEL_SIZE);
