@@ -61,6 +61,7 @@ body {
 
 .arrow:hover {
 	background-image: url(../res/scroll-indication-arrow-hover.png);
+	animation-play-state: paused;
 }
 
 /* Scroll down indicator (bouncing) */
