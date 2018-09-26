@@ -25,6 +25,18 @@ body {
 	color: #FFFFFF;
 }
 
+@media (max-width: 800px) {
+	.display-1 {
+		font-size: 400%;
+	}
+}
+
+@media (max-width: 600px) {
+	.display-1 {
+		font-size: 200%;
+	}
+}
+
 .section-wrapper > .title-wrapper > .display-4 {
 	color: #FFFFFF;
 }
@@ -33,9 +45,18 @@ body {
 	font-size: 18px;
 }
 
-.section-wrapper.text-wrapper {
-	padding-left: 10%;
-	padding-right: 10%;
+@media (min-width: 800px) {
+	.section-wrapper.text-wrapper {
+		padding-left: 30%;
+		padding-right: 30%;
+	}
+}
+
+@media (min-width: 600px) {
+	.section-wrapper.text-wrapper {
+		padding-left: 10%;
+		padding-right: 10%;
+	}
 }
 
 .text-wrapper {
