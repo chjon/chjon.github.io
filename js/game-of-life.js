@@ -1,6 +1,6 @@
 // Set up canvas
 var canvas = document.getElementById("game-of-life-canvas");
-canvas.width  = innerWidth * 0.9;
+canvas.width  = innerWidth;
 canvas.height = innerHeight;
 
 // Constants

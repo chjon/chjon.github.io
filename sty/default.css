@@ -10,7 +10,6 @@ body {
 
 /* Canvas */
 #game-of-life-canvas {
-	height: 100%;
 	opacity: 1;
 	margin: 0;
 }
@@ -35,7 +34,8 @@ body {
 }
 
 .section-wrapper.text-wrapper {
-	width: 50%;
+	padding-left: 10%;
+	padding-right: 10%;
 }
 
 .text-wrapper {
@@ -52,7 +52,7 @@ body {
 .arrow {
 	-webkit-animation: bounce 2s infinite;
     animation: bounce 2s infinite;
-	padding-top: 4%;
+	padding-top: 5em;
 	background-image: url(../res/scroll-indication-arrow.png);
 	background-repeat: no-repeat;
 	background-size: contain;
