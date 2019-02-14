@@ -20,6 +20,10 @@ collections:
 
 defaults:
   - scope:
+      path: "projects"
+    values:
+      layout: "default"
+  - scope:
       path: ""
     values:
       layout: "home"

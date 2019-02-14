@@ -1,4 +1,4 @@
-const FRAME_DELAY = 100;
+const FRAME_DELAY = 10;
 
 let canvas;
 let ctx;
@@ -8,18 +8,28 @@ class Ball {
     constructor(posX, posY) {
         this.posX = posX;
         this.posY = posY;
-        this.velX = 1;
-        this.velY = 1;
+        this.velX = 5;
+        this.velY = 2;
+        this.width = 64;
+        this.height = 48;
     }
 
     tick() {
         this.posX += this.velX;
         this.posY += this.velY;
+
+        if (this.posX <= 0 || this.posX + this.width >= canvas.width) {
+            this.velX *= -1;
+        }
+
+        if (this.posY <= 0 || this.posY + this.height >= canvas.height) {
+            this.velY *= -1;
+        }
     }
 
     draw() {
         ctx.fillStyle = "rgba(0, 0, 255, 255)";
-        ctx.fillRect(this.posX, this.posY, 5, 5);
+        ctx.fillRect(this.posX, this.posY, this.width, this.height);
     }
 }
 
