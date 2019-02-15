@@ -3,7 +3,41 @@
     margin: 0;
     top: 0;
     width: 100%;
-    background: #FFFF00;
+    background: #000000;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-toolbar * {
+    display: inline-block;
+}
+
+.nav-logo * {
+    font-size: 1.5em;
+    font-family: 'Exo 2', sans-serif;
+    text-decoration-line: none;
+
+    color: #FFFFFF;
+}
+
+.nav-terminal {
+    padding: 1%;
+    
+    background: #111111;
+}
+
+.nav-terminal * {
+    display: inline-block;
+}
+
+.nav-section {
+    font-size: 1.2em;
+    font-family: 'Open Sans', sans-serif;
+    text-decoration-line: none;
+
+    color: #FFFFFF;
 }
 
 .nav-current {

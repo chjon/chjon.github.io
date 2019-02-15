@@ -1,0 +1,6 @@
+<a class="overlay-title">{{ site.title }}</a>
+<div class="home-nav-bar" id="home-nav-bar">
+  {% for item in site.data.home-nav-bar %}
+    <a href="{{ item.link }}" class="home-nav-button">{{ item.name }}</a>
+  {% endfor %}
+</div>
