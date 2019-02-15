@@ -6,11 +6,19 @@
     <link rel="stylesheet" href="/assets/css/index.css">
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Exo+2:100">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300">
     {% feed_meta %}
     {% seo %}
-    <script src="/assets/js/home.js"></script>
+    <script type="module" src="/assets/js/home.js"></script>
   </head>
   <body>
-    {{ content }}
+    <section id="main-wrapper">
+        <canvas class="underlay" id="background-canvas"></canvas>
+        <div class="overlay">
+            <div class="overlay-content-wrapper">
+              {{ content }}
+            </div>
+        </div>
+    </section>
   </body>
 </html>
