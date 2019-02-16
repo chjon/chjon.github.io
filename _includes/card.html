@@ -1,0 +1,14 @@
+<section>
+  <div class="card" id="{{ include.id }}">
+    {% if include.header %}
+      <div class="card-header">
+        {{ include.header | markdownify }}
+      </div>
+      <hr class="card-divider"/>
+    {% endif %}
+
+    <div class="card-body">
+      {{ include.content | markdownify }}
+    </div>
+  </div>
+</section>
