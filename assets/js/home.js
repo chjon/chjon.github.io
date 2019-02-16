@@ -1,5 +1,5 @@
 const FRAME_DELAY = 100;
-const MAX_DIMENSIONS = { width: 60, height: 60 };
+const MAX_DIMENSIONS = { width: 50, height: 50 };
 
 class GOL {
     getColor(alpha) {
