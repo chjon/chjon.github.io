@@ -77,42 +77,25 @@
 // Cards
 
 .card {
-  border-radius: 2em;
-  padding: 0;
   max-width: 1000px;
-
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-
   background: var(--card-color);
 }
 
-.card-header h1 {
-  font-size: 3em;
+.card * {
+  color: var(--home-txt-color);
 }
 
 .card-divider {
-  width: 100%;
-  height: 1px;
-
-  border: none;
-  color: var(--home-txt-color);
   background: var(--home-txt-color);
 }
 
 .card-body {
   padding-left: 5%;
   padding-right: 5%;
-  width: 100%;
-
-  display: flex;
-  flex-direction: column;
 }
 
 .card-header h1, .card-body a, .card-body p {
   font-family: 'Open Sans', 'sans serif';
-  color: var(--home-txt-color);
 }
 
 .card-body a, .card-body p {
@@ -124,7 +107,6 @@
 
   font-family: 'Exo 2', 'sans serif';
   font-size: 3em;
-  color: var(--home-txt-color);
   line-height: 100%;
 }
 

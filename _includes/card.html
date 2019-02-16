@@ -1,7 +1,7 @@
 <div class="card" {% if include.id %} id="{{ include.id }}" {% endif %}>
   {% if include.header %}
     <div class="card-header">
-      {{ include.header | markdownify }}
+      <h1>{{ include.header }}</h1>
     </div>
     <hr class="card-divider"/>
   {% endif %}
