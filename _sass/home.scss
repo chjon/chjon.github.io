@@ -131,6 +131,7 @@
 .card-body p {
   font-size: 1em;
 }
+
 // Footer button bar
 
 .footer-wrapper {
@@ -139,6 +140,8 @@
   align-items: center;
   justify-content: center;
 
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
   padding-left: 5%;
   padding-right: 5%;
 
@@ -146,32 +149,18 @@
   background: var(--card-color);
 }
 
-.footer-button-bar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
-.footer-button {
-  padding: 0.5em;
-
-  font-size: 1.5em;
-  font-family: 'Open Sans', sans-serif;
-  text-decoration-line: none;
-
-  color: var(--home-txt-color);
-  filter: invert(100%);
+.footer-button, .footer-copyright {
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .footer-button-image {
-  width: 1.5em;
-  height: 1.5em;
+  filter: invert(100%);
 }
 
 .footer-copyright {
-  margin-top: 0;
-
   font-family: 'Open Sans', 'sans serif';
   font-size: 1em;
   color: var(--home-txt-color);

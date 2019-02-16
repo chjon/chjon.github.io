@@ -50,3 +50,25 @@ header, section {
 .overlay header {
   height: 100vh;
 }
+
+// Button bar
+
+.button-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-bar-button {
+  padding: 0.5em;
+
+  font-size: 1.5em;
+  font-family: 'Open Sans', sans-serif;
+  text-decoration-line: none;
+}
+
+.button-bar-button-image {
+  width: 1.5em;
+  height: 1.5em;
+}

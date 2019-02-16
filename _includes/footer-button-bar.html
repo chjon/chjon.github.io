@@ -1,16 +1,10 @@
 <div class="footer-wrapper">
-  <div class="footer-button-bar">
-    {% for item in site.data.footer-button-bar %}
-      <a href="{{ item.link }}" class="footer-button"
-        {% if item.target %} target="{{ item.target }}" {% endif %}
-        {% if item.description %} title="{{ item.description }}" {% endif %}
-      >
-        {% if item.image %}
-          <img src="{{ item.image }}" class="footer-button-image" alt="{{ item.name }}">
-        {% endif %}
-      </a>
-    {% endfor %}
-  </div>
+  {% include button-bar.html
+    data=site.data.toolbar
+    button_bar_class="footer-button-bar"
+    button_class="footer-button"
+    button_image_class="footer-button-image"
+  %}
   <p class="footer-copyright">
     © {{ site.author }} {{ site.copyright-year }}. All rights reserved.
   </p>

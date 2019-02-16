@@ -1,0 +1,27 @@
+<div
+  class="button-bar
+    {% if include.button_bar_class %}
+      {{ include.button_bar_class }}
+    {% endif %}"
+>
+    {% for item in include.data %}
+      <a href="{{ item.link }}"
+        class="button-bar-button
+          {% if include.button_class %}
+            {{ include.button_class }}
+          {% endif %}"
+        {% if item.target %} target="{{ item.target }}" {% endif %}
+        {% if item.description %} title="{{ item.description }}" {% endif %}
+      >
+        {% if item.image %}
+          <img src="{{ item.image }}"
+            class="button-bar-button-image
+              {% if include.button_image_class %}
+                {{ include.button_image_class }}
+              {% endif %}"
+            {% if item.name %} alt="{{ item.name }}" {% endif %}
+          >
+        {% endif %}
+      </a>
+    {% endfor %}
+</div>
