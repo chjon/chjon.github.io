@@ -89,31 +89,6 @@
   background: var(--home-txt-color);
 }
 
-.card-body {
-  padding-left: 5%;
-  padding-right: 5%;
-}
-
-.card-header h1, .card-body a, .card-body p {
-  font-family: 'Open Sans', 'sans serif';
-}
-
-.card-body a, .card-body p {
-  line-height: 200%;
-}
-
-.card-body h1 {
-  margin-bottom: 1%;
-
-  font-family: 'Exo 2', 'sans serif';
-  font-size: 3em;
-  line-height: 100%;
-}
-
-.card-body p {
-  font-size: 1em;
-}
-
 // Footer button bar
 
 .footer-wrapper {
