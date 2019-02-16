@@ -119,18 +119,18 @@
   line-height: 200%;
 }
 
-.card-body p {
-  font-size: 1.2em;
-}
-
 .card-body h1 {
-  font-family: 'Exo 2', 'sans serif';
-  color: var(--home-txt-color);
-  font-size: 4em;
-  line-height: 100%;
   margin-bottom: 1%;
+
+  font-family: 'Exo 2', 'sans serif';
+  font-size: 3em;
+  color: var(--home-txt-color);
+  line-height: 100%;
 }
 
+.card-body p {
+  font-size: 1em;
+}
 // Footer button bar
 
 .footer-wrapper {
