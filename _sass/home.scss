@@ -146,16 +146,33 @@
   background: var(--card-color);
 }
 
-.footer-wrapper p {
-  font-family: 'Open Sans', 'sans serif';
-  font-size: 1em;
-  color: var(--home-txt-color);
-}
-
-
 .footer-button-bar {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.footer-button {
+  padding: 0.5em;
+
+  font-size: 1.5em;
+  font-family: 'Open Sans', sans-serif;
+  text-decoration-line: none;
+
+  color: var(--home-txt-color);
+  filter: invert(100%);
+}
+
+.footer-button-image {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.footer-copyright {
+  margin-top: 0;
+
+  font-family: 'Open Sans', 'sans serif';
+  font-size: 1em;
+  color: var(--home-txt-color);
 }

@@ -1,6 +1,9 @@
 - name: Contact
   link: mailto:jt2chung@edu.uwaterloo.ca
+  image: /assets/icons/mail-icon.png
 - name: GitHub
   link: https://github.com/chjon
+  image: /assets/icons/github-icon.png
 - name: Resume
   link: /assets/res/resume.pdf
+  image: /assets/icons/resume-icon.png

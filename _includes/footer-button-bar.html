@@ -1,8 +1,14 @@
 <div class="footer-wrapper">
   <div class="footer-button-bar">
     {% for item in site.data.footer-button-bar %}
-      <a href="{{ item.link }}" class="home-nav-button">{{ item.name }}</a>
+      <a href="{{ item.link }}" class="footer-button">
+        {% if item.image %}
+          <img src="{{ item.image }}" class="footer-button-image" alt="{{ item.name }}">
+        {% else %}
+          {{ item.name }}
+        {% endif %}
+      </a>
     {% endfor %}
   </div>
-  <p>© {{ site.author }} {{ site.copyright-year }}. All rights reserved.</p>
+  <p class="footer-copyright">© {{ site.author }} {{ site.copyright-year }}. All rights reserved.</p>
 </div>
