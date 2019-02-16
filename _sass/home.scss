@@ -13,14 +13,14 @@
 
 // Title + Navigation bar
 
-.home-overlay {
+.header-wrapper {
   display: flex;
   align-content: center;
   justify-content: center;
   flex-direction: column;
 }
 
-.overlay-title {
+.home-title {
   padding-bottom: 0.2em;
 
   font-size: 7.5em;
