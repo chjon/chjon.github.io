@@ -36,6 +36,7 @@
   justify-content: center;
   align-content: center;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .home-nav-button {
@@ -51,6 +52,26 @@
 
 .home-nav-button:hover {
   background: var(--home-nav-button-hover-color);
+}
+
+@media only screen and (max-width: 1000px) {
+  .overlay-title {
+    font-size: 5em;
+  }
+
+  .home-nav-button {
+    font-size: 1.3em;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .overlay-title {
+    font-size: 3em;
+  }
+
+  .home-nav-button {
+    font-size: 1em;
+  }
 }
 
 // Cards
