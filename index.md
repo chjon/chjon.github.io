@@ -12,16 +12,10 @@ Although most of the work that I've done has been in game development, I'm alway
 In my free time, I also enjoy learning about math and physics, playing intramural Ultimate Frisbee, and playing Minecraft.
 {% endcapture %}
 
-{% capture project_content %}
-I like programming.
-{% endcapture %}
-
 {% capture end_content %}
 Clicky
 {% endcapture %}
 
 <header>{% include landing-screen.html %}</header>
-{% include card.html id="about" header="# About" content=about_content %}
-{% include card.html id="projects" header="# Projects" content=project_content %}
-{% include card.html id="end" content=end_content %}
-<footer></footer>
+<section>{% include card.html id="about" header="# About" content=about_content %}</section>
+<footer>{% include card.html id="end" content=end_content %}</footer>
