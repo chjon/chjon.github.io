@@ -9,7 +9,7 @@ I'm currently working as a game programmer at [Behaviour Interactive](https://ww
 
 Although most of the work that I've done has been in game development, I'm always looking to learn and apply knowledge from a variety of fields. The projects I've worked on include games, simulations, and API development. I'm especially interested in [data-driven programming](https://en.wikipedia.org/wiki/Data-driven_programming) and [emergent behaviour](https://en.wikipedia.org/wiki/Emergence). Examples of my work can be found on my [projects](#projects) page.
 
-In my free time, I also enjoy learning about math and physics, playing intramural Ultimate Frisbee, and playing Minecraft.
+In my free time, I also enjoy playing intramural Ultimate Frisbee, learning about math and physics, and playing video games.
 {% endcapture %}
 
 {% capture end_content %}
@@ -17,5 +17,5 @@ Clicky
 {% endcapture %}
 
 <header>{% include landing-screen.html %}</header>
-<section>{% include card.html id="about" header="# About" content=about_content %}</section>
-<footer>{% include card.html id="end" content=end_content %}</footer>
+<section id="about">{% include card.html content=about_content %}</section>
+<footer>{% include footer-button-bar.html content=end_content %}</footer>

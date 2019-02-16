@@ -1,4 +1,4 @@
-<div class="card" id="{{ include.id }}">
+<div class="card" {% if include.id %} id="{{ include.id }}" {% endif %}>
   {% if include.header %}
     <div class="card-header">
       {{ include.header | markdownify }}

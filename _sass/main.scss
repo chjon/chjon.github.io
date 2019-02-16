@@ -38,6 +38,9 @@ header, section {
 
 .overlay header, .overlay section, .overlay footer {
   width: 100%;
+  padding-top: 1.5%;
+  padding-bottom: 1.5%;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,11 +49,4 @@ header, section {
 
 .overlay header {
   height: 100vh;
-}
-.overlay section {
-  padding-top: 5%;
-}
-.overlay footer {
-  padding-top: 5%;
-  padding-bottom: 5%;
 }

@@ -1,0 +1,8 @@
+<div class="footer-wrapper">
+  <div class="footer-button-bar">
+    {% for item in site.data.footer-button-bar %}
+      <a href="{{ item.link }}" class="home-nav-button">{{ item.name }}</a>
+    {% endfor %}
+  </div>
+  <p>© {{ site.author }} {{ site.copyright-year }}. All rights reserved.</p>
+</div>
