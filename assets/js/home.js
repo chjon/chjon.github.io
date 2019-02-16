@@ -24,6 +24,7 @@ class GOL {
   }
 
   init() {
+    this.needsTick = true;
     this.cells = [];
     for (let i = 0; i < this.numCols; i = i + 1) {
       this.cells[i] = [];
@@ -42,6 +43,8 @@ class GOL {
   }
 
   tick() {
+    if (!this.needsTick) return;
+
     const neighbourCount = [];
     this.iterate((x, y) => {
       if (!neighbourCount[x]) neighbourCount[x] = [];
@@ -59,11 +62,17 @@ class GOL {
       }
     });
 
+    this.needsTick = false;
     this.iterate((i, j) => {
-        this.cells[i][j] = (
+        const newVal = (
             (neighbourCount[i][j] === 3) ||
             (neighbourCount[i][j] === 2 && this.cells[i][j])
         );
+
+        if (this.cells[i][j] !== newVal) {
+          this.cells[i][j] = newVal;
+          this.needsTick = true;
+        }
     });
   }
 
