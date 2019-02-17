@@ -3,13 +3,13 @@
   --home-txt-color: #FFFFFF;
   --home-nav-button-hover-color: rgba(100, 100, 100, 0.5);
   --card-color: rgba(100, 100, 100, 0.5);
-  --card-max-width: 1000px;
-  --card-min-width: 300px;
+  --card-max-width: 70em;
+  --card-min-width: 30em;
 }
 
 // Layout
 
-.overlay section {
+.home-content {
   min-height: 100vh;
 }
 
@@ -103,7 +103,7 @@
 }
 
 .footer-card {
-  width: 30%;
+  width: 30em;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
 }
