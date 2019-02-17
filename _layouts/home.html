@@ -30,9 +30,11 @@ layout: canvas-page
 
 <div class="home-content">
   {{ content }}
-</div>
 
-<footer>{%- include card.html
-  content=footer-content
-  card-class="home-card footer-card"
--%}</footer>
+  <footer>
+    {%- include card.html
+      content=footer-content
+      card-class="home-card footer-card"
+    -%}
+  </footer>
+</div>

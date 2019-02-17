@@ -15,10 +15,10 @@ Although most of the work that I've done has been in game development, I'm alway
 In my free time, I also enjoy playing intramural Ultimate Frisbee, learning about math and physics, and playing video games.
 {% endcapture %}
 
-{%- include card.html
-  id="about"
-  content=about-content
-  card-class="home-card"
-  is-section=true
-  is-markdown=true
--%}
+<section id="about">
+  {%- include card.html
+    content=about-content
+    card-class="home-card"
+    is-markdown=true
+  -%}
+</section>

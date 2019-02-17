@@ -6,7 +6,7 @@
   --home-nav-button-hover-color: rgba(100, 100, 100, 0.5);
   --card-color: rgba(100, 100, 100, 0.5);
   --card-max-width: 70em;
-  --card-min-width: 30em;
+  --card-min-width: 20em;
 }
 
 .underlay {
@@ -14,6 +14,11 @@
 }
 
 // Layout
+
+.overlay section, .overlay footer {
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
+}
 
 .home-content {
   min-height: 100vh;
@@ -114,7 +119,6 @@
 }
 
 .footer-card {
-  width: 30em;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
 }

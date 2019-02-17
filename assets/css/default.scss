@@ -1,0 +1,32 @@
+---
+---
+
+// Background color
+.underlay {
+  background: black;
+}
+
+// Main content card
+.main-card-body {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.default-card {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.main-card {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.main-card-divider {
+  background: #FFFFFF;
+}
+
+.content-card {
+  flex: 1;
+  margin: 1em;
+}

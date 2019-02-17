@@ -1,9 +1,17 @@
+:root {
+  --toolbar-height: 10vh;
+  --toolbar-font-height: 4vh;
+  --toolbar-image-size: 8vh;
+  --toolbar-section-width: 10vw;
+}
+
 .nav-toolbar {
+  width: 100%;
+  height: var(--toolbar-height);
+
   position: sticky;
   margin: 0;
   top: 0;
-  width: 100%;
-  height: 3.5em;
 
   color: white;
   background: #000000;
@@ -13,43 +21,32 @@
   justify-content: center;
 }
 
-.nav-toolbar-left, .nav-toolbar-center, .nav-toolbar-right {
+.nav-toolbar-left, .nav-toolbar-right {
+  width: var(--toolbar-section-width);
   height: 100%;
-  flex: 1;
+  
   display: flex;
   align-items: center;
+  flex: 1;
 }
 
 .nav-toolbar-left {
   justify-content: flex-start;
-}
-
-
-.nav-toolbar-center {
-  flex: 4;
-  justify-content: center;
-
-  font-size: 1.2em;
-  font-family: 'Exo 2', sans-serif;
+  padding-left: 2%;
 }
 
 .nav-toolbar-right {
   justify-content: flex-end;
+  padding-right: 2%;
 }
 
 .nav-toolbar-logo {
   width: 100%;
   height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .nav-toolbar-logo a {
-  width: 100%;
-  padding: 5%;
-  font-size: 1.2em;
+  font-size: var(--toolbar-font-height);
   font-family: 'Exo 2', sans-serif;
   text-decoration-line: none;
 
@@ -64,10 +61,7 @@
 }
 
 .nav-button {
-  width: 100%;
   height: 100%;
-  padding: 0.5em;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,4 +69,10 @@
 
 .nav-button:hover {
   filter: invert(0.5);
+}
+
+.nav-button-image {
+  width: var(--toolbar-image-size);
+  height: var(--toolbar-image-size);
+  padding: 10%;
 }
