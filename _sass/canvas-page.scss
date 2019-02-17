@@ -1,14 +1,9 @@
-:root {
-  --main-background-color: #000000;
-}
-
 .underlay {
   width: 100%;
   height: 100%;
   margin: 0;
 
   position: fixed;
-  background: var(--main-background-color);
   z-index: -1;
 }
 

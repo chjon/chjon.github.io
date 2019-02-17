@@ -51,3 +51,5 @@ In my free time, I also enjoy playing intramural Ultimate Frisbee, learning abou
   content=footer-content
   card-class="home-card footer-card"
 -%}</footer>
+
+<script type="module" src="/assets/js/gol.js"></script>
