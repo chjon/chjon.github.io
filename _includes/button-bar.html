@@ -1,13 +1,13 @@
-<div class="{{ 'button-bar ' | append: include.button_bar_class | rstrip }}">
+<div class="{{ 'button-bar ' | append: include.button-bar-class | rstrip }}">
   {% for item in include.data %}
     <a href="{{ item.link }}"
-      class="{{ 'button-bar-button ' | append: include.button_class | rstrip }}"
+      class="{{ 'button-bar-button ' | append: include.button-class | rstrip }}"
       {% if item.target %} target="{{ item.target }}" {% endif %}
       {% if item.description %} title="{{ item.description }}" {% endif %}
     >
       {%- if item.image -%}
         <img src="{{ item.image }}"
-          class="{{ 'button-bar-button-image ' | append: include.button_image_class | rstrip }}"
+          class="{{ 'button-bar-button-image ' | append: include.button-image-class | rstrip }}"
           {% if item.name %} alt="{{ item.name }}" {% endif %}
         >
       {%- elsif item.name -%}

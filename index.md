@@ -1,17 +1,15 @@
 ---
 ---
-{%- capture header_content -%}
-<div class="header-wrapper">
+{%- capture header-content -%}
   <a class="home-title">{{ site.title }}</a>
   {% include button-bar.html
     data=site.data.home-nav-bar
-    button_bar_class="home-nav-bar"
-    button_class="home-nav-button"
+    button-bar-class="home-nav-bar"
+    button-class="home-nav-button"
   %}
-</div>
 {%- endcapture -%}
 
-{% capture about_content %}
+{% capture about-content %}
 # Hello!
 
 I'm Jonathan, a second-year Computer Engineering student at the University of Waterloo.
@@ -23,12 +21,12 @@ Although most of the work that I've done has been in game development, I'm alway
 In my free time, I also enjoy playing intramural Ultimate Frisbee, learning about math and physics, and playing video games.
 {% endcapture %}
 
-{%- capture footer_content -%}
+{%- capture footer-content -%}
   {% include button-bar.html
     data=site.data.toolbar
-    button_bar_class="footer-button-bar"
-    button_class="footer-button"
-    button_image_class="footer-button-image"
+    button-bar-class="footer-button-bar"
+    button-class="footer-button"
+    button-image-class="footer-button-image"
   %}
   <p class="footer-copyright">{{-
     '© ' | append: site.author |  append: ' ' | append: site.copyright-year |
@@ -36,6 +34,18 @@ In my free time, I also enjoy playing intramural Ultimate Frisbee, learning abou
   -}}</p>
 {%- endcapture -%}
 
-<header>{{ header_content }}</header>
-<section id="about">{% include card.html content=about_content isMarkdown=true %}</section>
-<footer>{% include card.html id="footer-card" content=footer_content %}</footer>
+<header>{%- include card.html
+  content=header-content
+-%}</header>
+
+<section id="about">{%- include card.html
+  content=about-content
+  card-class="home-card"
+  is-markdown=true
+%}</section>
+
+<footer>{%- include card.html
+  content=footer-content
+  card-class="home-card footer-card"
+  card-divider-class="home-card-divider"
+-%}</footer>
