@@ -94,12 +94,17 @@
   margin-bottom: 0;
 }
 
-.footer-copyright {
-  text-align: center;
+.footer-button {
+  padding-left: 0.5em; 
+  padding-right: 0.5em; 
 }
 
-.footer-button-image {
-  filter: invert(100%);
+.footer-button:hover {
+  opacity: 0.3;
+}
+
+.footer-copyright {
+  text-align: center;
 }
 
 .footer-card {

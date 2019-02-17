@@ -1,4 +1,5 @@
 ---
+layout: canvas-page
 ---
 {%- capture header-content -%}
   <a class="home-title">{{ site.title }}</a>
