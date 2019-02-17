@@ -21,12 +21,6 @@ Although most of the work that I've done has been in game development, I'm alway
 In my free time, I also enjoy playing intramural Ultimate Frisbee, learning about math and physics, and playing video games.
 {% endcapture %}
 
-{% capture projects-content %}
-
-I like programming.
-
-{% endcapture %}
-
 {%- capture footer-content -%}
   {% include button-bar.html
     data=site.data.toolbar
@@ -48,14 +42,6 @@ I like programming.
   <section id="about">{%- include card.html
     content=about-content
     card-class="home-card"
-    is-markdown=true
-  -%}</section>
-
-  <section id="projects">{%- include card.html
-    header="Projects"
-    content=projects-content
-    card-class="home-card"
-    card-divider-class="home-card-divider"
     is-markdown=true
   -%}</section>
 </div>
