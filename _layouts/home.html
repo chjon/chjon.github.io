@@ -1,0 +1,38 @@
+---
+layout: canvas-page
+---
+
+{%- capture header-content -%}
+  <a class="home-title">{{ site.title }}</a>
+  {% include button-bar.html
+    data=site.data.home-nav-bar
+    button-bar-class="home-nav-bar"
+    button-class="home-nav-button"
+  %}
+{%- endcapture -%}
+
+{%- capture footer-content -%}
+  {% include button-bar.html
+    data=site.data.toolbar
+    button-bar-class="footer-button-bar"
+    button-class="footer-button"
+    button-image-class="footer-button-image"
+  %}
+  <p class="footer-copyright">{{-
+    '© ' | append: site.author |  append: ' ' | append: site.copyright-year |
+    append: '. All rights reserved.'
+  -}}</p>
+{%- endcapture -%}
+
+<header>{%- include card.html
+  content=header-content
+-%}</header>
+
+<div class="home-content">
+  {{ content }}
+</div>
+
+<footer>{%- include card.html
+  content=footer-content
+  card-class="home-card footer-card"
+-%}</footer>

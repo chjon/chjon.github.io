@@ -1,18 +1,26 @@
+{%- if include.is-section -%}
+  <section {% if include.id %} id="{{ include.id }}" {% endif %}>
+{%- endif -%}
+
 <div class="{{'card ' | append: include.card-class | rstrip }}"
   {% if include.id %} id="{{ include.id }}" {% endif %}
 >
-  {% if include.header %}
+  {%- if include.header -%}
     <div class="{{'card-header ' | append: include.card-header-class | rstrip }}">
       <h1>{{ include.header }}</h1>
     </div>
     <hr class="{{ 'card-divider ' | append: include.card-divider-class | rstrip }}"/>
-  {% endif %}
+  {%- endif -%}
 
   <div class="{{ 'card-body ' | append: include.card-body-class | rstrip }}">
-    {% if include.is-markdown %}
+    {%- if include.is-markdown -%}
       {{ include.content | markdownify }}
-    {% else %}
+    {%- else -%}
       {{ include.content }}
-    {% endif %}
+    {%- endif -%}
   </div>
 </div>
+
+{%- if include.is-section -%}
+  </section>
+{%- endif -%}

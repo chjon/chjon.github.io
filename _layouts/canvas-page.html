@@ -1,15 +1,17 @@
 <!doctype html>
-<!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
     <title>{{ site.title }}</title>
-    {%- if page.url == site.baseurl -%}
-      <link rel="stylesheet" href="/assets/css/index.css">
-    {%- endif -%}
+    {% if page.url == site.baseurl %}
+      <link rel="stylesheet" href="/assets/css/home.css">
+    {% endif %}
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Exo+2:100">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300">
+    {%- if page.script -%}
+      <script type="module" src="{{ page.script }}"></script>
+    {%- endif -%}
     {% feed_meta %}
     {% seo %}
   </head>

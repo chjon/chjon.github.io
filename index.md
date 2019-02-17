@@ -1,14 +1,7 @@
 ---
-layout: canvas-page
+layout: home
+script: /assets/js/gol.js
 ---
-{%- capture header-content -%}
-  <a class="home-title">{{ site.title }}</a>
-  {% include button-bar.html
-    data=site.data.home-nav-bar
-    button-bar-class="home-nav-bar"
-    button-class="home-nav-button"
-  %}
-{%- endcapture -%}
 
 {% capture about-content %}
 # Hello!
@@ -22,34 +15,10 @@ Although most of the work that I've done has been in game development, I'm alway
 In my free time, I also enjoy playing intramural Ultimate Frisbee, learning about math and physics, and playing video games.
 {% endcapture %}
 
-{%- capture footer-content -%}
-  {% include button-bar.html
-    data=site.data.toolbar
-    button-bar-class="footer-button-bar"
-    button-class="footer-button"
-    button-image-class="footer-button-image"
-  %}
-  <p class="footer-copyright">{{-
-    '© ' | append: site.author |  append: ' ' | append: site.copyright-year |
-    append: '. All rights reserved.'
-  -}}</p>
-{%- endcapture -%}
-
-<header>{%- include card.html
-  content=header-content
--%}</header>
-
-<div class="home-content">
-  <section id="about">{%- include card.html
-    content=about-content
-    card-class="home-card"
-    is-markdown=true
-  -%}</section>
-</div>
-
-<footer>{%- include card.html
-  content=footer-content
-  card-class="home-card footer-card"
--%}</footer>
-
-<script type="module" src="/assets/js/gol.js"></script>
+{%- include card.html
+  id="about"
+  content=about-content
+  card-class="home-card"
+  is-section=true
+  is-markdown=true
+-%}
