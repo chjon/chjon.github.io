@@ -6,27 +6,39 @@
   background: black;
 }
 
-// Main content card
-.main-card-body {
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
 .default-card {
+  padding-top: 2em;
+  padding-bottom: 2em;
+
   color: #FFFFFF;
   background: rgba(255, 255, 255, 0.3);
 }
 
+// Main card
+
 .main-card {
-  margin-left: 5%;
-  margin-right: 5%;
+  max-width: 90vw;
+  background: none;
+}
+
+.main-card-body {
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0;
 }
 
 .main-card-divider {
   background: #FFFFFF;
 }
 
-.content-card {
+.project-wrapper {
+  display: flex;
   flex: 1;
-  margin: 1em;
+  padding: 1em;
+}
+
+// Project cards
+
+.content-card-header {
+  display: block;
 }

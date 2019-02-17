@@ -1,5 +1,6 @@
 ---
 layout: home
+stylesheet: /assets/css/home.css
 script: /assets/js/gol.js
 ---
 

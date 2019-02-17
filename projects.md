@@ -2,23 +2,27 @@
 title: Projects
 layout: default
 permalink: /projects/
+stylesheet: /assets/css/default.css
+script: /assets/js/gol.js
 ---
-{% capture projects-content %}
-Nested project content
-{% endcapture %}
+{%- capture projects-main -%}
+  {%- for project in site.data.projects -%}
+    {%- capture projects-content -%}
+      {{ project.description }}
+    {%- endcapture -%}
 
-{% capture projects-main %}
-
-{%- for i in (0..29) -%}
-  {%- include card.html
-    content=projects-content
-    card-class="default-card content-card"
-    card-header-class="default-card-header"
-    is-markdown=true
-  -%}
-{%- endfor -%}
-
-{% endcapture %}
+    <div class="project-wrapper">
+      {%- include card.html
+        header=project.name
+        content=projects-content
+        card-class="default-card content-card"
+        card-header-class="default-card-header content-card-header"
+        card-body-class="default card-body content-card-body"
+        is-markdown=true
+      -%}
+    </div>
+  {%- endfor -%}
+{%- endcapture -%}
 
 <section>
   {% include card.html

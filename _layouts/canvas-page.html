@@ -2,15 +2,17 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>{{ site.title }}</title>
-    <link rel="stylesheet" href="/assets/css/styles.css">
-    {% if page.url == site.baseurl %}
-      <link rel="stylesheet" href="/assets/css/home.css">
-    {% else %}
-      <link rel="stylesheet" href="/assets/css/default.css">
+    {%- if page.title -%}
+      <title>{{ site.title | append: ' • ' | append: page.title }}</title>
+    {%- else -%}
+      <title>{{ site.title }}</title>
     {% endif %}
+    <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Exo+2:100">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300">
+    {%- if page.stylesheet -%}
+      <link rel="stylesheet" href="{{ page.stylesheet }}">
+    {%- endif -%}
     {%- if page.script -%}
       <script type="module" src="{{ page.script }}"></script>
     {%- endif -%}

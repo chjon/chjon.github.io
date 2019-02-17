@@ -1,0 +1,15 @@
+- name: InfiniteChess
+  description: A game of chess on an infinite board.
+  image: /assets/res/img/infinitechess.png
+  page-link: /projects/infinitechess
+- name: BlockGame
+  description: A 2D sandbox game
+  github-link: https://github.com/chjon/BlockGame
+  image: /assets/res/img/blockgame.png
+  page-link: /projects/blockgame
+- name: DeltaT
+  description: A reaction-time game built with a Linux SoC
+- name: Molecularize
+  description: A chemical computing tool written in Java
+- name: jonathanchung.xyz
+  description: This website
