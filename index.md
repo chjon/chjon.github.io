@@ -1,5 +1,16 @@
 ---
 ---
+{%- capture header_content -%}
+<div class="header-wrapper">
+  <a class="home-title">{{ site.title }}</a>
+  {% include button-bar.html
+    data=site.data.home-nav-bar
+    button_bar_class="home-nav-bar"
+    button_class="home-nav-button"
+  %}
+</div>
+{%- endcapture -%}
+
 {% capture about_content %}
 # Hello!
 
@@ -12,10 +23,19 @@ Although most of the work that I've done has been in game development, I'm alway
 In my free time, I also enjoy playing intramural Ultimate Frisbee, learning about math and physics, and playing video games.
 {% endcapture %}
 
-{% capture end_content %}
-Clicky
-{% endcapture %}
+{%- capture footer_content -%}
+  {% include button-bar.html
+    data=site.data.toolbar
+    button_bar_class="footer-button-bar"
+    button_class="footer-button"
+    button_image_class="footer-button-image"
+  %}
+  <p class="footer-copyright">{{-
+    '© ' | append: site.author |  append: ' ' | append: site.copyright-year |
+    append: '. All rights reserved.'
+  -}}</p>
+{%- endcapture -%}
 
-<header>{% include landing-screen.html %}</header>
-<section id="about">{% include card.html content=about_content %}</section>
-<footer>{% include footer-button-bar.html content=end_content %}</footer>
+<header>{{ header_content }}</header>
+<section id="about">{% include card.html content=about_content isMarkdown=true %}</section>
+<footer>{% include card.html id="footer-card" content=footer_content %}</footer>

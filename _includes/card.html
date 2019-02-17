@@ -7,6 +7,10 @@
   {% endif %}
 
   <div class="card-body">
-    {{ include.content | markdownify }}
+    {% if include.isMarkdown %}
+      {{ include.content | markdownify }}
+    {% else %}
+      {{ include.content }}
+    {% endif %}
   </div>
 </div>

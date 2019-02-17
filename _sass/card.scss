@@ -1,6 +1,7 @@
 // Layout
 
 .card {
+  width: 100%;
   border-radius: 2em;
 
   display: flex;
@@ -17,9 +18,9 @@
 
 .card-body {
   width: 100%;
-
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 3em;
+  padding-right: 3em;
+  padding-bottom: 2em;
 
   display: flex;
   flex-direction: column;
