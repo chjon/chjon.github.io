@@ -12,8 +12,8 @@
   position: sticky;
   margin: 0;
   top: 0;
+  z-index: 1;
 
-  color: white;
   background: black;
 
   display: flex;
@@ -48,11 +48,7 @@
 .nav-toolbar-logo a {
   font-size: var(--toolbar-font-height);
   font-family: 'Exo 2', sans-serif;
-  text-decoration-line: none;
-
   text-align: center;
-
-  color: #FFFFFF;
 }
 
 .nav-button-bar {

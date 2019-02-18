@@ -1,8 +1,6 @@
 ---
 ---
 :root {
-  --title-txt-color: #FFFFFF;
-  --home-txt-color: #FFFFFF;
   --home-nav-button-hover-color: rgba(100, 100, 100, 0.5);
   --card-color: rgba(100, 100, 100, 0.5);
   --card-max-width: 70em;
@@ -37,8 +35,6 @@
   font-family: 'Exo 2', sans-serif;
   text-align: center;
   text-decoration-line: none;
-
-  color: var(--title-txt-color);
 }
 
 .home-nav-bar {
@@ -52,12 +48,7 @@
 .home-nav-button {
   border-radius: 0.5em;
   padding: 0.5em;
-
   font-size: 1.5em;
-  font-family: 'Open Sans', sans-serif;
-  text-decoration-line: none;
-
-  color: var(--home-txt-color);
 }
 
 .home-nav-button:hover {
@@ -90,14 +81,6 @@
   max-width: var(--card-max-width);
   min-width: var(--card-min-width);
   background: var(--card-color);
-}
-
-.home-card * {
-  color: var(--home-txt-color);
-}
-
-.home-card-divider {
-  background: var(--home-txt-color);
 }
 
 // Footer button bar

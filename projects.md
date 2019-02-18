@@ -8,17 +8,21 @@ script: /assets/js/gol.js
 {%- capture projects-main -%}
   {%- for project in site.data.projects -%}
     {%- capture projects-content -%}
-      {{ project.description }}
+      {%- if project.description -%}
+        <p>{{ project.description }}</p>
+      {%- endif -%}
     {%- endcapture -%}
 
     <div class="project-wrapper">
-      {%- include card.html
+      {%- include hover-card.html
         header=project.name
-        content=projects-content
-        card-class="default-card content-card"
-        card-header-class="default-card-header content-card-header"
-        card-body-class="default card-body content-card-body"
-        is-markdown=true
+        content=project.description
+        card-class="project-card"
+        card-overlay-class="project-card-overlay"
+        card-header-class="project-card-header"
+        card-body-class="project-card-body"
+        img=project.image
+        link=project.link
       -%}
     </div>
   {%- endfor -%}

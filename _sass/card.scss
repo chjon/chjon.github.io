@@ -24,8 +24,7 @@
 
 .card-divider {
   width: 100%;
-  height: 1px;
-
+  height: 1pt;
   border: none;
 }
 
@@ -41,19 +40,6 @@
 
 // Fonts
 
-.card-header > h1, .card-body > h1 {
-  font-family: 'Exo 2', 'sans serif';
-  font-size: 3em;
-  margin-block-end: 0;
-  margin-block-start: 0;
-}
-
 .card-header > h1 {
   text-align: center;
-}
-
-.card-body > p {
-  font-family: 'Open Sans', 'sans serif';
-  font-size: 1em;
-  line-height: 200%;
 }
