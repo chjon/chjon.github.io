@@ -1,0 +1,36 @@
+title: Jonathan Chung
+author: Jonathan Chung
+email: jt2chung@edu.uwaterloo.ca
+copyright-year: 2019
+description: Jonathan Chung • Aspiring Software Developer
+baseurl: "/"
+url: "https://jonathanchung.xyz"
+github_username:  chjon
+
+# Build settings
+markdown: kramdown
+theme: minima
+plugins:
+  - jekyll-feed
+
+defaults:
+  - scope:
+      path: "projects"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+    values:
+      layout: "home"
+
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+# exclude:
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/

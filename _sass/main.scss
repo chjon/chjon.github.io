@@ -1,0 +1,44 @@
+:root {
+  --txt-colour: #FFFFFF;
+  --accent-color: #00FF00;
+}
+
+// Layout
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+// Font styles
+
+h1, a, p {
+  color: var(--txt-colour);
+}
+
+h1 {
+  font-family: 'Exo 2', 'sans serif';
+  font-size: 3em;
+  line-height: 150%;
+  margin-block-end: 0;
+  margin-block-start: 0;
+}
+
+a, p {
+  font-family: 'Open Sans', 'sans serif';
+  font-size: 1em;
+  line-height: 200%;
+  text-decoration-color: var(--accent-color);
+}
+
+p a:hover {
+  color: var(--accent-color);
+}
+
+hr {
+  background-color: var(--accent-color);
+}

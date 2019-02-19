@@ -1,0 +1,62 @@
+---
+---
+
+// Background color
+.underlay {
+  background: black;
+}
+
+// Main card
+
+.main-card {
+  max-width: 90vw;
+  background: none;
+}
+
+.main-card-body {
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 0;
+}
+
+// Project cards
+
+.project-wrapper {
+  display: flex;
+  flex: 1;
+  padding: 1em;
+}
+
+.project-card {
+  min-height: 15em;
+  min-width: 350px;
+}
+
+.project-card-overlay {
+  padding: 0.5em;
+
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--accent-color);
+}
+
+.project-card-overlay p {
+  padding-left: 2em;
+  padding-right: 2em;
+  text-align: center;
+}
+
+.project-card-overlay:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.project-button {
+  width: 2.5em;
+  height: 2.5em;
+
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.project-button:hover {
+  filter: invert(0.5);
+}

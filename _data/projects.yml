@@ -1,0 +1,33 @@
+- name: InfiniteChess
+  description: >-
+    A data-driven game of [chess on an infinite board](https://en.wikipedia.org/wiki/Infinite_chess) using
+    data-defined [non-conventional chess pieces](https://en.wikipedia.org/wiki/Fairy_chess_piece) and programmed
+    in C++ using the [SFML](https://www.sfml-dev.org/) library for [OpenGL](https://www.opengl.org/).
+  image: /assets/img/infinitechess.png
+  github-link: https://github.com/chjon/InfiniteChess
+- name: BlockGame
+  description: >-
+    A multi-threaded, continuous time-step physics simulation and
+    [sandbox game](https://en.wikipedia.org/wiki/Open_world) written in Java, with dynamic world generation
+    and dynamic world rendering.
+  github-link: https://github.com/chjon/BlockGame
+  image: /assets/img/blockgame.jpg
+- name: DeltaT
+  description: >-
+    A reaction-time game built with the [Onion Omega 2 Linux SoC](https://onion.io/Omega2/), with all
+    systems programmed in C++, including the game logic and an abstract GPIO interface.
+  image: /assets/img/deltat.jpg
+  github-link: https://github.com/chjon/DeltaT
+- name: Molecularize
+  description: >-
+    An extensible chemical computing tool written in Java.
+  image: /assets/img/molecularize.jpg
+  github-link: https://github.com/chjon/Molecularize
+- name: jonathan<wbr />chung.xyz
+  description: >-
+    This site was written in HTML, CSS, [Markdown](https://daringfireball.net/projects/markdown/),
+    [Liquid](https://github.com/Shopify/liquid/wiki), and Javascript, using
+    [Jekyll](https://jekyllrb.com/) to generate static pages.
+  github-link: https://github.com/chjon/chjon.github.io
+  page-link: /
+  page-description: Home page

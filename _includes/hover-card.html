@@ -1,0 +1,17 @@
+<div class="{{ 'hover-card ' | append: include.card-class | rstrip }}"
+  {% if include.id %} id="{{ include.id }}" {% endif %}
+  {% if include.img %} style="background-image: url('{{ include.img }}')" {% endif %}
+>
+  <div class="{{ 'hover-card-overlay ' | append: include.card-overlay-class | rstrip }}"
+    {% if include.overlay-img %} style="background-image: url('{{ include.overlay-img }}')" {% endif %}
+  >
+    <div class="{{ 'hover-card-header ' | append: include.card-header-class | rstrip }}">
+      <h1>
+        {{- include.header -}}
+      </h1>
+    </div>
+    <div class="{{ 'hover-card-body ' | append: include.card-body-class | rstrip }}">
+      {{- include.content -}}
+    </div>
+  </div>
+</div>

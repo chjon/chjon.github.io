@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    {%- if page.title -%}
+      <title>{{ site.title | append: ' • ' | append: page.title }}</title>
+    {%- else -%}
+      <title>{{ site.title }}</title>
+    {% endif %}
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Exo+2:100">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300">
+    {%- if page.stylesheet -%}
+      <link rel="stylesheet" href="{{ page.stylesheet }}">
+    {%- endif -%}
+    {%- if page.script -%}
+      <script type="module" src="{{ page.script }}"></script>
+    {%- endif -%}
+    {% feed_meta %}
+    {% seo %}
+  </head>
+  <body>
+    <canvas class="underlay" id="background-canvas"></canvas>
+    <div class="overlay">
+      {{ content }}
+    </div>
+  </body>
+</html>

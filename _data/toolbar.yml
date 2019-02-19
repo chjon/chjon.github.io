@@ -1,0 +1,13 @@
+- name: Contact
+  link: mailto:jt2chung@edu.uwaterloo.ca
+  image: /assets/icons/mail-icon.png
+  description: 'jt2chung@edu.uwaterloo.ca'
+- name: GitHub
+  link: https://github.com/chjon
+  image: /assets/icons/github-icon.png
+  description: GitHub
+- name: Resume
+  link: /assets/res/resume.pdf
+  image: /assets/icons/resume-icon.png
+  target: _blank
+  description: Resume
