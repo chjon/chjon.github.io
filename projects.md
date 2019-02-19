@@ -9,7 +9,7 @@ script: /assets/js/gol.js
   {%- for project in site.data.projects -%}
     {%- capture project-content -%}
       {%- if project.description -%}
-        <p>{{ project.description }}</p>
+        {{ project.description | markdownify }}
       {%- endif -%}
       <div class="button-bar">
         {%- if project.github-link -%}
@@ -18,6 +18,7 @@ script: /assets/js/gol.js
             button-class="project-button"
             image="/assets/icons/github-icon.png"
             link=project.github-link
+            description="GitHub page"
           -%}
         {%- endif -%}
         {%- if project.page-link -%}
@@ -26,6 +27,7 @@ script: /assets/js/gol.js
             button-class="project-button"
             image="/assets/icons/link-icon.png"
             link=project.page-link
+            description=project.page-description
           -%}
         {%- endif -%}
       </div>

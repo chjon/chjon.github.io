@@ -29,13 +29,20 @@
 
 .project-card {
   min-height: 15em;
-  min-width: 300px;
+  min-width: 350px;
 }
 
 .project-card-overlay {
-  padding: 0;
+  padding: 0.5em;
+
   background: rgba(0, 0, 0, 0.7);
   border: 1px solid var(--accent-color);
+}
+
+.project-card-overlay p {
+  padding-left: 2em;
+  padding-right: 2em;
+  text-align: center;
 }
 
 .project-card-overlay:hover {

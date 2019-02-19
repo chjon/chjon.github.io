@@ -1,12 +1,12 @@
 <a href="{{ include.link }}"
   class="{{ 'button ' | append: include.button-class | rstrip }}"
-  {% if item.target %} target="{{ item.target }}" {% endif %}
-  {% if item.description %} title="{{ item.description }}" {% endif %}
+  {% if include.target %} target="{{ include.target }}" {% endif %}
+  {% if include.description %} title="{{ include.description }}" {% endif %}
 >
   {%- if include.image -%}
     <img src="{{ include.image }}"
       class="{{ 'button-image ' | append: include.button-image-class | rstrip }}"
-      {% if include.image-alt %} alt="{{ item.image-alt }}" {% endif %}
+      {% if include.image-alt %} alt="{{ include.image-alt }}" {% endif %}
     >
   {%- elsif include.name -%}
     {{ include.name }}

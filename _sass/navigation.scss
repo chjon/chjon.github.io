@@ -50,6 +50,11 @@
   font-family: 'Exo 2', sans-serif;
   text-align: center;
   line-height: 110%;
+  text-decoration-line: none;
+}
+
+.nav-toolbar-logo a:hover {
+  text-decoration-color: var(--accent-color);
 }
 
 .nav-button-bar {
@@ -61,8 +66,8 @@
   width: var(--toolbar-image-size);
   height: var(--toolbar-image-size);
 
-  margin-left: 0.5em;
-  margin-right: 0.5em;
+  margin-left: 1vw;
+  margin-right: 1vw;
 }
 
 .nav-button:hover {
