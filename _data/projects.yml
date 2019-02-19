@@ -5,8 +5,6 @@
     in C++ using the [SFML](https://www.sfml-dev.org/) library for [OpenGL](https://www.opengl.org/).
   image: /assets/img/infinitechess.png
   github-link: https://github.com/chjon/InfiniteChess
-  page-link: /projects/infinitechess
-  page-description: Project page
 - name: BlockGame
   description: >-
     A multi-threaded, continuous time-step physics simulation and
