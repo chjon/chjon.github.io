@@ -16,13 +16,25 @@ body {
 
 // Font styles
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  font-size: 1em;
+}
+
+@media (max-width: 800px) {
+  html {
+    font-size: 0.875em;
+  }
+}
+
 h1, a, p {
   color: var(--txt-colour);
 }
 
 h1 {
   font-family: 'Exo 2', 'sans serif';
-  font-size: 3em;
+  font-size: 3rem;
   line-height: 150%;
   margin-block-end: 0;
   margin-block-start: 0;
@@ -30,7 +42,7 @@ h1 {
 
 a, p {
   font-family: 'Open Sans', 'sans serif';
-  font-size: 1em;
+  font-size: 1rem;
   line-height: 200%;
   text-decoration-color: var(--accent-color);
 }
