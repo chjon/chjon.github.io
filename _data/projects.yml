@@ -6,12 +6,16 @@
   description: A 2D sandbox game
   github-link: https://github.com/chjon/BlockGame
   image: /assets/img/blockgame.jpg
-  link: "/projects/blockgame/"
+  page-link: /projects/blockgame
 - name: DeltaT
   description: A reaction-time game built with a Linux SoC
   image: /assets/img/deltat.jpg
+  github-link: https://github.com/chjon/DeltaT
 - name: Molecularize
   description: A chemical computing tool written in Java
   image: /assets/img/molecularize.jpg
+  github-link: https://github.com/chjon/Molecularize
 - name: jonathan<wbr />chung.xyz
   description: This website
+  github-link: https://github.com/chjon/chjon.github.io
+  page-link: /

@@ -1,18 +1,14 @@
 <div class="{{ 'button-bar ' | append: include.button-bar-class | rstrip }}">
   {% for item in include.data %}
-    <a href="{{ item.link }}"
-      class="{{ 'button-bar-button ' | append: include.button-class | rstrip }}"
-      {% if item.target %} target="{{ item.target }}" {% endif %}
-      {% if item.description %} title="{{ item.description }}" {% endif %}
-    >
-      {%- if item.image -%}
-        <img src="{{ item.image }}"
-          class="{{ 'button-bar-button-image ' | append: include.button-image-class | rstrip }}"
-          {% if item.name %} alt="{{ item.name }}" {% endif %}
-        >
-      {%- elsif item.name -%}
-        {{ item.name }}
-      {%- endif -%}
-    </a>
+    {%- include button.html
+      button-class=include.button-class
+      button-image-class=include.button-image-class
+      name=item.name
+      link=item.link
+      target=item.target
+      description=item.description
+      image=item.image
+      image-alt=item.image-alt
+    -%}
   {% endfor %}
 </div>

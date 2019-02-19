@@ -26,11 +26,12 @@
   }
 
   .hover-card-body {
-    opacity: 1;
+    display: flex;
   }
 }
 
 .hover-card-header {
+  width: 100%;
   text-align: center;
 }
 
@@ -39,11 +40,11 @@
   height: 100%;
 
   position: absolute;
-  opacity: 0;
 
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .hover-card-overlay {

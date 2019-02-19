@@ -2,8 +2,7 @@
   {% if include.id %} id="{{ include.id }}" {% endif %}
   {% if include.img %} style="background-image: url('{{ include.img }}')" {% endif %}
 >
-  <a class="{{ 'hover-card-overlay ' | append: include.card-overlay-class | rstrip }}"
-    {% if include.link %} href="{{ include.link }}" {% endif %}
+  <div class="{{ 'hover-card-overlay ' | append: include.card-overlay-class | rstrip }}"
     {% if include.overlay-img %} style="background-image: url('{{ include.overlay-img }}')" {% endif %}
   >
     <div class="{{ 'hover-card-header ' | append: include.card-header-class | rstrip }}">
@@ -14,5 +13,5 @@
     <div class="{{ 'hover-card-body ' | append: include.card-body-class | rstrip }}">
       {{- include.content -}}
     </div>
-  </a>
+  </div>
 </div>

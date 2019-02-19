@@ -7,16 +7,34 @@ script: /assets/js/gol.js
 ---
 {%- capture projects-main -%}
   {%- for project in site.data.projects -%}
-    {%- capture projects-content -%}
+    {%- capture project-content -%}
       {%- if project.description -%}
         <p>{{ project.description }}</p>
       {%- endif -%}
+      <div class="button-bar">
+        {%- if project.github-link -%}
+          {%- include button.html
+            name="GitHub"
+            button-class="project-button"
+            image="/assets/icons/github-icon.png"
+            link=project.github-link
+          -%}
+        {%- endif -%}
+        {%- if project.page-link -%}
+          {%- include button.html
+            name="Page"
+            button-class="project-button"
+            image="/assets/icons/link-icon.png"
+            link=project.page-link
+          -%}
+        {%- endif -%}
+      </div>
     {%- endcapture -%}
 
     <div class="project-wrapper">
       {%- include hover-card.html
         header=project.name
-        content=project.description
+        content=project-content
         card-class="project-card"
         card-overlay-class="project-card-overlay"
         card-header-class="project-card-header"

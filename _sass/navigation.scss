@@ -49,6 +49,7 @@
   font-size: var(--toolbar-font-height);
   font-family: 'Exo 2', sans-serif;
   text-align: center;
+  line-height: 110%;
 }
 
 .nav-button-bar {
@@ -57,18 +58,13 @@
 }
 
 .nav-button {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: var(--toolbar-image-size);
+  height: var(--toolbar-image-size);
+
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 
 .nav-button:hover {
   filter: invert(0.5);
-}
-
-.nav-button-image {
-  width: var(--toolbar-image-size);
-  height: var(--toolbar-image-size);
-  padding: 10%;
 }
