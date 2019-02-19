@@ -3,8 +3,7 @@
 :root {
   --home-nav-button-hover-color: rgba(100, 100, 100, 0.5);
   --card-color: rgba(100, 100, 100, 0.5);
-  --card-max-width: 70em;
-  --card-min-width: 20em;
+  --card-max-width: 70rem;
 }
 
 .underlay {
@@ -18,8 +17,8 @@
 }
 
 .overlay section, .overlay footer {
-  padding-top: 1.5em;
-  padding-bottom: 1.5em;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .home-content {
@@ -29,9 +28,9 @@
 // Title + Navigation bar
 
 .home-title {
-  padding-bottom: 0.2em;
+  padding-bottom: 0.2rem;
 
-  font-size: 7.5em;
+  font-size: 7.5rem;
   font-family: 'Exo 2', sans-serif;
   text-align: center;
   text-decoration-line: none;
@@ -46,32 +45,32 @@
 }
 
 .home-nav-button {
-  border-radius: 0.5em;
-  padding: 0.5em;
-  font-size: 1.5em;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  font-size: 1.5rem;
 }
 
 .home-nav-button:hover {
   background: var(--home-nav-button-hover-color);
 }
 
-@media only screen and (max-width: 1000px) {
-  .overlay-title {
-    font-size: 5em;
+@media (max-width: 1000px) {
+  .home-title {
+    font-size: 5rem;
   }
 
   .home-nav-button {
-    font-size: 1.3em;
+    font-size: 1.5rem;
   }
 }
 
-@media only screen and (max-width: 600px) {
-  .overlay-title {
-    font-size: 3em;
+@media (max-width: 700px) {
+  .home-title {
+    font-size: 3rem;
   }
 
   .home-nav-button {
-    font-size: 1em;
+    font-size: 1.3rem;
   }
 }
 
@@ -79,7 +78,6 @@
 
 .home-card {
   max-width: var(--card-max-width);
-  min-width: var(--card-min-width);
   background: var(--card-color);
 }
 
@@ -93,11 +91,11 @@
 }
 
 .footer-button {
-  width: 3em;
-  height: 3em;
+  width: 3rem;
+  height: 3rem;
 
-  margin-left: 0.5em; 
-  margin-right: 0.5em; 
+  margin-left: 0.5rem; 
+  margin-right: 0.5rem; 
 }
 
 .footer-button:hover {
@@ -109,8 +107,8 @@
 }
 
 .footer-card {
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .footer-card .card-body{

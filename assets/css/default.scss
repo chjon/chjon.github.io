@@ -9,8 +9,22 @@
 // Main card
 
 .main-card {
-  max-width: 90vw;
+  max-width: 90%;
   background: none;
+}
+
+.project-wrapper {
+  min-width: 50%;
+}
+
+@media (max-width: 700px) {
+  .main-card {
+    max-width: 100%;
+  }
+
+  .project-wrapper {
+    min-width: 100%;
+  }
 }
 
 .main-card-body {
@@ -21,27 +35,26 @@
 
 // Project cards
 
+.project-card {
+  min-height: 15rem;
+}
+
 .project-wrapper {
   display: flex;
   flex: 1;
-  padding: 1em;
-}
-
-.project-card {
-  min-height: 15em;
-  min-width: 350px;
+  padding: 1rem;
 }
 
 .project-card-overlay {
-  padding: 0.5em;
+  padding: 0.5rem;
 
   background: rgba(0, 0, 0, 0.7);
   border: 1px solid var(--accent-color);
 }
 
 .project-card-overlay p {
-  padding-left: 2em;
-  padding-right: 2em;
+  padding-left: 2rem;
+  padding-right: 2rem;
   text-align: center;
 }
 
@@ -50,11 +63,11 @@
 }
 
 .project-button {
-  width: 2.5em;
-  height: 2.5em;
+  width: 2.5rem;
+  height: 2.5rem;
 
-  margin-left: 0.5em;
-  margin-right: 0.5em;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .project-button:hover {
