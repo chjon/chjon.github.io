@@ -30,6 +30,29 @@ export function toCartesian(r, a) {
 }
 
 /**
+ * Calculate the distance between two points
+ * @param { number } x1 
+ * @param { number } y1 
+ * @param { number } x2 
+ * @param { number } y2 
+ */
+export function dist(x1, y1, x2, y2) {
+  return Math.hypot(y2 - y1, x2 - x1);
+}
+
+/**
+ * Calculate the square of the distance between two points
+ * @param { number } x1 
+ * @param { number } y1 
+ * @param { number } x2 
+ * @param { number } y2 
+ */
+export function dist2(x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  return dx * dx + dy * dy;
+}
+
+/**
  * Get the minimum and maximum values in a list
  * @param { number[] } list the list of values
  * @return {{ min: number, max: number }} an object containing the minimum and maximum values

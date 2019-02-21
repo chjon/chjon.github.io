@@ -1,5 +1,6 @@
-<a href="{{ include.link }}"
-  class="{{ 'button ' | append: include.button-class | rstrip }}"
+<a class="{{ 'button ' | append: include.button-class | rstrip }}"
+  {% if include.id %} id="{{ include.id }}" {% endif %}
+  {% if include.link %} href="{{ include.link }}" {% endif %}
   {% if include.target %} target="{{ include.target }}" {% endif %}
   {% if include.description %} title="{{ include.description }}" {% endif %}
 >
