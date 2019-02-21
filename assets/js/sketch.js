@@ -37,6 +37,30 @@ export function init(setup, draw) {
 
 // Graphics
 
+export function pushState() {
+  ctx.save();
+}
+
+export function popState() {
+  ctx.restore();
+}
+
+export function translate(x, y) {
+  ctx.translate(x, y);
+}
+
+export function rotate(a) {
+  ctx.rotate(a);
+}
+
+export function onAxis(x1, y1, x2, y2, callback) {
+  pushState();
+  translate(x1, y1);
+  rotate(Math.atan2(y2 - y1, x2 - x1));
+  callback();
+  popState();
+}
+
 export function setStroke(style) {
   ctx.strokeStyle = style;
 }
