@@ -49,8 +49,8 @@ export function getBounds(list) {
 /**
  * Scale a list of numbers such that the maximum difference of any two numbers is 1,
  * and then shift all the values to be centered around 0
- * @param {number[]} list a list of numbers
- * @return {number[]} the normalized list
+ * @param { number[] } list a list of numbers
+ * @return { number[] } the normalized list
  */
 export function normalize(list = []) {
   if (list.length === 0) return [];
@@ -72,20 +72,30 @@ export function normalize(list = []) {
 }
 
 /**
+ * Add a constant to all the values in a list
+ * @param { number[] } list a list of numbers
+ * @param { number } shiftVal the value to add
+ * @return { number[] } the normalized list
+ */
+export function shift(list, shiftVal = 0) {
+  return list.map((val) => {
+    return val + shiftVal;
+  });
+}
+
+/**
  * Shift the center of all the values in a list
- * @param {number[]} list a list of numbers
- * @return {number[]} the normalized list
+ * @param { number[] } list a list of numbers
+ * @param { number } newCenter the desired center
+ * @return { number[] } the normalized list
  */
 export function shiftCenter(list, newCenter = 0) {
   if (list.length === 0) return [];
   if (list.length === 1) return [ newCenter ];
 
   const { min, max } = getBounds(list);
-  const shift = newCenter - (max + min) / 2;
-
-  return list.map((val) => {
-    return val - shift;
-  });
+  const shiftVal = newCenter - (max + min) / 2;
+  return shift(list, -shiftVal);
 }
 
 /**
