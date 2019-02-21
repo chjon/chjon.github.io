@@ -102,10 +102,7 @@ export function dft(x = []) {
       im -= x[n] * Math.sin(phi_2);
     }
 
-    re /= N;
-    im /= N;
-
-    X[k] = { re, im };
+    X[k] = { re: re / N, im: im / N };
   }
 
   return X;
