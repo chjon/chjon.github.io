@@ -1,6 +1,6 @@
+import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
 
-const TAU = 2 * Math.PI;
 let window = { width: 0, height: 0 };
 let time = 0;
 let center;
@@ -8,8 +8,17 @@ let waveBegin = 400;
 let waveScale = 3;
 const wave = [];
 
-const inputSignal = [];
-let polarSignal;
+let inputSignal = [];
+let outputSignal;
+
+function generateStartFunction() {
+  for (let i = -200; i < 200; i = i + 1) {
+    inputSignal.push(i * i);
+  }
+
+  inputSignal = maths.normalize(inputSignal);
+  inputSignal = maths.scale(inputSignal, 200);
+}
 
 class Circle {
   constructor(x, y, r, a) {
@@ -25,64 +34,25 @@ class Circle {
   }
 }
 
-function sin(x) {
-  return 150 * Math.sin(x * TAU / 100);
-}
-
-function generateStartFunction() {
-  for (let i = 0; i < 100; i = i + 1) {
-    inputSignal.push(sin(1.5 * i));
-  }
-}
-
-// Perform a discrete Fourier transform
-function dft(x = []) {
-  const X = [];
-  const N = x.length;
-  const phi_0 = TAU / N;
-  for (let k = 0; k < N; k = k + 1) {
-    let re = 0, im = 0;
-    const phi_1 = phi_0 * k;
-    for (let n = 0; n < N; n = n + 1) {
-      const phi_2 = phi_1 * n;
-      re += x[n] * Math.cos(phi_2);
-      im -= x[n] * Math.sin(phi_2);
-    }
-
-    re /= N;
-    im /= N;
-
-    X[k] = { freq: k, amp: Math.hypot(re, im), phase: Math.atan2(re, im) };
-  }
-
-  return X;
-}
-
 function drawEpicycles(vals) {
   // Draw the circles
   const endPoint = { x: center.x, y: center.y };
 
-  vals.forEach((val) => {
-    if (!val.amp) return;
+  for (let freq = 0; freq < vals.length; freq = freq + 1) {
+    const val = vals[freq];
+    if (!val.r) return;
 
     const circle = new Circle(
       endPoint.x,
       endPoint.y,
-      val.amp,
-      val.phase + val.freq * time,
+      val.r,
+      val.a + freq * time,
     );
 
-    if (circle.x == center.x && circle.y == center.y) {
-      sketch.setStroke('#FF0000');
-      circle.draw();
-      sketch.setStroke('#FFFFFF');
-    } else {
-      circle.draw();
-    }
-
+    circle.draw();
     endPoint.x = circle.x + circle.r * Math.cos(circle.a);
     endPoint.y = circle.y - circle.r * Math.sin(circle.a);
-  });
+  };
 
   // Draw the line across
   sketch.line(endPoint.x, endPoint.y, waveBegin, endPoint.y);
@@ -105,8 +75,13 @@ function setup() {
   center = { x: 200, y: window.height / 2 };
 
   generateStartFunction();
-  polarSignal = dft(inputSignal);
-  console.log(polarSignal);
+  outputSignal = maths.dft(inputSignal);
+  outputSignal = outputSignal.map(({ re, im }) => {
+    return maths.toPolar(re, im);
+  });
+  outputSignal = outputSignal.map(({ r, a }) => {
+    return { r, a: a + Math.PI / 2 };
+  });
   sketch.setFrameInterval(20);
 }
 
@@ -114,10 +89,10 @@ function draw() {
   sketch.setStroke('#FFFFFF');
   sketch.setFill('#FFFFFF');
 
-  drawEpicycles(polarSignal);
+  drawEpicycles(outputSignal);
   drawWave();
 
-  time += TAU / inputSignal.length;
+  time += maths.TWO_PI / inputSignal.length;
 }
 
 sketch.init(setup, draw);
