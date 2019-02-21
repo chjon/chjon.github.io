@@ -72,6 +72,23 @@ export function normalize(list = []) {
 }
 
 /**
+ * Shift the center of all the values in a list
+ * @param {number[]} list a list of numbers
+ * @return {number[]} the normalized list
+ */
+export function shiftCenter(list, newCenter = 0) {
+  if (list.length === 0) return [];
+  if (list.length === 1) return [ newCenter ];
+
+  const { min, max } = getBounds(list);
+  const shift = newCenter - (max + min) / 2;
+
+  return list.map((val) => {
+    return val - shift;
+  });
+}
+
+/**
  * Scale a list of numbers by a constant scalar value
  * @param { number[] } list the list of nubmers to scale
  * @param { number } lambda the constant by which to scale
