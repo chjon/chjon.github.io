@@ -165,6 +165,10 @@ export class Quadtree {
 
     if (minPoint) {
       this.length--;
+
+      if (this.length === 0) {
+        this.bucket = [];
+      }
     }
     return minPoint;
   }
