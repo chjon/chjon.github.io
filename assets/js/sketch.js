@@ -112,7 +112,7 @@ export function arc(x, y, r, sAngle, eAngle) {
   ctx.stroke();
 }
 
-export function ellipse(cx, cy, rx, ry){
+export function ellipse(cx, cy, rx, ry) {
   ctx.save();
   ctx.beginPath();
 
@@ -122,4 +122,20 @@ export function ellipse(cx, cy, rx, ry){
 
   ctx.restore();
   ctx.stroke();
+}
+
+export function rect(x1, y1, x2, y2) {
+  if (x1 > x2) {
+    const tmp = x1;
+    x1 = x2;
+    x2 = tmp;
+  }
+
+  if (y1 > y2) {
+    const tmp = y1;
+    y1 = y2;
+    y2 = tmp;
+  }
+
+  ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
 }
