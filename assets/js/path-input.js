@@ -1,35 +1,54 @@
 import * as sketch from './sketch.js';
 import { Quadtree } from './quadtree.js';
 
-const GRAB_RADIUS = 20;
+const GRAB_RADIUS = 10;
 let clickedTree;
 
 const modeLabel = document.getElementById('mode-label');
 let mode = 'Drawing';
 let selected = undefined;
+let closest;
+
+document.onmousemove = (e) => {
+  if (!clickedTree) {
+    return;
+  }
+
+  if (!selected) {
+    closest = clickedTree.getClosestWithin(e.pageX, e.pageY, GRAB_RADIUS * GRAB_RADIUS);
+  }
+}
 
 document.onmousedown = (e) => {
+  if (!clickedTree) {
+    return;
+  }
+
   if (mode === 'Drawing') {
-    clickedTree.addPoint(e.pageX, e.pageY);
-  } else if (mode === 'Editing') {
-    selected = clickedTree.popClosestWithin(e.pageX, e.pageY, GRAB_RADIUS * GRAB_RADIUS);
+    if (!e.ctrlKey) {
+      clickedTree.addPoint(e.pageX, e.pageY);
+      closest = { x: e.pageX, y: e.pageY };
+    } else if (closest) {
+      clickedTree.pop(closest.x, closest.y);
+      closest = clickedTree.getClosestWithin(e.pageX, e.pageY, GRAB_RADIUS * GRAB_RADIUS);;
+    }
   }
 }
 
 document.onmouseup = (e) => {
-  if (selected) {
-    clickedTree.addPoint(e.pageX, e.pageY);
-    selected = undefined;
-  }
 }
 
 document.onkeyup = (e) => {
+  if (!clickedTree) {
+    return;
+  }
+
   switch (e.keyCode) {
     case 'D'.charCodeAt(0):
       mode = 'Drawing';
       break;
-    case 'E'.charCodeAt(0):
-      mode = 'Editing';
+    case 'C'.charCodeAt(0):
+      mode = 'Connecting';
       break;
     case 'O'.charCodeAt(0):
       console.log(clickedTree);
@@ -51,6 +70,10 @@ function draw() {
   sketch.setFill('#FFFFFF');
 
   clickedTree.draw();
+
+  if (closest) {
+    sketch.ellipse(closest.x, closest.y, GRAB_RADIUS, GRAB_RADIUS);
+  }
 }
 
 sketch.init(setup, draw);
