@@ -13,9 +13,6 @@
     {%- if page.stylesheet -%}
       <link rel="stylesheet" href="{{ page.stylesheet }}">
     {%- endif -%}
-    {%- if page.script -%}
-      <script type="module" src="{{ page.script }}"></script>
-    {%- endif -%}
     {% feed_meta %}
     {% seo %}
   </head>
@@ -24,5 +21,9 @@
     <div class="overlay">
       {{ content }}
     </div>
+
+    {%- if page.script -%}
+      <script type="module" src="{{ page.script }}"></script>
+    {%- endif -%}
   </body>
 </html>

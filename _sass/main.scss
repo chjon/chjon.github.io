@@ -1,6 +1,12 @@
 :root {
   --txt-colour: #FFFFFF;
   --accent-color: #00FF00;
+  --background-color: #000000;
+}
+
+// Background color
+.underlay {
+  background: var(--background-color);
 }
 
 // Layout
