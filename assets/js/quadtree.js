@@ -1,5 +1,4 @@
 import * as maths from './math-utils.js';
-import * as sketch from './sketch.js';
 
 export class Quadtree {
   constructor(x, y, width, height, maxBucketSize, maxDepth) {
@@ -164,7 +163,7 @@ export class Quadtree {
 
       let foundIndex;
       for (let i = 0; i < this.bucket.length; i = i + 1) {
-        if (this.bucket[i].x === obj.x && this.bucket[i].y === obj.y) {
+        if (this.bucket[i] === obj) {
           foundIndex = i;
           break;
         }
@@ -195,20 +194,5 @@ export class Quadtree {
     }
 
     return retVal;
-  }
-
-  draw() {
-    sketch.rect(this.bounds.left, this.bounds.top, this.bounds.right, this.bounds.bottom);
-
-    if (this.bucket) {
-      this.bucket.forEach((storedObj) => {
-        sketch.ellipse(storedObj.x, storedObj.y, 5, 5);
-      });
-    } else {
-      this.ne.draw();
-      this.nw.draw();
-      this.se.draw();
-      this.sw.draw();
-    }
   }
 }
