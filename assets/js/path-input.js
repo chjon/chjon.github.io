@@ -57,6 +57,7 @@ function printFrom(startPoint) {
   console.log(JSON.stringify(toPrint));
 }
 
+// Translate the currently selected points
 function move(xShift, yShift) {
   selection.forEach((obj) => {
     clickedTree.pop(obj);
@@ -66,6 +67,7 @@ function move(xShift, yShift) {
   });
 }
 
+// Scale the currently selected points
 function scale(x1, y1, x2, y2) {
   const selectionComponents = selection.reduce((selectionComponents, obj) => {
     selectionComponents.x.push(obj.x);
@@ -94,6 +96,7 @@ function scale(x1, y1, x2, y2) {
   });
 }
 
+// Rotate the currently selected points
 function rotate(x1, y1, x2, y2) {
   const selectionComponents = selection.reduce((selectionComponents, obj) => {
     selectionComponents.x.push(obj.x);
@@ -252,6 +255,11 @@ document.onkeyup = (e) => {
   }
 
   switch (e.keyCode) {
+    // Cancel current operation
+    case 27:
+      prevPoint = undefined;
+      break;
+
     // Delete selection
     case 46:
       selection.forEach((obj) => {

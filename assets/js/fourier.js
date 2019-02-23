@@ -2,7 +2,7 @@ import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
 
 let SIGNAL_LENGTH;
-let POINT_DENSITY = 0.07;
+let POINT_DENSITY = 0.08;
 let window = { width: 0, height: 0 };
 let counter = 0;
 let inputSignal = { x: [], y: [] };
@@ -28,7 +28,7 @@ function loadStartFunction(inputString) {
   });
 
   inputSignal.x = maths.shiftCenter(inputSignal.x);
-  inputSignal.y = maths.shift(maths.scale(maths.shiftCenter(inputSignal.y), -1), 50);
+  inputSignal.y = maths.shift(maths.scale(maths.shiftCenter(inputSignal.y), -1));
 
   return inputSignal;
 }
@@ -98,7 +98,7 @@ function setup() {
 
 function draw() {
   sketch.setStroke('rgba(255, 255, 255, 0.1)');
-  const pointY = drawEpicycles(outputSignal.y, 100, window.height / 2 + 100, true).y;
+  const pointY = drawEpicycles(outputSignal.y, 100, window.height / 2 + 50, true).y;
   const pointX = drawEpicycles(outputSignal.x, window.width / 2, 100, false).x;
 
   sketch.setStroke('#FFFFFF');
