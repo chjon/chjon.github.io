@@ -37,6 +37,7 @@ function disconnect(toDisconnect) {
   }
 }
 
+// Draw the objects in the quadtree
 function drawQuadtree(qTree) {
   if (qTree.bucket) {
     qTree.bucket.forEach((storedObj) => {
@@ -68,9 +69,12 @@ document.onmousedown = (e) => {
   }
 
   if (mode === 'Drawing') {
+    // Add a new point
     if (!e.ctrlKey) {
       closest = { x: e.pageX, y: e.pageY };
       clickedTree.push(closest);
+
+    // Remove an existing point
     } else if (closest) {
       disconnect(closest);
       clickedTree.pop(closest);
@@ -98,16 +102,54 @@ document.onkeyup = (e) => {
   }
 
   switch (e.keyCode) {
+    // Switch to drawing mode
     case 'D'.charCodeAt(0):
       mode = 'Drawing';
       selected = undefined;
       break;
+
+    // Switch to connecting mode
     case 'C'.charCodeAt(0):
       mode = 'Connecting';
       break;
+    
+    // Output the raw point data
     case 'O'.charCodeAt(0):
-      console.log(clickedTree);
+      console.log(clickedTree.getAll());
       break;
+
+    // Output the points in order of connection if all of them are connected
+    case 'P'.charCodeAt(0):
+      const allPoints = clickedTree.getAll();
+      if (allPoints.length === 0) {
+        console.log(JSON.stringify(allPoints));
+        break;
+      } else if (allPoints.length === 1) {
+        console.log(JSON.stringify([{ x: allPoints[0].x, y: allPoints[0].y }]));
+        break;
+      }
+
+      const allConnected = allPoints.reduce((allConnected, point) => {
+        return allConnected && !!point.next;
+      }, true);
+
+      if (!allConnected) {
+        console.log('Cannot output; graph is not connected');
+      } else {
+        const firstPoint = allPoints[0];
+        const sortedPoints = [];
+        let curPoint = firstPoint;
+
+        do {
+          sortedPoints.push({ x: curPoint.x, y: curPoint.y });
+          curPoint = curPoint.next;
+        } while (curPoint != firstPoint);
+
+        console.log(JSON.stringify(sortedPoints));
+      }
+
+      break;
+
     default:
       break;
   }
