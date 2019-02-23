@@ -37,6 +37,22 @@ function disconnect(toDisconnect) {
   }
 }
 
+// Output a list of all the points after the current one
+function printFrom(startPoint) {
+  if (!startPoint) {
+    return;
+  }
+
+  const toPrint = [{ x: startPoint.x, y: startPoint.y }];
+  let curPoint = startPoint.next;
+  while (curPoint && curPoint != startPoint) {
+    toPrint.push({ x: curPoint.x, y: curPoint.y });
+    curPoint = curPoint.next;
+  }
+
+  console.log(JSON.stringify(toPrint));
+}
+
 // Draw the objects in the quadtree
 function drawQuadtree(qTree) {
   if (qTree.bucket) {
@@ -90,10 +106,9 @@ document.onmousedown = (e) => {
       connect(selected, closest);
       selected = closest;
     }
+  } else if (mode === 'Printing') {
+    printFrom(closest);
   }
-}
-
-document.onmouseup = (e) => {
 }
 
 document.onkeyup = (e) => {
@@ -120,34 +135,7 @@ document.onkeyup = (e) => {
 
     // Output the points in order of connection if all of them are connected
     case 'P'.charCodeAt(0):
-      const allPoints = clickedTree.getAll();
-      if (allPoints.length === 0) {
-        console.log(JSON.stringify(allPoints));
-        break;
-      } else if (allPoints.length === 1) {
-        console.log(JSON.stringify([{ x: allPoints[0].x, y: allPoints[0].y }]));
-        break;
-      }
-
-      const allConnected = allPoints.reduce((allConnected, point) => {
-        return allConnected && !!point.next;
-      }, true);
-
-      if (!allConnected) {
-        console.log('Cannot output; graph is not connected');
-      } else {
-        const firstPoint = allPoints[0];
-        const sortedPoints = [];
-        let curPoint = firstPoint;
-
-        do {
-          sortedPoints.push({ x: curPoint.x, y: curPoint.y });
-          curPoint = curPoint.next;
-        } while (curPoint != firstPoint);
-
-        console.log(JSON.stringify(sortedPoints));
-      }
-
+      mode = 'Printing';
       break;
 
     default:
