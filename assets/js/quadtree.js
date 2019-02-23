@@ -85,7 +85,7 @@ export class Quadtree {
     }
   }
 
-  popClosestWithin(x, y, maxR2) {
+  getClosestWithin(x, y, maxR2) {
     let boundR2 = maxR2;
     const minDist2Val = this.minDist2(x, y);
 
@@ -109,13 +109,7 @@ export class Quadtree {
       }
 
       if (minDist2 < boundR2) {
-        const closest = this.bucket[closestIndex];
-        this.bucket = this.bucket.slice(0, closestIndex).concat(
-          this.bucket.slice(closestIndex + 1, this.bucket.length)
-        );
-
-        this.length--;
-        return closest; 
+        return this.bucket[closestIndex];
       } else {
         return undefined;
       }
@@ -146,31 +140,61 @@ export class Quadtree {
       const tmpTree = treeMinDist2Pairs[i].qTree;
       if (!tmpTree.length) continue;
 
-      const tmpPoint = tmpTree.popClosestWithin(x, y, boundR2);
+      const tmpPoint = tmpTree.getClosestWithin(x, y, boundR2);
       if (!tmpPoint) continue;
 
       const tmpDist2 = maths.dist2(x, y, tmpPoint.x, tmpPoint.y);
 
       if (tmpDist2 < boundR2) {
-        if (minTree) {
-          minTree.addPoint(minPoint.x, minPoint.y);
-        }
-
         minTree = tmpTree;
         minPoint = tmpPoint;
-      } else {
-        tmpTree.addPoint(tmpPoint);
       }
     }
 
-    if (minPoint) {
-      this.length--;
+    return minPoint;
+  }
 
-      if (this.length === 0) {
+  pop(x, y) {
+    if (!this.isInBounds(x, y)) {
+      return undefined;
+    }
+
+    // Check the current bucket
+    if (this.bucket) {
+      if (!this.bucket.length) return undefined;
+
+      let foundIndex;
+      for (let i = 0; i < this.bucket.length; i = i + 1) {
+        if (this.bucket[i].x === x && this.bucket[i].y === y) {
+          foundIndex = i;
+          break;
+        }
+      }
+
+      if (foundIndex !== undefined) {
+        this.bucket = this.bucket.slice(0, foundIndex).concat(
+          this.bucket.slice(foundIndex + 1, this.bucket.length)
+        );
+
+        this.length--;
+        return { x, y };
+      }
+
+      return undefined;
+    }
+
+    const retVal = this
+      .getCorrectQuad(x, y)
+      .pop(x, y);
+
+    if (retVal) {
+      this.length--;
+      if (!this.length) {
         this.bucket = [];
       }
     }
-    return minPoint;
+
+    return retVal;
   }
 
   draw() {
