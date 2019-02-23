@@ -195,4 +195,17 @@ export class Quadtree {
 
     return retVal;
   }
+
+  // Get all the objects in the quadtree
+  getAll() {
+    if (this.bucket) {
+      return this.bucket.slice(0);
+    }
+
+    return []
+      .concat(this.ne.getAll())
+      .concat(this.nw.getAll())
+      .concat(this.se.getAll())
+      .concat(this.sw.getAll());
+  }
 }
