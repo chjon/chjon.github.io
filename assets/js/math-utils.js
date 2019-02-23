@@ -118,7 +118,7 @@ export function shiftCenter(list, newCenter = 0) {
 
   const { min, max } = getBounds(list);
   const shiftVal = newCenter - (max + min) / 2;
-  return shift(list, -shiftVal);
+  return shift(list, shiftVal);
 }
 
 /**
@@ -156,4 +156,73 @@ export function dft(x = []) {
   }
 
   return X;
+}
+
+export function avg(a, b) {
+  return (a + b) / 2;
+}
+
+export function randInterpolate(list = [], numPoints = list.length) {
+  if (list.length <= 1) {
+    return list;
+  }
+
+  while (list.length < numPoints) {
+    const chosenIndex = Math.floor(Math.random() * list.length);
+    const adjacentIndex = (chosenIndex + 1) % list.length;
+    const newPoint = {
+      x: avg(list[chosenIndex].x, list[adjacentIndex].x),
+      y: avg(list[chosenIndex].y, list[adjacentIndex].y),
+    };
+
+    const newList = list.slice(0, adjacentIndex);
+    newList.push(newPoint);
+    list = newList.concat(list.slice(adjacentIndex, list.length));
+  }
+
+  return list;
+}
+
+export function interpolate(list = [], numPoints = list.length) {
+  if (list.length <= 1) {
+    return list;
+  }
+
+  // Get distances needed to get to the next point
+  const dists = [];
+  let totalDist = 0;
+  for (let i = 0; i < list.length - 1; i = i + 1) {
+    dists[i] = dist(list[i].x, list[i].y, list[i + 1].x, list[i + 1].y);
+    totalDist += dists[i];
+  }
+  dists[list.length - 1] = dist(list[list.length - 1].x, list[list.length - 1].y, list[0].x, list[0].y);
+  totalDist += dists[list.length - 1];
+
+  const newList = [list[0]];
+  const stepSize = totalDist / numPoints;
+  let distIndex = 0;
+  let curPoint = { x: list[0].x, y: list[0].y };
+  let distSinceLastPoint = 0;
+  debugger;
+  for (let i = 0; i < numPoints; i = i + 1) {
+    let curStepSize = stepSize;
+    distSinceLastPoint = dist(list[distIndex].x, list[distIndex].y, curPoint.x, curPoint.y);
+    while (curStepSize + distSinceLastPoint > dists[distIndex]) {
+      curStepSize -= dists[distIndex];
+      distIndex = (distIndex + 1) % list.length;
+    }
+
+    let angle = Math.atan2(
+      list[(distIndex + 1) % list.length].y - list[distIndex].y,
+      list[(distIndex + 1) % list.length].x - list[distIndex].x
+    );
+
+    curStepSize += distSinceLastPoint;
+    curPoint.x = list[distIndex].x + curStepSize * Math.cos(angle);
+    curPoint.y = list[distIndex].y + curStepSize * Math.sin(angle);
+
+    newList[i] = { x: curPoint.x, y: curPoint.y };
+  }
+
+  return newList;
 }
