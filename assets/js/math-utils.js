@@ -183,6 +183,11 @@ export function randInterpolate(list = [], numPoints = list.length) {
   return list;
 }
 
+/**
+ * Connect points with lines and then place points on the line at regular intervals
+ * @param {{ x: number, y: number }[]} list an array of points
+ * @param { number } numPoints the desired number of points to space on the line
+ */
 export function interpolate(list = [], numPoints = list.length) {
   if (list.length <= 1) {
     return list;
@@ -203,7 +208,6 @@ export function interpolate(list = [], numPoints = list.length) {
   let distIndex = 0;
   let curPoint = { x: list[0].x, y: list[0].y };
   let distSinceLastPoint = 0;
-  debugger;
   for (let i = 0; i < numPoints; i = i + 1) {
     let curStepSize = stepSize;
     distSinceLastPoint = dist(list[distIndex].x, list[distIndex].y, curPoint.x, curPoint.y);
