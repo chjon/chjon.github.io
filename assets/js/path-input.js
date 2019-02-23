@@ -26,10 +26,10 @@ document.onmousedown = (e) => {
 
   if (mode === 'Drawing') {
     if (!e.ctrlKey) {
-      clickedTree.addPoint(e.pageX, e.pageY);
       closest = { x: e.pageX, y: e.pageY };
+      clickedTree.push(closest);
     } else if (closest) {
-      clickedTree.pop(closest.x, closest.y);
+      clickedTree.pop(closest);
       closest = clickedTree.getClosestWithin(e.pageX, e.pageY, GRAB_RADIUS * GRAB_RADIUS);;
     }
   }
@@ -62,7 +62,7 @@ document.onkeyup = (e) => {
 
 function setup() {
   sketch.setFrameInterval(20);
-  clickedTree = new Quadtree(0, 0, sketch.getWidth(), sketch.getHeight(), 4, 5, true);
+  clickedTree = new Quadtree(0, 0, sketch.getWidth(), sketch.getHeight(), 4, 6);
 }
 
 function draw() {
