@@ -2,7 +2,7 @@ import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
 
 export class Quadtree {
-  constructor(x, y, width, height, maxBucketSize, maxDepth, isRoot = false) {
+  constructor(x, y, width, height, maxBucketSize, maxDepth) {
     this.mid = {
       x: x + width / 2,
       y: y + height / 2,
@@ -15,15 +15,14 @@ export class Quadtree {
     }
     this.maxBucketSize = maxBucketSize;
     this.maxDepth = maxDepth;
-    this.isRoot = isRoot;
     this.bucket = [];
     this.length = 0;
   }
   
-  isInBounds(x, y) {
+  isInBounds(obj) {
     return (
-      x >= this.bounds.left && x < this.bounds.right &&
-      y >= this.bounds.top && y < this.bounds.bottom
+      obj.x >= this.bounds.left && obj.x < this.bounds.right &&
+      obj.y >= this.bounds.top && obj.y < this.bounds.bottom
     );
   }
 
@@ -45,22 +44,22 @@ export class Quadtree {
     return maths.dist2(x, y, closestX, closestY);
   }
 
-  getCorrectQuad(x, y) {
-    if (x < this.mid.x) {
-      return (y < this.mid.y) ? (this.nw) : (this.sw);
+  getCorrectQuad(obj) {
+    if (obj.x < this.mid.x) {
+      return (obj.y < this.mid.y) ? (this.nw) : (this.sw);
     } else {
-      return (y < this.mid.y) ? (this.ne) : (this.se);
+      return (obj.y < this.mid.y) ? (this.ne) : (this.se);
     }
   }
 
-  addPointToQuad(x, y) {
+  pushToQuad(obj) {
     return this
-      .getCorrectQuad(x, y)
-      .addPoint(x, y);
+      .getCorrectQuad(obj)
+      .push(obj);
   }
 
-  addPoint(x, y) {
-    if (!this.isInBounds(x, y)) return;
+  push(obj) {
+    if (!this.isInBounds(obj)) return;
     this.length++;
 
     if (this.bucket && this.bucket.length === this.maxBucketSize && this.maxDepth) {
@@ -71,17 +70,17 @@ export class Quadtree {
       this.sw = new Quadtree(this.bounds.left, this.mid.y, halfWidth, halfHeight, this.maxBucketSize, this.maxDepth - 1);
       this.se = new Quadtree(this.mid.x, this.mid.y, halfWidth, halfHeight, this.maxBucketSize, this.maxDepth - 1);
       
-      this.bucket.forEach(({ x, y }) => {
-        this.addPointToQuad( x, y );
+      this.bucket.forEach((storedObj) => {
+        this.pushToQuad(storedObj);
       });
 
       this.bucket = undefined;
     };
 
     if (this.bucket || !this.maxDepth) {
-      this.bucket.push({ x, y });
+      this.bucket.push(obj);
     } else {
-      this.addPointToQuad( x, y );
+      this.pushToQuad(obj);
     }
   }
 
@@ -154,8 +153,8 @@ export class Quadtree {
     return minPoint;
   }
 
-  pop(x, y) {
-    if (!this.isInBounds(x, y)) {
+  pop(obj) {
+    if (!this.isInBounds(obj)) {
       return undefined;
     }
 
@@ -165,27 +164,28 @@ export class Quadtree {
 
       let foundIndex;
       for (let i = 0; i < this.bucket.length; i = i + 1) {
-        if (this.bucket[i].x === x && this.bucket[i].y === y) {
+        if (this.bucket[i].x === obj.x && this.bucket[i].y === obj.y) {
           foundIndex = i;
           break;
         }
       }
 
       if (foundIndex !== undefined) {
+        const retVal = this.bucket[foundIndex];
         this.bucket = this.bucket.slice(0, foundIndex).concat(
           this.bucket.slice(foundIndex + 1, this.bucket.length)
         );
 
         this.length--;
-        return { x, y };
+        return retVal;
       }
 
       return undefined;
     }
 
     const retVal = this
-      .getCorrectQuad(x, y)
-      .pop(x, y);
+      .getCorrectQuad(obj)
+      .pop(obj);
 
     if (retVal) {
       this.length--;
@@ -201,8 +201,8 @@ export class Quadtree {
     sketch.rect(this.bounds.left, this.bounds.top, this.bounds.right, this.bounds.bottom);
 
     if (this.bucket) {
-      this.bucket.forEach(({ x, y }) => {
-        sketch.ellipse(x, y, 5, 5);
+      this.bucket.forEach((storedObj) => {
+        sketch.ellipse(storedObj.x, storedObj.y, 5, 5);
       });
     } else {
       this.ne.draw();
