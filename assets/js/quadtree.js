@@ -196,6 +196,52 @@ export class Quadtree {
     return retVal;
   }
 
+  getAllWithin(x1, y1, x2, y2) {
+    // Make sure the coordinates of the selection box are increasing
+    if (x2 < x1) {
+      const temp = x1;
+      x1 = x2;
+      x2 = temp;
+    }
+
+    if (y2 < y1) {
+      const temp = y1;
+      y1 = y2;
+      y2 = temp;
+    }
+
+    // Get shallow children in bounds
+    if (this.bucket) {
+      return this.bucket.filter((obj) => {
+        return obj.x >= x1 && obj.x <= x2 && obj.y >= y1 && obj.y <= y2;
+      });
+    }
+
+    // Get deep children
+    let foundPoints = [];
+    if (x1 < this.mid.x) {
+      if (y1 < this.mid.y) {
+        foundPoints = foundPoints.concat(this.nw.getAllWithin(x1, y1, x2, y2));
+      }
+
+      if (y2 >= this.mid.y) {
+        foundPoints = foundPoints.concat(this.sw.getAllWithin(x1, y1, x2, y2));
+      }
+    }
+
+    if (x2 >= this.mid.x) {
+      if (y1 < this.mid.y) {
+        foundPoints = foundPoints.concat(this.ne.getAllWithin(x1, y1, x2, y2));
+      }
+
+      if (y2 >= this.mid.y) {
+        foundPoints = foundPoints.concat(this.se.getAllWithin(x1, y1, x2, y2));
+      }
+    }
+
+    return foundPoints;
+  }
+
   // Get all the objects in the quadtree
   getAll() {
     if (this.bucket) {
