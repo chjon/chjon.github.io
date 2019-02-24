@@ -20,9 +20,9 @@ export function setFrameInterval(newInterval) {
 
 // Initialization
 
-export function init(setup, draw) {
+export function init(setup, draw, canvasName = 'background-canvas') {
   window.onload = () => {
-    canvas = document.getElementById('background-canvas');
+    canvas = document.getElementById(canvasName);
     canvas.width = innerWidth;
     canvas.height = innerHeight;
     ctx = canvas.getContext('2d');

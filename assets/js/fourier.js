@@ -1,7 +1,6 @@
 import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
 
-let SIGNAL_LENGTH;
 let POINT_DENSITY = 0.08;
 let window = { width: 0, height: 0 };
 let counter = 0;
@@ -17,18 +16,28 @@ function loadStartFunction(inputString) {
     totalDist += maths.dist(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
   }
   totalDist += maths.dist(points[points.length - 1].x, points[points.length - 1].y, points[0].x, points[0].y);
-
   const numPoints = Math.floor(totalDist * POINT_DENSITY);
 
   points = maths.interpolate(points, numPoints);
-  SIGNAL_LENGTH = points.length;
   points.forEach((point) => {
-    inputSignal.x.push(point.x / 2);
-    inputSignal.y.push(point.y / 2);
+    inputSignal.x.push(point.x);
+    inputSignal.y.push(point.y);
   });
 
-  inputSignal.x = maths.shiftCenter(inputSignal.x);
-  inputSignal.y = maths.shift(maths.scale(maths.shiftCenter(inputSignal.y), -1));
+  const range = {
+    x: maths.getBounds(inputSignal.x),
+    y: maths.getBounds(inputSignal.y),
+  }
+
+  const scales = {
+    x: 0.4 * window.width / (range.x.max - range.x.min),
+    y: 0.4 * window.height / (range.y.max - range.y.min),
+  }
+
+  const scale = Math.min(scales.x, scales.y);
+
+  inputSignal.x = maths.scale(maths.shiftCenter(inputSignal.x), scale);
+  inputSignal.y = maths.scale(maths.shiftCenter(inputSignal.y), -scale);
 
   return inputSignal;
 }
@@ -98,8 +107,8 @@ function setup() {
 
 function draw() {
   sketch.setStroke('rgba(255, 255, 255, 0.1)');
-  const pointY = drawEpicycles(outputSignal.y, 100, window.height / 2 + 50, true).y;
-  const pointX = drawEpicycles(outputSignal.x, window.width / 2, 100, false).x;
+  const pointY = drawEpicycles(outputSignal.y, window.width * 0.1, window.height * 0.5, true).y;
+  const pointX = drawEpicycles(outputSignal.x, window.width * 0.5, window.height * 0.1, false).x;
 
   sketch.setStroke('#FFFFFF');
   wave[counter] = wave[counter] || { x: pointX, y: pointY };
@@ -107,7 +116,7 @@ function draw() {
     sketch.line(wave[i].x, wave[i].y, wave[i + 1].x, wave[i + 1].y);
   }
 
-  counter = (counter + 1) % SIGNAL_LENGTH;
+  counter = (counter + 1) % outputSignal.x.length;
 }
 
 sketch.init(setup, draw);
