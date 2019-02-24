@@ -1,6 +1,8 @@
 let canvas;
 let ctx;
 let waitInterval = 10;
+let imageTintBuffer;
+let imageTintBufferCtx;
 
 // Getters
 
@@ -26,6 +28,9 @@ export function init(setup, draw, canvasName = 'background-canvas') {
     canvas.width = innerWidth;
     canvas.height = innerHeight;
     ctx = canvas.getContext('2d');
+    imageTintBuffer = document.createElement('canvas');
+    imageTintBufferCtx = imageTintBuffer.getContext('2d');
+    imageTintBufferCtx.globalCompositeOperation = 'destination-atop';
 
     setup();
     setInterval(() => {
@@ -138,4 +143,21 @@ export function rect(x1, y1, x2, y2) {
   }
 
   ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+}
+
+export function drawImage(img, x, y, width = img.width, height = img.height, color) {
+
+  if (color) {  
+    imageTintBufferCtx.width = width;
+    imageTintBufferCtx.height = height;
+    imageTintBufferCtx.globalCompositeOperation = 'source-over';
+    imageTintBufferCtx.fillStyle = color;
+    imageTintBufferCtx.fillRect(0, 0, width, height);
+    imageTintBufferCtx.globalCompositeOperation = 'destination-atop';
+    imageTintBufferCtx.drawImage(img, 0, 0, width, height);
+
+    ctx.drawImage(imageTintBuffer, x, y);
+  } else {
+    ctx.drawImage(img, x, y, width, height);
+  }
 }
