@@ -12,7 +12,7 @@
   min-width: 50%;
 }
 
-@media (max-width: 700px) {
+@media (max-device-width: 800px), (max-width: 850px) {
   .main-card {
     max-width: 100%;
   }
