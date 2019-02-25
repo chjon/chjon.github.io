@@ -1,52 +1,39 @@
 // Layout
 
-.hover-card {
-  width: 100%;
-  height: 100%;
-  border-radius: 2rem;
+.ui-hover-card {
   background-size: 100%, contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.hover-card-overlay {
+.ui-hover-card-overlay {
   width: 100%;
   height: 100%;
 
   border-radius: 2rem;
-
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.hover-card-overlay:hover {
-  .hover-card-header {
+.ui-hover-card-content-wrapper {
+  position: relative;
+}
+
+.ui-hover-card-overlay:hover {
+  .ui-hover-card-header {
     opacity: 0;
   }
 
-  .hover-card-body {
+  .ui-hover-card-body {
     display: flex;
   }
 }
 
-.hover-card-header {
-  width: 100%;
-  text-align: center;
-}
-
-.hover-card-body {
-  width: 100%;
-  height: 100%;
-
+.ui-hover-card-body {
   position: absolute;
 
   display: none;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-}
-
-.hover-card-overlay {
-  position: relative;
 }

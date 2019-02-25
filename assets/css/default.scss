@@ -12,7 +12,7 @@
   min-width: 50%;
 }
 
-@media (max-width: 700px) {
+@media (max-device-width: 800px), (max-width: 850px) {
   .main-card {
     max-width: 100%;
   }
@@ -31,25 +31,19 @@
 // Project cards
 
 .project-card {
-  min-height: 15rem;
+  min-height: 20rem;
 }
 
 .project-wrapper {
-  display: flex;
-  flex: 1;
   padding: 1rem;
 }
 
 .project-card-overlay {
-  padding: 0.5rem;
-
   background: rgba(0, 0, 0, 0.7);
   border: 1px solid var(--accent-color);
 }
 
 .project-card-overlay p {
-  padding-left: 2rem;
-  padding-right: 2rem;
   text-align: center;
 }
 

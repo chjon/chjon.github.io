@@ -1,8 +1,6 @@
 :root {
-  --toolbar-height: 10vh;
-  --toolbar-font-height: 4vh;
-  --toolbar-image-size: 8vh;
-  --toolbar-section-width: 10vw;
+  --toolbar-height: 5em;
+  --toolbar-section-width: 10em;
 }
 
 .nav-toolbar {
@@ -46,7 +44,7 @@
 }
 
 .nav-toolbar-logo a {
-  font-size: var(--toolbar-font-height);
+  font-size: 2em;
   font-family: 'Exo 2', sans-serif;
   text-align: center;
   line-height: 110%;
@@ -63,8 +61,8 @@
 }
 
 .nav-button {
-  width: var(--toolbar-image-size);
-  height: var(--toolbar-image-size);
+  width: 2em;
+  height: 2em;
 
   margin-left: 1vw;
   margin-right: 1vw;

@@ -1,18 +1,22 @@
-<div class="{{'card ' | append: include.card-class | rstrip }}"
-  {% if include.id %} id="{{ include.id }}" {% endif %}
->
-  {%- if include.header -%}
-    <div class="{{'card-header ' | append: include.card-header-class | rstrip }}">
-      <h1>{{ include.header }}</h1>
-    </div>
-    <hr class="{{ 'card-divider ' | append: include.card-divider-class | rstrip }}"/>
-  {%- endif -%}
+<div class="{{ 'ui-card-wrapper ' | append: include.wrapper-class | rstrip }}">
+  <div class="{{'ui-card ' | append: include.card-class | rstrip }}"
+    {% if include.id %} id="{{ include.id }}" {% endif %}
+  >
+    <div class="{{ 'ui-card-content-wrapper ' | append: include.card-content-wrapper-class | rstrip }}">
+      {%- if include.header -%}
+        <div class="{{ 'ui-card-header ' | append: include.card-header-class | rstrip }}">
+          <h1>{{ include.header }}</h1>
+        </div>
+        <hr class="{{ 'ui-card-divider ' | append: include.card-divider-class | rstrip }}"/>
+      {%- endif -%}
 
-  <div class="{{ 'card-body ' | append: include.card-body-class | rstrip }}">
-    {%- if include.is-markdown -%}
-      {{ include.content | markdownify }}
-    {%- else -%}
-      {{ include.content }}
-    {%- endif -%}
+      <div class="{{ 'ui-card-body ' | append: include.card-body-class | rstrip }}">
+        {%- if include.is-markdown -%}
+          {{ include.content | markdownify }}
+        {%- else -%}
+          {{ include.content }}
+        {%- endif -%}
+      </div>
+    </div>
   </div>
 </div>
