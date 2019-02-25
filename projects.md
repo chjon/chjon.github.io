@@ -33,18 +33,17 @@ script: /assets/js/gol.js
       </div>
     {%- endcapture -%}
 
-    <div class="project-wrapper">
-      {%- include hover-card.html
-        header=project.name
-        content=project-content
-        card-class="project-card"
-        card-overlay-class="project-card-overlay"
-        card-header-class="project-card-header"
-        card-body-class="project-card-body"
-        img=project.image
-        link=project.link
-      -%}
-    </div>
+    {%- include hover-card.html
+      header=project.name
+      content=project-content
+      wrapper-class="project-wrapper"
+      card-class="project-card"
+      card-overlay-class="project-card-overlay"
+      card-header-class="project-card-header"
+      card-body-class="project-card-body"
+      img=project.image
+      link=project.link
+    -%}
   {%- endfor -%}
 {%- endcapture -%}
 

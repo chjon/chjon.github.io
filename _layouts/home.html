@@ -24,9 +24,12 @@ layout: canvas-page
   -}}</p>
 {%- endcapture -%}
 
-<header>{%- include card.html
-  content=header-content
--%}</header>
+<header>
+  {%- include card.html
+    content=header-content
+    card-body-class="title-card-content"
+  -%}
+</header>
 
 <div class="home-content">
   {{ content }}
@@ -34,7 +37,8 @@ layout: canvas-page
   <footer>
     {%- include card.html
       content=footer-content
-      card-class="home-card footer-card"
+      card-class="home-card"
+      card-content-wrapper-class="footer-card-content-wrapper"
     -%}
   </footer>
 </div>

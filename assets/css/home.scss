@@ -12,6 +12,12 @@
   height: 100vh;
 }
 
+.title-card-content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .overlay section, .overlay footer {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
@@ -102,11 +108,7 @@
   text-align: center;
 }
 
-.footer-card {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
-.footer-card .card-body{
-  padding: 0;
+.footer-card-content-wrapper {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
