@@ -98,9 +98,9 @@ function generateCombo(resistors, desiredResistance, maxResistors, tolerance) {
 }
 
 function recalculate() {
-  const desiredResistance = parseInt(desiredResistanceInput.value);
+  const desiredResistance = parseFloat(desiredResistanceInput.value);
   const maxResistors = parseInt(maxResistorsInput.value);
-  const tolerance = parseInt(toleranceInput.value);
+  const tolerance = parseFloat(toleranceInput.value);
   const availableResistances = availableResistanceInput.value;
 
   if (!validate(desiredResistance, availableResistances)) {
@@ -116,8 +116,6 @@ function recalculate() {
   });
 
   const combinations = generateCombo(resistors, desiredResistance, maxResistors, tolerance);
-
-  console.log(combinations);
 
   const outputString = combinations
   .sort((a, b) => {
