@@ -15,7 +15,7 @@ script: /assets/js/resistors.js
 
 {% capture output-panel %}
   <p>Possible combinations</p>
-  <textarea id="combo-output" rows="8" readonly="true"></textarea>
+  <textarea id="combo-output" rows="20" readonly="true"></textarea>
 {% endcapture %}
 
 <div class="row">
