@@ -50,43 +50,50 @@ function generateCombo(resistors, desiredResistance, maxResistors, tolerance) {
   }
 
   // Combine resistances
-  let foundCombos = resistors.slice(0);
-  const used = [];
-  for (let i = 0; i < resistors.length && maxResistors > 1; i = i + 1) {
-    const curResistor = resistors[i];
+  let foundResistances = [resistors[0]];
+  let seriesAccumulator = resistors[0];
+  let parallelAccumulator = resistors[0];
 
-    if (used.indexOf(curResistor.representation) !== -1) {
-      continue;
-    }
+  for (let i = 1; i < resistors.length && i < maxResistors; i = i + 1) {
+    const desiredSeriesResistance = desiredResistance - parallelAccumulator.resistance;
+    const desiredParallelResistance = 1 / ((1 / desiredResistance) - (1 / seriesAccumulator.resistance));
+    const nextResistors = resistors.slice(i);
+    
+    foundResistances = foundResistances
+    .concat(
+      generateCombo(nextResistors, desiredResistance, maxResistors, tolerance)
+    )
+    .concat(
+      generateCombo(nextResistors, desiredSeriesResistance, maxResistors - i, tolerance)
+      .map((resistor) => {
+        return connectSeries(parallelAccumulator, resistor);
+      })
+    )
+    .concat(
+      generateCombo(nextResistors, desiredParallelResistance, maxResistors - i, tolerance)
+      .map((resistor) => {
+        return connectParallel(seriesAccumulator, resistor);
+      })
+    );
 
-    used.push(curResistor.representation);
-    resistors.splice(i, 1);
-
-    const desiredSeriesResistance = desiredResistance - curResistor.resistance;
-    const seriesResistors = generateCombo(resistors, desiredSeriesResistance, maxResistors - 1, tolerance)
-    .map((resistor) => {
-      return connectSeries(curResistor, resistor);
-    });
-
-    const desiredParallelResistance = 1 / ((1 / desiredResistance) - (1 / curResistor.resistance));
-    const parallelResistors = generateCombo(resistors, desiredParallelResistance, maxResistors - 1, tolerance)
-    .map((resistor) => {
-      return connectParallel(curResistor, resistor);
-    });
-
-    foundCombos = foundCombos.concat(seriesResistors).concat(parallelResistors);
-  
-    resistors.splice(i, 0, curResistor);
+    const nextResistor = resistors[i];
+    seriesAccumulator = connectSeries(seriesAccumulator, nextResistor);
+    parallelAccumulator = connectParallel(parallelAccumulator, nextResistor);
   }
 
-  const foundReps = [];
-  return foundCombos.filter((resistor) => {
-    if (foundReps.indexOf(resistor.representation) !== -1) {
+  const used = [];
+  return foundResistances
+  .filter((resistor) => {
+    if (Math.abs(resistor.resistance - desiredResistance) > tolerance) {
       return false;
     }
 
-    foundReps.push(resistor.representation);
-    return Math.abs(desiredResistance - resistor.resistance) <= tolerance;
+    if (used.indexOf(resistor.representation) === -1) {
+      used.push(resistor.representation);
+      return true;
+    }
+
+    return false;
   });
 }
 
