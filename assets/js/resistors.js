@@ -2,9 +2,8 @@ let desiredResistanceInput;
 let maxResistorsInput;
 let availableResistanceInput;
 let calculateButtonInput;
+let toleranceInput;
 let combinationOutput;
-
-const TOLERANCE = 0.5;
 
 function validate(desiredResistance, availableResistances) {
   // Validate inputs
@@ -45,25 +44,32 @@ function connectParallel(resistor1, resistor2) {
   };
 }
 
-function generateCombo(resistors, desiredResistance, maxResistors) {
+function generateCombo(resistors, desiredResistance, maxResistors, tolerance) {
   if (maxResistors < 1 || resistors.length === 0) {
     return [];
   }
 
   // Combine resistances
   let foundCombos = resistors.slice(0);
+  const used = [];
   for (let i = 0; i < resistors.length && maxResistors > 1; i = i + 1) {
     const curResistor = resistors[i];
+
+    if (used.indexOf(curResistor.representation) !== -1) {
+      continue;
+    }
+
+    used.push(curResistor.representation);
     resistors.splice(i, 1);
 
     const desiredSeriesResistance = desiredResistance - curResistor.resistance;
-    const seriesResistors = generateCombo(resistors, desiredSeriesResistance, maxResistors - 1)
+    const seriesResistors = generateCombo(resistors, desiredSeriesResistance, maxResistors - 1, tolerance)
     .map((resistor) => {
       return connectSeries(curResistor, resistor);
     });
 
     const desiredParallelResistance = 1 / ((1 / desiredResistance) - (1 / curResistor.resistance));
-    const parallelResistors = generateCombo(resistors, desiredParallelResistance, maxResistors - 1)
+    const parallelResistors = generateCombo(resistors, desiredParallelResistance, maxResistors - 1, tolerance)
     .map((resistor) => {
       return connectParallel(curResistor, resistor);
     });
@@ -73,14 +79,21 @@ function generateCombo(resistors, desiredResistance, maxResistors) {
     resistors.splice(i, 0, curResistor);
   }
 
+  const foundReps = [];
   return foundCombos.filter((resistor) => {
-    return Math.abs(desiredResistance - resistor.resistance) < TOLERANCE;
+    if (foundReps.indexOf(resistor.representation) !== -1) {
+      return false;
+    }
+
+    foundReps.push(resistor.representation);
+    return Math.abs(desiredResistance - resistor.resistance) <= tolerance;
   });
 }
 
 function recalculate() {
   const desiredResistance = parseInt(desiredResistanceInput.value);
   const maxResistors = parseInt(maxResistorsInput.value);
+  const tolerance = parseInt(toleranceInput.value);
   const availableResistances = availableResistanceInput.value;
 
   if (!validate(desiredResistance, availableResistances)) {
@@ -95,7 +108,7 @@ function recalculate() {
     }
   });
 
-  const combinations = generateCombo(resistors, desiredResistance, maxResistors);
+  const combinations = generateCombo(resistors, desiredResistance, maxResistors, tolerance);
 
   console.log(combinations);
 
@@ -115,6 +128,7 @@ window.onload = () => {
   maxResistorsInput = document.getElementById('max-resistors');
   availableResistanceInput = document.getElementById('available-resistances');
   calculateButtonInput = document.getElementById('calculate-button');
+  toleranceInput = document.getElementById('acceptable-tolerance');
   combinationOutput = document.getElementById('combo-output');
 
   calculateButtonInput.onclick = recalculate;
