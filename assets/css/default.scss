@@ -62,3 +62,12 @@
 .project-button:hover {
   filter: invert(0.5);
 }
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+textarea {
+  resize: none;
+}

@@ -22,11 +22,17 @@ export function setFrameInterval(newInterval) {
 
 // Initialization
 
-export function init(setup, draw, canvasName = 'background-canvas') {
+export function init(
+  setup,
+  draw,
+  canvasName = 'background-canvas',
+  canvasWidth = innerWidth,
+  canvasHeight = innerHeight
+) {
   window.onload = () => {
     canvas = document.getElementById(canvasName);
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
     ctx = canvas.getContext('2d');
     imageTintBuffer = document.createElement('canvas');
     imageTintBufferCtx = imageTintBuffer.getContext('2d');
