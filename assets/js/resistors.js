@@ -30,6 +30,28 @@ function getResistanceList(availableResistances) {
   });
 }
 
+function combineCost(cost1, cost2) {
+  const allCosts = {};
+  
+  cost1.forEach(({ key, count }) => {
+    if (allCosts[key]) {
+      allCosts[key].count += count;
+    } else {
+      allCosts[key] = { key, count };
+    }
+  });
+
+  cost2.forEach(({ key, count }) => {
+    if (allCosts[key]) {
+      allCosts[key].count += count;
+    } else {
+      allCosts[key] = { key, count };
+    }
+  });
+
+  return Object.values(allCosts);
+}
+
 function connectSeries(resistor1, resistor2) {
   return {
     resistance: resistor1.resistance + resistor2.resistance,
@@ -45,6 +67,53 @@ function connectParallel(resistor1, resistor2) {
 }
 
 function generateCombo(resistors, desiredResistance, maxResistors, tolerance) {
+  const allCombos = [{}];
+  resistors.forEach((resistor) => {
+    if (allCombos[0][resistor.representation]) {
+      allCombos[0][resistor.representation].count++;
+    } else {
+      allCombos[0][resistor.representation] = resistor;
+      resistor.cost = [{ key: resistor.representation, count: 1 }];
+      resistor.count = 1;
+    }
+  });
+
+  for (let i = 0; i < maxResistors; i++) {
+    for (let j = 0; j <= i && i + j + 1 < maxResistors; j++) {
+      const iSet = Object.values(allCombos[i]);
+      const jSet = Object.values(allCombos[j]);
+      allCombos[i + j + 1] = allCombos[i + j + 1] || {};
+
+      for (let k = 0; k < iSet.length; k++) {
+        for (let l = 0; l < jSet.length; l++) {
+          const combinedCost = combineCost(iSet[k].cost, jSet[l].cost);
+          const costTooHigh = combinedCost.reduce((costTooHigh, { key, count }) => {
+            return costTooHigh || count > allCombos[0][key].count;
+          }, false);
+
+          if (costTooHigh) {
+            continue;
+          }
+
+          const seriesCombo = { ...connectSeries(iSet[k], jSet[l]), cost: combinedCost};
+          const parallelCombo = { ...connectParallel(iSet[k], jSet[l]), cost: combinedCost};
+          if (allCombos[i + j + 1][seriesCombo.representation]) {
+            continue;
+          }
+
+          allCombos[i + j + 1][seriesCombo.representation] = seriesCombo;
+          allCombos[i + j + 1][parallelCombo.representation] = parallelCombo;
+        }
+      }
+    }
+  }
+
+  return allCombos.reduce((acc, cur) => {
+    return acc.concat(Object.values(cur));
+  }, []);
+}
+
+function generateCombo2(resistors, desiredResistance, maxResistors, tolerance) {
   if (maxResistors < 1 || resistors.length === 0) {
     return [];
   }
