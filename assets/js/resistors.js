@@ -53,10 +53,12 @@ function combineCost(cost1, cost2) {
 }
 
 function connectSeries(resistor1, resistor2) {
-  return {
-    resistance: resistor1.resistance + resistor2.resistance,
-    representation: `(${resistor1.representation})+(${resistor2.representation})`,
-  };
+  const resistance = resistor1.resistance + resistor2.resistance;
+  const representation = (resistor1.resistance < resistor2.resistance) ?
+    `(${resistor1.representation})+(${resistor2.representation})` :
+    `(${resistor2.representation})+(${resistor1.representation})`;
+
+  return { resistance, representation };
 }
 
 function connectParallel(resistor1, resistor2) {
@@ -113,59 +115,6 @@ function generateCombo(resistors, desiredResistance, maxResistors, tolerance) {
   }, []);
 }
 
-function generateCombo2(resistors, desiredResistance, maxResistors, tolerance) {
-  if (maxResistors < 1 || resistors.length === 0) {
-    return [];
-  }
-
-  // Combine resistances
-  let foundResistances = [resistors[0]];
-  let seriesAccumulator = resistors[0];
-  let parallelAccumulator = resistors[0];
-
-  for (let i = 1; i < resistors.length && i < maxResistors; i = i + 1) {
-    const desiredSeriesResistance = desiredResistance - parallelAccumulator.resistance;
-    const desiredParallelResistance = 1 / ((1 / desiredResistance) - (1 / seriesAccumulator.resistance));
-    const nextResistors = resistors.slice(i);
-    
-    foundResistances = foundResistances
-    .concat(
-      generateCombo(nextResistors, desiredResistance, maxResistors, tolerance)
-    )
-    .concat(
-      generateCombo(nextResistors, desiredSeriesResistance, maxResistors - i, tolerance)
-      .map((resistor) => {
-        return connectSeries(parallelAccumulator, resistor);
-      })
-    )
-    .concat(
-      generateCombo(nextResistors, desiredParallelResistance, maxResistors - i, tolerance)
-      .map((resistor) => {
-        return connectParallel(seriesAccumulator, resistor);
-      })
-    );
-
-    const nextResistor = resistors[i];
-    seriesAccumulator = connectSeries(seriesAccumulator, nextResistor);
-    parallelAccumulator = connectParallel(parallelAccumulator, nextResistor);
-  }
-
-  const used = [];
-  return foundResistances
-  .filter((resistor) => {
-    if (Math.abs(resistor.resistance - desiredResistance) > tolerance) {
-      return false;
-    }
-
-    if (used.indexOf(resistor.representation) === -1) {
-      used.push(resistor.representation);
-      return true;
-    }
-
-    return false;
-  });
-}
-
 function recalculate() {
   const desiredResistance = parseFloat(desiredResistanceInput.value);
   const maxResistors = parseInt(maxResistorsInput.value);
@@ -187,6 +136,9 @@ function recalculate() {
   const combinations = generateCombo(resistors, desiredResistance, maxResistors, tolerance);
 
   const outputString = combinations
+  .filter((resistor) => {
+    return Math.abs(resistor.resistance - desiredResistance) <= tolerance;
+  })
   .sort((a, b) => {
     return Math.abs(a.resistance - desiredResistance) - Math.abs(b.resistance - desiredResistance);
   })
