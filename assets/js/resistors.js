@@ -53,19 +53,82 @@ function combineCost(cost1, cost2) {
 }
 
 function connectSeries(resistor1, resistor2) {
-  const resistance = resistor1.resistance + resistor2.resistance;
-  const representation = (resistor1.resistance < resistor2.resistance) ?
-    `(${resistor1.representation})+(${resistor2.representation})` :
-    `(${resistor2.representation})+(${resistor1.representation})`;
-
-  return { resistance, representation };
+  return resistor1.resistance + resistor2.resistance;
 }
 
 function connectParallel(resistor1, resistor2) {
-  return {
-    resistance: 1 / ((1 / resistor1.resistance) + (1 / resistor2.resistance)),
-    representation: `(${resistor1.representation})||(${resistor2.representation})`,
-  };
+  return 1 / ((1 / resistor1.resistance) + (1 / resistor2.resistance));
+}
+
+function combineResistors(resistor1, resistor2, operatorSymbol, operatorFunction) {
+  if (resistor1.resistor1 && !resistor2.resistor1) {
+    const tmp = resistor1;
+    resistor1 = resistor2;
+    resistor2 = tmp;
+  }
+
+  if (!resistor1.resistor1) {
+    let newResistor2 = { ...resistor2 };
+    if (newResistor2.resistor2 && operatorSymbol === newResistor2.operatorSymbol) {
+      if (newResistor2.resistor1.resistance < resistor1.resistance) {
+        const tmp = newResistor2.resistor1;
+        newResistor2.resistor1 = resistor1;
+        resistor1 = tmp;
+      }
+        
+      if (newResistor2.resistor1.resistance > newResistor2.resistor2.resistance) {
+        const tmp = newResistor2.resistor1;
+        newResistor2.resistor1 = newResistor2.resistor2;
+        newResistor2.resistor2 = tmp;
+      }
+
+      newResistor2.representation = '(' +
+        newResistor2.resistor1.representation +
+        operatorSymbol +
+        newResistor2.resistor2.representation +
+      ')';
+      newResistor2.resistance = operatorFunction(newResistor2.resistor1, newResistor2.resistor2);
+    }
+
+    if (resistor1.resistance > newResistor2.resistance) {
+      const tmp = resistor1;
+      resistor1 = newResistor2;
+      newResistor2 = tmp;
+    }
+
+    const resistance = operatorFunction(resistor1, newResistor2);
+    const representation = `(${resistor1.representation}${operatorSymbol}${newResistor2.representation})`;
+    return { resistance, representation, resistor1, resistor2: newResistor2, operatorSymbol };
+  }
+
+  if (resistor1.resistance > resistor2.resistance) {
+    const tmp = resistor1;
+    resistor1 = resistor2;
+    resistor2 = tmp;
+  }
+
+  if (resistor1.operatorSymbol !== resistor2.operatorSymbol) {
+    if (operatorSymbol === resistor2.operatorSymbol) {
+      const tmp = resistor1;
+      resistor1 = resistor2;
+      resistor2 = tmp;
+    }
+
+    const tmp = combineResistors(resistor1.resistor2, resistor2, operatorSymbol, operatorFunction);
+    return combineResistors(resistor1.resistor1, tmp, operatorSymbol, operatorFunction);
+  } else if (operatorSymbol === resistor1.operatorSymbol) {
+    if (resistor1.resistor1.resistance < resistor2.resistor1.resistance) {
+      const tmp = combineResistors(resistor1.resistor2, resistor2, operatorSymbol, operatorFunction);
+      return combineResistors(resistor1.resistor1, tmp, operatorSymbol, operatorFunction);
+    }
+
+    const tmp = combineResistors(resistor2.resistor2, resistor1, operatorSymbol, operatorFunction);
+    return combineResistors(resistor2.resistor1, tmp, operatorSymbol, operatorFunction);
+  }
+
+  const resistance = operatorFunction(resistor1, resistor2);
+  const representation = `(${resistor1.representation}${operatorSymbol}${resistor2.representation})`;
+  return { resistance, representation, resistor1, resistor2, operatorSymbol };
 }
 
 function generateCombo(resistors, desiredResistance, maxResistors, tolerance) {
@@ -88,6 +151,9 @@ function generateCombo(resistors, desiredResistance, maxResistors, tolerance) {
 
       for (let k = 0; k < iSet.length; k++) {
         for (let l = 0; l < jSet.length; l++) {
+          const r1 = iSet[k];
+          const r2 = jSet[l];
+
           const combinedCost = combineCost(iSet[k].cost, jSet[l].cost);
           const costTooHigh = combinedCost.reduce((costTooHigh, { key, count }) => {
             return costTooHigh || count > allCombos[0][key].count;
@@ -97,14 +163,15 @@ function generateCombo(resistors, desiredResistance, maxResistors, tolerance) {
             continue;
           }
 
-          const seriesCombo = { ...connectSeries(iSet[k], jSet[l]), cost: combinedCost};
-          const parallelCombo = { ...connectParallel(iSet[k], jSet[l]), cost: combinedCost};
-          if (allCombos[i + j + 1][seriesCombo.representation]) {
-            continue;
+          const seriesCombo = { ...combineResistors(iSet[k], jSet[l], '+', connectSeries), cost: combinedCost };
+          const parallelCombo = { ...combineResistors(iSet[k], jSet[l], '|', connectParallel), cost: combinedCost };
+          if (!allCombos[i + j + 1][seriesCombo.representation]) {
+            allCombos[i + j + 1][seriesCombo.representation] = seriesCombo;
           }
 
-          allCombos[i + j + 1][seriesCombo.representation] = seriesCombo;
-          allCombos[i + j + 1][parallelCombo.representation] = parallelCombo;
+          if (!allCombos[i + j + 1][parallelCombo.representation]) {
+            allCombos[i + j + 1][parallelCombo.representation] = parallelCombo;
+          }
         }
       }
     }
@@ -143,7 +210,7 @@ function recalculate() {
     return Math.abs(a.resistance - desiredResistance) - Math.abs(b.resistance - desiredResistance);
   })
   .reduce((outputString, resistor) => {
-    return `${outputString}${resistor.resistance}: ${resistor.representation}\n`;
+    return `${outputString}${resistor.resistance} = ${resistor.representation}\n`;
   }, '');
 
   combinationOutput.value = outputString;
