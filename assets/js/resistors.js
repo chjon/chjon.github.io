@@ -109,15 +109,7 @@ function combineResistors(resistor1, resistor2, operatorSymbol, operatorFunction
       }
 
       const newResistor2 = combineResistors(resistor1, resistor2.resistor2, operatorSymbol, operatorFunction);
-
-      return {
-        resistance: operatorFunction(resistor2.resistor1, newResistor2),
-        representation: `(${resistor2.resistor1.representation}${operatorSymbol}${newResistor2.representation})`,
-        resistor1: resistor2.resistor1,
-        resistor2: newResistor2,
-        operatorSymbol,
-        operatorFunction,
-      };
+      return combineResistors(resistor2.resistor1, newResistor2, operatorSymbol, operatorFunction);
     }
 
     // Handle number-number-number case
@@ -147,24 +139,8 @@ function combineResistors(resistor1, resistor2, operatorSymbol, operatorFunction
       };
     }
 
-    const newResistor2 = {
-      resistance: operatorFunction(resistor2.resistor2, resistor1),
-      representation: `(${resistor2.resistor2.representation}${operatorSymbol}${resistor1.representation})`,
-      resistor1: resistor2.resistor2,
-      resistor2: resistor1,
-      operatorSymbol,
-      operatorFunction,
-    };
-
-    return {
-      resistance: operatorFunction(resistor2.resistor1, newResistor2),
-      representation: `(${resistor2.resistor1.representation}${operatorSymbol}${newResistor2.representation})`,
-      resistor1: resistor2.resistor1,
-      resistor2: newResistor2,
-      operatorSymbol,
-      operatorFunction,
-    };
-
+    const newResistor2 = combineResistors(resistor2.resistor2, resistor1, operatorSymbol, operatorFunction);
+    return combineResistors(resistor2.resistor1, newResistor2, operatorSymbol, operatorFunction);
   }
   
   // Handle object-object case
@@ -177,28 +153,20 @@ function combineResistors(resistor1, resistor2, operatorSymbol, operatorFunction
       resistor2 = tmp;
     }
 
-    const newResistor2 = {
-      resistance: operatorFunction(resistor1.resistor2, resistor2),
-      representation: `(${resistor1.resistor2.representation}${operatorSymbol}${resistor2.representation})`,
-      resistor1: resistor1.resistor2,
-      resistor2,
-      operatorSymbol,
-      operatorFunction,
-    };
-
-    return {
-      resistance: operatorFunction(resistor1.resistor1, newResistor2),
-      representation: `(${resistor1.resistor1.representation}${operatorSymbol}${newResistor2.representation})`,
-      resistor1: resistor1.resistor1,
-      resistor2: newResistor2,
-      operatorSymbol,
-      operatorFunction,
-    };
+    const newResistor2 = combineResistors(resistor1.resistor2, resistor2, operatorSymbol, operatorFunction);
+    return combineResistors(resistor1.resistor1, newResistor2, operatorSymbol, operatorFunction);
   }
 
   // Handle same operator case
   if (resistor1.operatorSymbol !== operatorSymbol) {
     if (resistor1.resistance > resistor2.resistance) {
+      const tmp = resistor1;
+      resistor1 = resistor2;
+      resistor2 = tmp;
+    } else if (
+      resistor1.resistance === resistor2.resistance &&
+      resistor1.representation > resistor2.representation
+    ) {
       const tmp = resistor1;
       resistor1 = resistor2;
       resistor2 = tmp;
@@ -229,9 +197,7 @@ function combineResistors(resistor1, resistor2, operatorSymbol, operatorFunction
 
   if (!resistor1.resistor1.operatorSymbol) {
     const newResistor2 = combineResistors(resistor1.resistor2, resistor2, operatorSymbol, operatorFunction);
-    const resistance = operatorFunction(resistor1.resistor1, newResistor2);
-    const representation = `(${resistor1.resistor1.representation}${operatorSymbol}${newResistor2.representation})`;
-    return { resistance, representation, resistor1, resistor2: newResistor2, operatorSymbol, operatorFunction };
+    return combineResistors(resistor1.resistor1, newResistor2, operatorSymbol, operatorFunction);
   }
 
   // Handle all children are objects case
@@ -242,9 +208,7 @@ function combineResistors(resistor1, resistor2, operatorSymbol, operatorFunction
   }
 
   const newResistor2 = combineResistors(resistor1.resistor2, resistor2);
-  const resistance = operatorFunction(resistor1.resistor1, newResistor2);
-  const representation = `(${resistor1.resistor1.representation}${operatorSymbol}${newResistor2.representation})`;
-  return { resistance, representation, resistor1, resistor2: newResistor2, operatorSymbol, operatorFunction };
+  return combineResistors(resistor1.resistor1, newResistor2, operatorSymbol, operatorFunction);
 }
 
 function generateCombo(resistors, desiredResistance, maxResistors, tolerance) {
