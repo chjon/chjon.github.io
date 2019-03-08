@@ -5,6 +5,10 @@ let calculateButtonInput;
 let toleranceInput;
 let combinationOutput;
 
+let combinations;
+let prevAvailableResistanceInput;
+let prevMaxResistorsInput;
+
 function validate(desiredResistance, availableResistances) {
   // Validate inputs
   if (!desiredResistance) {
@@ -211,7 +215,7 @@ function combineResistors(resistor1, resistor2, operatorSymbol, operatorFunction
   return combineResistors(resistor1.resistor1, newResistor2, operatorSymbol, operatorFunction);
 }
 
-function generateCombo(resistors, desiredResistance, maxResistors, tolerance) {
+function generateCombo(resistors, maxResistors) {
   const allCombos = [{}];
   resistors.forEach((resistor) => {
     if (allCombos[0][resistor.representation]) {
@@ -280,7 +284,11 @@ function recalculate() {
     }
   });
 
-  const combinations = generateCombo(resistors, desiredResistance, maxResistors, tolerance);
+  if (prevAvailableResistanceInput !== availableResistances || prevMaxResistorsInput !== maxResistors) {
+    prevAvailableResistanceInput = availableResistances;
+    prevMaxResistorsInput = maxResistors;
+    combinations = generateCombo(resistors, maxResistors);
+  }
 
   const outputString = combinations
   .filter((resistor) => {
