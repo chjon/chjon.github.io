@@ -63,9 +63,20 @@
   filter: invert(0.5);
 }
 
-.row {
+.ui-row {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.ui-item-wrapper {
+  min-width: 50%;
+}
+
+@media (max-device-width: 800px), (max-width: 850px) {
+  .ui-item-wrapper {
+    min-width: 100%;
+  }
 }
 
 textarea {
