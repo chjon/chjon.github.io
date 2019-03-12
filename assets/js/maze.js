@@ -1,6 +1,7 @@
 import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
 
+let mazeGenerator;
 let window;
 let maze;
 
@@ -172,20 +173,110 @@ class MazeGenerator {
       }
     }
   }
+
+  generateMazeDFSAnimated(width, height) {
+    this.width = width;
+    this.height = height;
+    this.stack = [{ x: maths.randInt(width), y: maths.randInt(height) }];
+    this.visited = this.newBitField(width, height);
+    this.maze = new Maze(width, height);
+  }
+
+  generateMazeDFSStep() {
+    if (this.stack.length > 0) {
+      const { x, y } = this.stack[this.stack.length - 1];
+      this.visited[x][y] = true;
+      const numPossibleMoves = this.numPossibleMoves(x, y, this.width, this.height, this.visited);
+      if (numPossibleMoves) {
+        let directionToMove = maths.randInt(numPossibleMoves);
+        if (x > 0 && !this.visited[x - 1][y]) {
+          if (!directionToMove) {
+            this.maze.setVWall(x - 1, y, false);
+            this.stack.push({ x: x - 1, y: y });
+            return;
+          } else {
+            directionToMove--;
+          }
+        }
+        if (x < this.width - 1 && !this.visited[x + 1][y]) {
+          if (!directionToMove) {
+            this.maze.setVWall(x, y, false);
+            this.stack.push({ x: x + 1, y: y });
+            return;
+          } else {
+            directionToMove--;
+          }
+        }
+        if (y > 0 && !this.visited[x][y - 1]) {
+          if (!directionToMove) {
+            this.maze.setHWall(x, y - 1, false);
+            this.stack.push({ x: x, y: y - 1 });
+            return;
+          } else {
+            directionToMove--;
+          }
+        }
+        if (y < this.height - 1 && !this.visited[x][y + 1]) {
+          if (!directionToMove) {
+            this.maze.setHWall(x, y, false);
+            this.stack.push({ x: x, y: y + 1 });
+            return;
+          } else {
+            directionToMove--;
+          }
+        }
+      } else {
+        this.stack.pop();
+      }
+    } else {
+      return this.maze;
+    }
+  }
+
+  draw() {
+    const hScaleFactor = window.width / this.width;
+    const vScaleFactor = window.height / this.height;
+
+    // Draw visited cells
+    sketch.setFill('#066');
+    for (let x = 0; x < this.width; x++) {
+      for (let y = 0; y < this.height; y++) {
+        if (this.visited[x][y]) {
+          sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+        }
+      }
+    }
+
+    // Draw stacked cells
+    sketch.setFill('#050');
+    this.stack.forEach(({ x, y }) => {
+      sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+    });
+
+    // Draw top of stack
+    sketch.setFill('#A00');
+    if (this.stack.length) {
+      const { x, y } = this.stack[this.stack.length - 1];
+      sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+    }
+
+    // Draw maze walls
+    this.maze.draw();
+  }
 }
 
 function setup() {
-  sketch.setFrameInterval(20);
+  sketch.setFrameInterval(100);
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
-
-  const mazeGenerator = new MazeGenerator();
-  maze = mazeGenerator.generateMaze(60, 45);
-  console.log(maze);
+  mazeGenerator = new MazeGenerator();
+  mazeGenerator.generateMazeDFSAnimated(30, 20);
 }
 
 function draw() {
-  sketch.setStroke('#FFFFFF');
-  maze.draw();
+  sketch.setStroke('#000');
+  sketch.setLineWidth(2);
+  mazeGenerator.generateMazeDFSStep();
+  mazeGenerator.draw();
 }
 
 sketch.init(setup, draw);

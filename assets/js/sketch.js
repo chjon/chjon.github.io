@@ -72,6 +72,10 @@ export function onAxis(x1, y1, x2, y2, callback) {
   popState();
 }
 
+export function setLineWidth(width) {
+  ctx.lineWidth = width;
+}
+
 export function setStroke(style) {
   ctx.strokeStyle = style;
 }
@@ -135,7 +139,7 @@ export function ellipse(cx, cy, rx, ry) {
   ctx.stroke();
 }
 
-export function rect(x1, y1, x2, y2) {
+export function rect(x1, y1, x2, y2, fill) {
   if (x1 > x2) {
     const tmp = x1;
     x1 = x2;
@@ -148,7 +152,15 @@ export function rect(x1, y1, x2, y2) {
     y2 = tmp;
   }
 
-  ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+  if (fill) {
+    ctx.fillRect(x1, y1, x2 - x1, y2 - y1);
+  } else {
+    ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+  }
+}
+
+export function fillRect(x1, y1, x2, y2) {
+  rect(x1, y1, x2, y2, true);
 }
 
 export function drawImage(img, x, y, width = img.width, height = img.height, color) {
