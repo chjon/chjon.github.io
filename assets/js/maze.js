@@ -265,11 +265,29 @@ class MazeGenerator {
   }
 }
 
+function constrainDimensions({ actualWidth, actualHeight }, { maxWidth, maxHeight }) {
+  const widthInSquares = actualWidth / maxWidth;
+  const heightInSquares = actualHeight / maxHeight;
+  
+  if (widthInSquares > heightInSquares) {
+    return {
+      numCols: maxWidth,
+      numRows: Math.floor(actualHeight / widthInSquares),
+    };
+  } else {
+    return {
+      numCols: Math.floor(actualWidth / heightInSquares),
+      numRows: maxHeight,
+    };
+  }
+}
+
 function setup() {
   sketch.setFrameInterval(100);
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
   mazeGenerator = new MazeGenerator();
-  mazeGenerator.generateMazeDFSAnimated(30, 20);
+  const { numCols, numRows } = constrainDimensions({ actualWidth: window.width, actualHeight: window.height }, { maxWidth: 40, maxHeight: 40 });
+  mazeGenerator.generateMazeDFSAnimated(numCols, numRows);
 }
 
 function draw() {
