@@ -1,3 +1,4 @@
+import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
 
 let window;
@@ -15,22 +16,19 @@ class Maze {
       this.hWalls[i] = [];
       this.vWalls[i] = [];
       for (let j = 0; j < this.height - 1; j++) {
-        this.hWalls[i][j] = (Math.random() < 0.5);
-        this.vWalls[i][j] = (Math.random() < 0.5);
+        this.vWalls[i][j] = true;
+        this.hWalls[i][j] = true;
       }
     }
 
     for (let i = 0; i < this.width - 1; i++) {
-      this.vWalls[i][this.height - 1] = (Math.random() < 0.5);
+      this.vWalls[i][this.height - 1] = true;
     }
 
     this.hWalls[this.width - 1] = [];
     for (let i = 0; i < this.height - 1; i++) {
-      this.hWalls[this.width - 1][i] = (Math.random() < 0.5);
+      this.hWalls[this.width - 1][i] = true;
     }
-
-    console.log(this.hWalls);
-    console.log(this.vWalls);
   }
 
   openOnLeft(x, y) {
@@ -47,6 +45,14 @@ class Maze {
 
   openOnBottom(x, y) {
     return this.hWalls[x][y] === false;
+  }
+
+  setHWall(x, y, hasWall) {
+    this.hWalls[x][y] = hasWall;
+  }
+
+  setVWall(x, y, hasWall) {
+    this.vWalls[x][y] = hasWall;
   }
 
   draw() {
@@ -87,56 +93,84 @@ class Maze {
         );
       }
     }
-
-    // Draw cell states
-    /*
-    for (let x = 0; x < this.width; x++) {
-      for (let y = 0; y < this.height; y++) {
-        if (this.openOnTop(x, y)) {
-          sketch.ellipse(
-            hScaleFactor * x + hScaleFactor / 2,
-            vScaleFactor * y + vScaleFactor / 4,
-            hScaleFactor / 8,
-            vScaleFactor / 8,
-          );
-        }
-
-        if (this.openOnBottom(x, y)) {
-          sketch.ellipse(
-            hScaleFactor * x + hScaleFactor / 2,
-            vScaleFactor * y + 3 * vScaleFactor / 4,
-            hScaleFactor / 8,
-            vScaleFactor / 8,
-          );
-        }
-
-        if (this.openOnLeft(x, y)) {
-          sketch.ellipse(
-            hScaleFactor * x + hScaleFactor / 4,
-            vScaleFactor * y + vScaleFactor / 2,
-            hScaleFactor / 8,
-            vScaleFactor / 8,
-          );
-        }
-
-        if (this.openOnRight(x, y)) {
-          sketch.ellipse(
-            hScaleFactor * x + 3 * hScaleFactor / 4,
-            vScaleFactor * y + vScaleFactor / 2,
-            hScaleFactor / 8,
-            vScaleFactor / 8,
-          );
-        }
-      }
-    }
-    */
   }
 }
 
 class MazeGenerator {
   generateMaze(width, height) {
     const maze = new Maze(width, height);
+    this.generateMazeDFS(width, height, maze);
     return maze;
+  }
+
+  newBitField(width, height) {
+    const bitField = [];
+    for (let i = 0; i < width; i++) {
+      bitField[i] = [];
+      for (let j = 0; j < height; j++) {
+        bitField[i][j] = false;
+      }
+    }
+
+    return bitField;
+  }
+
+  numPossibleMoves(x, y, width, height, visited) {
+    let numPossibleMoves = 0;
+    if (x > 0 && !visited[x - 1][y]) numPossibleMoves++;
+    if (x < width - 1 && !visited[x + 1][y]) numPossibleMoves++;
+    if (y > 0 && !visited[x][y - 1]) numPossibleMoves++;
+    if (y < height - 1 && !visited[x][y + 1]) numPossibleMoves++;
+    return numPossibleMoves;
+  }
+
+  generateMazeDFS(
+    width, height, maze,
+    x = maths.randInt(width),
+    y = maths.randInt(height),
+    visited = this.newBitField(width, height),
+  ) {
+    visited[x][y] = true;
+    while (this.numPossibleMoves(x, y, width, height, visited)) {
+      const numPossibleMoves = this.numPossibleMoves(x, y, width, height, visited);
+      let directionToMove = maths.randInt(numPossibleMoves);
+      if (x > 0 && !visited[x - 1][y]) {
+        if (!directionToMove) {
+          maze.setVWall(x - 1, y, false);
+          this.generateMazeDFS(width, height, maze, x - 1, y, visited);
+          continue;
+        } else {
+          directionToMove--;
+        }
+      }
+      if (x < width - 1 && !visited[x + 1][y]) {
+        if (!directionToMove) {
+          maze.setVWall(x, y, false);
+          this.generateMazeDFS(width, height, maze, x + 1, y, visited);
+          continue;
+        } else {
+          directionToMove--;
+        }
+      }
+      if (y > 0 && !visited[x][y - 1]) {
+        if (!directionToMove) {
+          maze.setHWall(x, y - 1, false);
+          this.generateMazeDFS(width, height, maze, x, y - 1, visited);
+          continue;
+        } else {
+          directionToMove--;
+        }
+      }
+      if (y < height - 1 && !visited[x][y + 1]) {
+        if (!directionToMove) {
+          maze.setHWall(x, y, false);
+          this.generateMazeDFS(width, height, maze, x, y + 1, visited);
+          continue;
+        } else {
+          directionToMove--;
+        }
+      }
+    }
   }
 }
 
@@ -145,7 +179,8 @@ function setup() {
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
 
   const mazeGenerator = new MazeGenerator();
-  maze = mazeGenerator.generateMaze(40, 30);
+  maze = mazeGenerator.generateMaze(60, 45);
+  console.log(maze);
 }
 
 function draw() {
