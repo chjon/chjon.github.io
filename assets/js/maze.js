@@ -125,53 +125,59 @@ class MazeGenerator {
     return numPossibleMoves;
   }
 
-  generateMazeDFS(
-    width, height, maze,
-    x = maths.randInt(width),
-    y = maths.randInt(height),
-    visited = this.newBitField(width, height),
-  ) {
-    visited[x][y] = true;
-    while (this.numPossibleMoves(x, y, width, height, visited)) {
+  generateMazeDFS(width, height) {
+    const stack = [{ x: maths.randInt(width), y: maths.randInt(height) }];
+    const visited = this.newBitField(width, height);
+    const maze = new Maze(width, height);
+
+    while (stack.length > 0) {
+      const { x, y } = stack[stack.length - 1];
+      visited[x][y] = true;
       const numPossibleMoves = this.numPossibleMoves(x, y, width, height, visited);
-      let directionToMove = maths.randInt(numPossibleMoves);
-      if (x > 0 && !visited[x - 1][y]) {
-        if (!directionToMove) {
-          maze.setVWall(x - 1, y, false);
-          this.generateMazeDFS(width, height, maze, x - 1, y, visited);
-          continue;
-        } else {
-          directionToMove--;
+      if (numPossibleMoves) {
+        let directionToMove = maths.randInt(numPossibleMoves);
+        if (x > 0 && !visited[x - 1][y]) {
+          if (!directionToMove) {
+            maze.setVWall(x - 1, y, false);
+            stack.push({ x: x - 1, y: y });
+            continue;
+          } else {
+            directionToMove--;
+          }
         }
-      }
-      if (x < width - 1 && !visited[x + 1][y]) {
-        if (!directionToMove) {
-          maze.setVWall(x, y, false);
-          this.generateMazeDFS(width, height, maze, x + 1, y, visited);
-          continue;
-        } else {
-          directionToMove--;
+        if (x < width - 1 && !visited[x + 1][y]) {
+          if (!directionToMove) {
+            maze.setVWall(x, y, false);
+            stack.push({ x: x + 1, y: y });
+            continue;
+          } else {
+            directionToMove--;
+          }
         }
-      }
-      if (y > 0 && !visited[x][y - 1]) {
-        if (!directionToMove) {
-          maze.setHWall(x, y - 1, false);
-          this.generateMazeDFS(width, height, maze, x, y - 1, visited);
-          continue;
-        } else {
-          directionToMove--;
+        if (y > 0 && !visited[x][y - 1]) {
+          if (!directionToMove) {
+            maze.setHWall(x, y - 1, false);
+            stack.push({ x: x, y: y - 1 });
+            continue;
+          } else {
+            directionToMove--;
+          }
         }
-      }
-      if (y < height - 1 && !visited[x][y + 1]) {
-        if (!directionToMove) {
-          maze.setHWall(x, y, false);
-          this.generateMazeDFS(width, height, maze, x, y + 1, visited);
-          continue;
-        } else {
-          directionToMove--;
+        if (y < height - 1 && !visited[x][y + 1]) {
+          if (!directionToMove) {
+            maze.setHWall(x, y, false);
+            stack.push({ x: x, y: y + 1 });
+            continue;
+          } else {
+            directionToMove--;
+          }
         }
+      } else {
+        stack.pop();
       }
     }
+    
+    return maze;
   }
 
   generateMazeDFSAnimated(width, height) {
@@ -287,14 +293,14 @@ function setup() {
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
   mazeGenerator = new MazeGenerator();
   const { numCols, numRows } = constrainDimensions({ actualWidth: window.width, actualHeight: window.height }, { maxWidth: 40, maxHeight: 40 });
-  mazeGenerator.generateMazeDFSAnimated(numCols, numRows);
+  maze = mazeGenerator.generateMazeDFS(numCols, numRows);
 }
 
 function draw() {
-  sketch.setStroke('#000');
+  sketch.setStroke('#FFF');
   sketch.setLineWidth(2);
-  mazeGenerator.generateMazeDFSStep();
-  mazeGenerator.draw();
+  // mazeGenerator.generateMazeDFSStep();
+  maze.draw();
 }
 
 sketch.init(setup, draw);
