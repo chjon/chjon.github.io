@@ -1,5 +1,6 @@
 import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
+import { DisjointSet } from './disjoint-set.js';
 
 let mazeGenerator;
 let window;
@@ -46,6 +47,26 @@ class Maze {
 
   openOnBottom(x, y) {
     return this.hWalls[x][y] === false;
+  }
+
+  getWalls() {
+    const walls = [];
+    for (let x = 0; x < this.width - 1; x++) {
+      for (let y = 0; y < this.height - 1; y++) {
+        walls.push({ x, y, isHorizontal: true });
+        walls.push({ x, y, isHorizontal: false });
+      }
+    }
+
+    for (let x = 0; x < this.width - 1; x++) {
+      walls.push({ x, y: this.height - 1, isHorizontal: false });
+    }
+
+    for (let y = 0; y < this.height - 1; y++) {
+      walls.push({ x: this.width - 1, y, isHorizontal: true });
+    }
+
+    return walls;
   }
 
   setHWall(x, y, hasWall) {
@@ -239,6 +260,30 @@ class MazeGenerator {
     }
   }
 
+  generateMazeKruskals(width, height) {
+    const sets = new DisjointSet(width * height);
+    const maze = new Maze(width, height);
+    const walls = maths.shuffleList(maze.getWalls());
+
+    for (let i = 0; i < walls.length && sets.getNumSets() > 1; i++) {
+      const { x, y, isHorizontal } = walls[i];
+      const cell1 = x + y * width;
+      const cell2 = (isHorizontal) ? (x + (y + 1) * width) : (x + 1 + y * width);
+      const set1 = sets.getSet(cell1);
+      const set2 = sets.getSet(cell2);
+      if (set1 !== set2) {
+        sets.join(set1, set2);
+        if (isHorizontal) {
+          maze.setHWall(x, y, false);
+        } else {
+          maze.setVWall(x, y, false);
+        }
+      }
+    }
+
+    return maze;
+  }
+
   draw() {
     const hScaleFactor = window.width / this.width;
     const vScaleFactor = window.height / this.height;
@@ -292,14 +337,18 @@ function setup() {
   sketch.setFrameInterval(100);
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
   mazeGenerator = new MazeGenerator();
-  const { numCols, numRows } = constrainDimensions({ actualWidth: window.width, actualHeight: window.height }, { maxWidth: 40, maxHeight: 40 });
-  maze = mazeGenerator.generateMazeDFS(numCols, numRows);
+  const { numCols, numRows } = constrainDimensions(
+    { actualWidth: window.width, actualHeight: window.height },
+    { maxWidth: 40, maxHeight: 40 },
+  );
+  maze = mazeGenerator.generateMazeKruskals(numCols, numRows);
 }
 
 function draw() {
   sketch.setStroke('#FFF');
   sketch.setLineWidth(2);
   // mazeGenerator.generateMazeDFSStep();
+  // mazeGenerator.generateMazeKruskalsStep();
   maze.draw();
 }
 
