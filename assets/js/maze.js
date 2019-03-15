@@ -284,7 +284,36 @@ class MazeGenerator {
     return maze;
   }
 
-  draw() {
+  generateMazeKruskalsAnimated(width, height) {
+    this.width = width;
+    this.height = height;
+    this.sets = new DisjointSet(width * height);
+    this.maze = new Maze(width, height);
+    this.walls = maths.shuffleList(this.maze.getWalls());
+    return this.maze;
+  }
+
+  generateMazeKruskalsStep() {
+    if (!this.walls.length || this.sets.getNumSets() <= 1) {
+      return;
+    }
+
+    const { x, y, isHorizontal } = this.walls.pop();
+    const cell1 = x + y * this.width;
+    const cell2 = (isHorizontal) ? (x + (y + 1) * this.width) : (x + 1 + y * this.width);
+    const set1 = this.sets.getSet(cell1);
+    const set2 = this.sets.getSet(cell2);
+    if (set1 !== set2) {
+      this.sets.join(set1, set2);
+      if (isHorizontal) {
+        this.maze.setHWall(x, y, false);
+      } else {
+        this.maze.setVWall(x, y, false);
+      }
+    }
+  }
+
+  drawDFS() {
     const hScaleFactor = window.width / this.width;
     const vScaleFactor = window.height / this.height;
 
@@ -314,6 +343,22 @@ class MazeGenerator {
     // Draw maze walls
     this.maze.draw();
   }
+
+  drawKruskals() {
+    this.maze.draw();
+    if (this.walls.length && this.sets.getNumSets() > 1) {
+      const hScaleFactor = window.width / this.width;
+      const vScaleFactor = window.height / this.height;
+      const { x, y, isHorizontal } = this.walls[this.walls.length - 1];
+
+      sketch.setStroke('#A00');
+      if (isHorizontal) {
+        sketch.line(hScaleFactor * x, vScaleFactor * (y + 1), hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+      } else {
+        sketch.line(hScaleFactor * (x + 1), vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+      }
+    }
+  }
 }
 
 function constrainDimensions({ actualWidth, actualHeight }, { maxWidth, maxHeight }) {
@@ -341,15 +386,16 @@ function setup() {
     { actualWidth: window.width, actualHeight: window.height },
     { maxWidth: 40, maxHeight: 40 },
   );
-  maze = mazeGenerator.generateMazeKruskals(numCols, numRows);
+  maze = mazeGenerator.generateMazeKruskalsAnimated(numCols, numRows);
 }
 
 function draw() {
   sketch.setStroke('#FFF');
   sketch.setLineWidth(2);
+  // maze.draw();
   // mazeGenerator.generateMazeDFSStep();
-  // mazeGenerator.generateMazeKruskalsStep();
-  maze.draw();
+  mazeGenerator.drawKruskals();
+  mazeGenerator.generateMazeKruskalsStep();
 }
 
 sketch.init(setup, draw);
