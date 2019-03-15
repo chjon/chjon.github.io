@@ -237,3 +237,18 @@ export function interpolate(list = [], numPoints = list.length) {
 export function randInt(max = 1, min = 0) {
   return min + Math.floor((max - min) * Math.random());
 }
+
+/**
+ * Put a list into a random number (mutates the list)
+ * @param {any[]} list - the list to shuffle
+ */
+export function shuffleList(list = []) {
+  for (let i = 0; i < list.length - 1; i++) {
+    const indexToSwap = randInt(i + 1, list.length);
+    const tmp = list[i];
+    list[i] = list[indexToSwap];
+    list[indexToSwap] = tmp;
+  }
+
+  return list;
+}
