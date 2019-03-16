@@ -464,6 +464,71 @@ class MazeSolver {
     }
   }
 
+  solveWallOnRightAnimated(
+    maze,
+    x1 = 0,
+    y1 = 0,
+    x2 = maze.width - 1,
+    y2 = maze.height - 1,
+  ) {
+    this.maze = maze;
+    this.stack = [{ x: x1, y: y1 }];
+    this.visited = newBitField(maze.width, maze.height);
+    this.dest = { x: x2, y: y2 };
+    this.dir = 0;
+  }
+
+  solveWallOnRightStep() {
+    if (!this.stack.length) {
+      return;
+    }
+
+    const { x, y } = this.stack[this.stack.length - 1];
+    this.visited[x][y] = true;
+    if (x !== this.dest.x || y !== this.dest.y) {
+      let nextDir = (this.dir + 1) % 4;
+      let nextPos;
+
+      for (let i = 0; i < 4 && !nextPos; i++) {
+        this.dir = nextDir;
+        switch (nextDir) {
+          case 0:
+            if (this.maze.openOnTop(x, y)) {
+              nextPos = { x, y: y - 1 };
+            }
+            break;
+          case 1:
+            if (this.maze.openOnRight(x, y)) {
+              nextPos = { x: x + 1, y };
+            }
+            break;
+          case 2:
+            if (this.maze.openOnBottom(x, y)) {
+              nextPos = { x, y: y + 1 };
+            }
+            break;
+          case 3:
+            if (this.maze.openOnLeft(x, y)) {
+              nextPos = { x: x - 1, y };
+            }
+            break;
+        }
+
+        nextDir = ((nextDir - 1) % 4 + 4) % 4;
+      }
+
+      if (this.stack.length > 1) {
+        const { x, y } = this.stack[this.stack.length - 2];
+        if (x === nextPos.x && y === nextPos.y) {
+          this.stack.pop();
+          return;
+        }
+      }
+
+      this.stack.push(nextPos);
+    }
+  }
+
   draw() {
     const hScaleFactor = window.width / this.maze.width;
     const vScaleFactor = window.height / this.maze.height;
@@ -522,7 +587,7 @@ function setup() {
   );
   maze = mazeGenerator.generateMazeKruskals(numCols, numRows);
   //solution = mazeSolver.solveDFS(maze);
-  mazeSolver.solveDFSAnimated(maze);
+  mazeSolver.solveWallOnRightAnimated(maze);
 }
 
 function draw() {
@@ -538,7 +603,7 @@ function draw() {
   // });
 
   mazeSolver.draw();
-  mazeSolver.solveDFSStep();
+  mazeSolver.solveWallOnRightStep();
 
   maze.draw();
 }
