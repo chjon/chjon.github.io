@@ -2,9 +2,11 @@ import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
 import { DisjointSet } from './disjoint-set.js';
 
-let mazeGenerator;
 let window;
 let maze;
+let mazeGenerator;
+let mazeSolver;
+let solution;
 
 function newBitField(width, height) {
   const bitField = [];
@@ -362,14 +364,21 @@ class MazeGenerator {
 }
 
 class MazeSolver {
-  solveDFS(maze, visited = newBitField(maze.width, maze.height), x1, y1, x2, y2) {
+  solveDFS(
+    maze,
+    visited = newBitField(maze.width, maze.height),
+    x1 = 0,
+    y1 = 0,
+    x2 = maze.width - 1,
+    y2 = maze.height - 1,
+  ) {
     if (x1 === x2 && y1 === y2) {
       return [{ x: x1, y: y1 }];
     }
 
     let stack;
     visited[x1][y1] = true;
-    if (maze.openOnTop(x1, y1) && visited[x1][y1 - 1]) {
+    if (maze.openOnTop(x1, y1) && !visited[x1][y1 - 1]) {
       stack = this.solveDFS(maze, visited, x1, y1 - 1, x2, y2);
       if (stack) {
         stack.push({ x: x1, y: y1 });
@@ -377,7 +386,7 @@ class MazeSolver {
       }
     }
 
-    if (maze.openOnBottom(x1, y1) && visited[x1][y1 + 1]) {
+    if (maze.openOnBottom(x1, y1) && !visited[x1][y1 + 1]) {
       stack = this.solveDFS(maze, visited, x1, y1 + 1, x2, y2);
       if (stack) {
         stack.push({ x: x1, y: y1 });
@@ -385,7 +394,7 @@ class MazeSolver {
       }
     }
 
-    if (maze.openOnLeft(x1, y1) && visited[x1 - 1][y1]) {
+    if (maze.openOnLeft(x1, y1) && !visited[x1 - 1][y1]) {
       stack = this.solveDFS(maze, visited, x1 - 1, y1, x2, y2);
       if (stack) {
         stack.push({ x: x1, y: y1 });
@@ -393,14 +402,95 @@ class MazeSolver {
       }
     }
 
-    if (maze.openOnRight(x1, y1) && visited[x1 + 1][y1]) {
+    if (maze.openOnRight(x1, y1) && !visited[x1 + 1][y1]) {
       stack = this.solveDFS(maze, visited, x1 + 1, y1, x2, y2);
       if (stack) {
         stack.push({ x: x1, y: y1 });
         return stack;
       }
     }
-    visited[x][y] = false;
+    visited[x1][y1] = false;
+  }
+
+  solveDFSAnimated(
+    maze,
+    x1 = 0,
+    y1 = 0,
+    x2 = maze.width - 1,
+    y2 = maze.height - 1,
+  ) {
+    this.maze = maze;
+    this.stack = [{ x: x1, y: y1, step: 0 }];
+    this.visited = newBitField(maze.width, maze.height);
+    this.dest = { x: x2, y: y2 };
+  }
+
+  solveDFSStep() {
+    if (!this.stack.length) {
+      return;
+    }
+
+    const { x, y, step } = this.stack[this.stack.length - 1];
+    this.stack[this.stack.length - 1].step++;
+    if (x !== this.dest.x || y !== this.dest.y) {
+      switch (step) {
+        case 0:
+          if (this.maze.openOnTop(x, y) && !this.visited[x][y - 1]) {
+            this.stack.push({ x, y: y - 1, step: 0 });
+            this.visited[x][y - 1] = true;
+            break;
+          }
+        case 1:
+          if (this.maze.openOnBottom(x, y) && !this.visited[x][y + 1]) {
+            this.stack.push({ x, y: y + 1, step: 0 });
+            this.visited[x][y + 1] = true;
+            break;
+          }
+        case 2:
+          if (this.maze.openOnLeft(x, y) && !this.visited[x - 1][y]) {
+            this.stack.push({ x: x - 1, y, step: 0 });
+            this.visited[x - 1][y] = true;
+            break;
+          }
+        case 3:
+          if (this.maze.openOnRight(x, y) && !this.visited[x + 1][y]) {
+            this.stack.push({ x: x + 1, y, step: 0 });
+            this.visited[x + 1][y] = true;
+            break;
+          }
+        default:
+          this.stack.pop();
+      }
+    }
+  }
+
+  draw() {
+    const hScaleFactor = window.width / this.maze.width;
+    const vScaleFactor = window.height / this.maze.height;
+
+    // Draw visited cells
+    sketch.setFill('#066');
+    for (let x = 0; x < this.maze.width; x++) {
+      for (let y = 0; y < this.maze.height; y++) {
+        if (this.visited[x][y]) {
+          sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+        }
+      }
+    }
+
+    if (this.stack.length) {
+      const { x, y } = this.stack[this.stack.length - 1];
+
+      // Draw stacked cells
+      sketch.setFill((x === this.dest.x && y === this.dest.y) ? '#A00' : '#050');
+      this.stack.forEach(({ x, y }) => {
+        sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+      });
+
+      // Draw top of stack
+      sketch.setFill('#A00');
+      sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+    }    
   }
 }
 
@@ -425,16 +515,31 @@ function setup() {
   sketch.setFrameInterval(100);
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
   mazeGenerator = new MazeGenerator();
+  mazeSolver = new MazeSolver();
   const { numCols, numRows } = constrainDimensions(
     { actualWidth: window.width, actualHeight: window.height },
     { maxWidth: 40, maxHeight: 40 },
   );
   maze = mazeGenerator.generateMazeKruskals(numCols, numRows);
+  //solution = mazeSolver.solveDFS(maze);
+  mazeSolver.solveDFSAnimated(maze);
 }
 
 function draw() {
   sketch.setStroke('#FFF');
   sketch.setLineWidth(2);
+
+  // const hScaleFactor = window.width / maze.width;
+  // const vScaleFactor = window.height / maze.height;
+
+  // sketch.setFill('#066');
+  // solution.forEach(({ x, y }) => {
+  //   sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+  // });
+
+  mazeSolver.draw();
+  mazeSolver.solveDFSStep();
+
   maze.draw();
 }
 
