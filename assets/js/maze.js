@@ -553,6 +553,15 @@ class MazeSolver {
       }
     }
 
+    // Draw target destination
+    sketch.setFill('#AA0');
+    sketch.fillRect(
+      hScaleFactor * this.dest.x,
+      vScaleFactor * this.dest.y,
+      hScaleFactor * (this.dest.x + 1),
+      vScaleFactor * (this.dest.y + 1),
+    );
+
     if (this.stack.length) {
       const { x, y } = this.stack[this.stack.length - 1];
 
@@ -565,7 +574,7 @@ class MazeSolver {
       // Draw top of stack
       sketch.setFill('#A00');
       sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
-    }    
+    }
   }
 }
 
@@ -607,7 +616,7 @@ function draw() {
   // const hScaleFactor = window.width / maze.width;
   // const vScaleFactor = window.height / maze.height;
 
-  // sketch.setFill('#066');
+  // sketch.setFill('#A00');
   // solution.forEach(({ x, y }) => {
   //   sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
   // });
