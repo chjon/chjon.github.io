@@ -83,6 +83,15 @@ class Maze {
     return walls;
   }
 
+  numPossibleMoves(x, y, visited) {
+    let numPossibleMoves = 0;
+    if (this.openOnLeft(x, y) && (!visited || !visited[x - 1][y])) numPossibleMoves++;
+    if (this.openOnRight(x, y) && (!visited || !visited[x + 1][y])) numPossibleMoves++;
+    if (this.openOnTop(x, y) && (!visited || !visited[x][y - 1])) numPossibleMoves++;
+    if (this.openOnBottom(x, y) && (!visited || !visited[x][y + 1])) numPossibleMoves++;
+    return numPossibleMoves;
+  }
+
   setHWall(x, y, hasWall) {
     this.hWalls[x][y] = hasWall;
   }
@@ -139,15 +148,6 @@ class MazeGenerator {
     return maze;
   }
 
-  numPossibleMoves(x, y, width, height, visited) {
-    let numPossibleMoves = 0;
-    if (x > 0 && !visited[x - 1][y]) numPossibleMoves++;
-    if (x < width - 1 && !visited[x + 1][y]) numPossibleMoves++;
-    if (y > 0 && !visited[x][y - 1]) numPossibleMoves++;
-    if (y < height - 1 && !visited[x][y + 1]) numPossibleMoves++;
-    return numPossibleMoves;
-  }
-
   generateMazeDFS(width, height) {
     const stack = [{ x: maths.randInt(width), y: maths.randInt(height) }];
     const visited = newBitField(width, height);
@@ -156,7 +156,7 @@ class MazeGenerator {
     while (stack.length > 0) {
       const { x, y } = stack[stack.length - 1];
       visited[x][y] = true;
-      const numPossibleMoves = this.numPossibleMoves(x, y, width, height, visited);
+      const numPossibleMoves = maze.numPossibleMoves(x, y, width, height, visited);
       if (numPossibleMoves) {
         let directionToMove = maths.randInt(numPossibleMoves);
         if (x > 0 && !visited[x - 1][y]) {
@@ -215,7 +215,7 @@ class MazeGenerator {
     if (this.stack.length > 0) {
       const { x, y } = this.stack[this.stack.length - 1];
       this.visited[x][y] = true;
-      const numPossibleMoves = this.numPossibleMoves(x, y, this.width, this.height, this.visited);
+      const numPossibleMoves = this.maze.numPossibleMoves(x, y, this.width, this.height, this.visited);
       if (numPossibleMoves) {
         let directionToMove = maths.randInt(numPossibleMoves);
         if (x > 0 && !this.visited[x - 1][y]) {
@@ -420,46 +420,56 @@ class MazeSolver {
     y2 = maze.height - 1,
   ) {
     this.maze = maze;
-    this.stack = [{ x: x1, y: y1, step: 0 }];
+    this.stack = [{ x: x1, y: y1 }];
     this.visited = newBitField(maze.width, maze.height);
     this.dest = { x: x2, y: y2 };
   }
 
-  solveDFSStep() {
+  solveDFSStep(randomize) {
     if (!this.stack.length) {
       return;
     }
 
-    const { x, y, step } = this.stack[this.stack.length - 1];
-    this.stack[this.stack.length - 1].step++;
+    const { x, y } = this.stack[this.stack.length - 1];
+    this.visited[x][y] = true;
     if (x !== this.dest.x || y !== this.dest.y) {
-      switch (step) {
-        case 0:
-          if (this.maze.openOnTop(x, y) && !this.visited[x][y - 1]) {
-            this.stack.push({ x, y: y - 1, step: 0 });
-            this.visited[x][y - 1] = true;
-            break;
+      const numPossibleMoves = this.maze.numPossibleMoves(x, y, this.visited);
+      if (numPossibleMoves) {
+        let directionToMove = randomize ? maths.randInt(numPossibleMoves) : 0;
+        if (this.maze.openOnRight(x, y) && !this.visited[x + 1][y]) {
+          if (!directionToMove) {
+            this.stack.push({ x: x + 1, y: y });
+            return;
+          } else {
+            directionToMove--;
           }
-        case 1:
-          if (this.maze.openOnBottom(x, y) && !this.visited[x][y + 1]) {
-            this.stack.push({ x, y: y + 1, step: 0 });
-            this.visited[x][y + 1] = true;
-            break;
+        }
+        if (this.maze.openOnBottom(x, y) && !this.visited[x][y + 1]) {
+          if (!directionToMove) {
+            this.stack.push({ x: x, y: y + 1 });
+            return;
+          } else {
+            directionToMove--;
           }
-        case 2:
-          if (this.maze.openOnLeft(x, y) && !this.visited[x - 1][y]) {
-            this.stack.push({ x: x - 1, y, step: 0 });
-            this.visited[x - 1][y] = true;
-            break;
+        }
+        if (this.maze.openOnLeft(x, y) && !this.visited[x - 1][y]) {
+          if (!directionToMove) {
+            this.stack.push({ x: x - 1, y: y });
+            return;
+          } else {
+            directionToMove--;
           }
-        case 3:
-          if (this.maze.openOnRight(x, y) && !this.visited[x + 1][y]) {
-            this.stack.push({ x: x + 1, y, step: 0 });
-            this.visited[x + 1][y] = true;
-            break;
+        }
+        if (this.maze.openOnTop(x, y) && !this.visited[x][y - 1]) {
+          if (!directionToMove) {
+            this.stack.push({ x: x, y: y - 1 });
+            return;
+          } else {
+            directionToMove--;
           }
-        default:
-          this.stack.pop();
+        }
+      } else {
+        this.stack.pop();
       }
     }
   }
@@ -587,7 +597,7 @@ function setup() {
   );
   maze = mazeGenerator.generateMazeKruskals(numCols, numRows);
   //solution = mazeSolver.solveDFS(maze);
-  mazeSolver.solveWallOnRightAnimated(maze);
+  mazeSolver.solveDFSAnimated(maze);
 }
 
 function draw() {
@@ -603,7 +613,7 @@ function draw() {
   // });
 
   mazeSolver.draw();
-  mazeSolver.solveWallOnRightStep();
+  mazeSolver.solveDFSStep(true);
 
   maze.draw();
 }
