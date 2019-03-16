@@ -622,7 +622,7 @@ function draw() {
   // });
 
   mazeSolver.draw();
-  mazeSolver.solveDFSStep(true);
+  mazeSolver.solveDFSStep();
 
   maze.draw();
 }
