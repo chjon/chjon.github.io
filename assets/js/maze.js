@@ -6,6 +6,18 @@ let mazeGenerator;
 let window;
 let maze;
 
+function newBitField(width, height) {
+  const bitField = [];
+  for (let i = 0; i < width; i++) {
+    bitField[i] = [];
+    for (let j = 0; j < height; j++) {
+      bitField[i][j] = false;
+    }
+  }
+
+  return bitField;
+}
+
 class Maze {
   constructor(width, height) {
     this.width = width;
@@ -125,18 +137,6 @@ class MazeGenerator {
     return maze;
   }
 
-  newBitField(width, height) {
-    const bitField = [];
-    for (let i = 0; i < width; i++) {
-      bitField[i] = [];
-      for (let j = 0; j < height; j++) {
-        bitField[i][j] = false;
-      }
-    }
-
-    return bitField;
-  }
-
   numPossibleMoves(x, y, width, height, visited) {
     let numPossibleMoves = 0;
     if (x > 0 && !visited[x - 1][y]) numPossibleMoves++;
@@ -148,7 +148,7 @@ class MazeGenerator {
 
   generateMazeDFS(width, height) {
     const stack = [{ x: maths.randInt(width), y: maths.randInt(height) }];
-    const visited = this.newBitField(width, height);
+    const visited = newBitField(width, height);
     const maze = new Maze(width, height);
 
     while (stack.length > 0) {
@@ -205,7 +205,7 @@ class MazeGenerator {
     this.width = width;
     this.height = height;
     this.stack = [{ x: maths.randInt(width), y: maths.randInt(height) }];
-    this.visited = this.newBitField(width, height);
+    this.visited = newBitField(width, height);
     this.maze = new Maze(width, height);
   }
 
@@ -303,7 +303,7 @@ class MazeGenerator {
     const cell2 = (isHorizontal) ? (x + (y + 1) * this.width) : (x + 1 + y * this.width);
     const set1 = this.sets.getSet(cell1);
     const set2 = this.sets.getSet(cell2);
-    if (set1 !== set2) {
+    if (set1 !== set2 || Math.random() < 0.3) {
       this.sets.join(set1, set2);
       if (isHorizontal) {
         this.maze.setHWall(x, y, false);
@@ -361,6 +361,49 @@ class MazeGenerator {
   }
 }
 
+class MazeSolver {
+  solveDFS(maze, visited = newBitField(maze.width, maze.height), x1, y1, x2, y2) {
+    if (x1 === x2 && y1 === y2) {
+      return [{ x: x1, y: y1 }];
+    }
+
+    let stack;
+    visited[x1][y1] = true;
+    if (maze.openOnTop(x1, y1) && visited[x1][y1 - 1]) {
+      stack = this.solveDFS(maze, visited, x1, y1 - 1, x2, y2);
+      if (stack) {
+        stack.push({ x: x1, y: y1 });
+        return stack;
+      }
+    }
+
+    if (maze.openOnBottom(x1, y1) && visited[x1][y1 + 1]) {
+      stack = this.solveDFS(maze, visited, x1, y1 + 1, x2, y2);
+      if (stack) {
+        stack.push({ x: x1, y: y1 });
+        return stack;
+      }
+    }
+
+    if (maze.openOnLeft(x1, y1) && visited[x1 - 1][y1]) {
+      stack = this.solveDFS(maze, visited, x1 - 1, y1, x2, y2);
+      if (stack) {
+        stack.push({ x: x1, y: y1 });
+        return stack;
+      }
+    }
+
+    if (maze.openOnRight(x1, y1) && visited[x1 + 1][y1]) {
+      stack = this.solveDFS(maze, visited, x1 + 1, y1, x2, y2);
+      if (stack) {
+        stack.push({ x: x1, y: y1 });
+        return stack;
+      }
+    }
+    visited[x][y] = false;
+  }
+}
+
 function constrainDimensions({ actualWidth, actualHeight }, { maxWidth, maxHeight }) {
   const widthInSquares = actualWidth / maxWidth;
   const heightInSquares = actualHeight / maxHeight;
@@ -386,16 +429,13 @@ function setup() {
     { actualWidth: window.width, actualHeight: window.height },
     { maxWidth: 40, maxHeight: 40 },
   );
-  maze = mazeGenerator.generateMazeKruskalsAnimated(numCols, numRows);
+  maze = mazeGenerator.generateMazeKruskals(numCols, numRows);
 }
 
 function draw() {
   sketch.setStroke('#FFF');
   sketch.setLineWidth(2);
-  // maze.draw();
-  // mazeGenerator.generateMazeDFSStep();
-  mazeGenerator.drawKruskals();
-  mazeGenerator.generateMazeKruskalsStep();
+  maze.draw();
 }
 
 sketch.init(setup, draw);
