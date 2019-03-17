@@ -1,6 +1,6 @@
 import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
-import { Quadtree } from './quadtree.js';
+import { Quadtree } from './data-structures/quadtree.js';
 
 const GRAB_RADIUS = 10;
 let clickedTree;

@@ -1,6 +1,6 @@
 import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
-import { DisjointSet } from './disjoint-set.js';
+import { DisjointSet } from './data-structures/disjoint-set.js';
 
 let window;
 let maze;
@@ -273,7 +273,7 @@ class MazeGenerator {
       const cell2 = (isHorizontal) ? (x + (y + 1) * width) : (x + 1 + y * width);
       const set1 = sets.getSet(cell1);
       const set2 = sets.getSet(cell2);
-      if (set1 !== set2 || Math.random() < 0.1) {
+      if (set1 !== set2) {
         sets.join(set1, set2);
         if (isHorizontal) {
           maze.setHWall(x, y, false);
