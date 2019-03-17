@@ -273,7 +273,7 @@ class MazeGenerator {
       const cell2 = (isHorizontal) ? (x + (y + 1) * width) : (x + 1 + y * width);
       const set1 = sets.getSet(cell1);
       const set2 = sets.getSet(cell2);
-      if (set1 !== set2) {
+      if (set1 !== set2 || Math.random() < 0.1) {
         sets.join(set1, set2);
         if (isHorizontal) {
           maze.setHWall(x, y, false);
@@ -485,7 +485,7 @@ class MazeSolver {
     this.stack = [{ x: x1, y: y1 }];
     this.visited = newBitField(maze.width, maze.height);
     this.dest = { x: x2, y: y2 };
-    this.dir = 0;
+    this.dir = 2;
   }
 
   solveWallOnRightStep() {
@@ -527,15 +527,17 @@ class MazeSolver {
         nextDir = ((nextDir - 1) % 4 + 4) % 4;
       }
 
-      if (this.stack.length > 1) {
-        const { x, y } = this.stack[this.stack.length - 2];
-        if (x === nextPos.x && y === nextPos.y) {
+      // Prune the stack
+      if (this.visited[nextPos.x][nextPos.y]) {
+        while (
+          nextPos.x !== this.stack[this.stack.length - 1].x ||
+          nextPos.y !== this.stack[this.stack.length - 1].y
+        ) {
           this.stack.pop();
-          return;
         }
+      } else {
+        this.stack.push(nextPos);
       }
-
-      this.stack.push(nextPos);
     }
   }
 
@@ -606,7 +608,8 @@ function setup() {
   );
   maze = mazeGenerator.generateMazeKruskals(numCols, numRows);
   //solution = mazeSolver.solveDFS(maze);
-  mazeSolver.solveDFSAnimated(maze);
+  //mazeSolver.solveDFSAnimated(maze);
+  mazeSolver.solveWallOnRightAnimated(maze);
 }
 
 function draw() {
@@ -622,7 +625,8 @@ function draw() {
   // });
 
   mazeSolver.draw();
-  mazeSolver.solveDFSStep();
+  // mazeSolver.solveDFSStep(true);
+  mazeSolver.solveWallOnRightStep();
 
   maze.draw();
 }
