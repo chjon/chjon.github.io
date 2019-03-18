@@ -1,10 +1,10 @@
 import * as maths from '../math-utils.js';
-import { newNDArray } from '../array-utils.js';
+import * as arrays from '../array-utils.js';
 
 export class MazeSolver {
   solveDFS(
     maze,
-    visited = newNDArray([maze.width, maze.height], false),
+    visited = arrays.newNDArray([maze.width, maze.height], false),
     x1 = 0,
     y1 = 0,
     x2 = maze.width - 1,
@@ -59,7 +59,7 @@ export class MazeSolver {
   ) {
     this.maze = maze;
     this.stack = [{ x: x1, y: y1 }];
-    this.visited = newNDArray([maze.width, maze.height], false);
+    this.visited = arrays.newNDArray([maze.width, maze.height], false);
     this.dest = { x: x2, y: y2 };
   }
 
@@ -121,7 +121,7 @@ export class MazeSolver {
   ) {
     this.maze = maze;
     this.stack = [{ x: x1, y: y1 }];
-    this.visited = newNDArray([maze.width, maze.height], false);
+    this.visited = arrays.newNDArray([maze.width, maze.height], false);
     this.dest = { x: x2, y: y2 };
     this.dir = 2;
   }
@@ -185,13 +185,11 @@ export class MazeSolver {
 
     // Draw visited cells
     sketch.setFill('#066');
-    for (let x = 0; x < this.maze.width; x++) {
-      for (let y = 0; y < this.maze.height; y++) {
-        if (this.visited[x][y]) {
-          sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
-        }
+    arrays.iterate(this.visited, (visited, [x, y]) => {
+      if (visited) {
+        sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
       }
-    }
+    });
 
     // Draw target destination
     sketch.setFill('#AA0');

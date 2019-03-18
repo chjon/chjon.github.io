@@ -1,4 +1,5 @@
 import * as maths from '../math-utils.js';
+import * as arrays from '../array-utils.js';
 import { DisjointSet } from '../data-structures/disjoint-set.js';
 import { Maze } from './maze.js';
 
@@ -184,13 +185,11 @@ export class MazeGenerator {
 
     // Draw visited cells
     sketch.setFill('#066');
-    for (let x = 0; x < this.width; x++) {
-      for (let y = 0; y < this.height; y++) {
-        if (this.visited[x][y]) {
-          sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
-        }
+    arrays.iterate(this.visited, (visited, [x, y]) => {
+      if (visited) {
+        sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
       }
-    }
+    });
 
     // Draw stacked cells
     sketch.setFill('#050');

@@ -37,3 +37,19 @@ export function constrainDimensions(dimensions) {
     return Math.floor(actual / max);
   });
 }
+
+/**
+ * Iterate over every element of an n-dimensional array
+ * @param {any[]} array - the array over which to iterate
+ * @param {Function} callback - the function to apply to each element 
+ * @param {number[]} indices - the index of the current array
+ */
+export function iterate(array, callback, indices = []) {
+  array.forEach((element, index) => {
+    if (Array.isArray(element)) {
+      iterate(element, callback, [...indices, index]);
+    } else {
+      callback(element, [...indices, index]);
+    }
+  });
+}
