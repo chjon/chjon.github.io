@@ -1,5 +1,5 @@
 import * as maths from '../math-utils.js';
-import { newNDArray } from '../utils.js';
+import { newNDArray } from '../array-utils.js';
 
 export class MazeSolver {
   solveDFS(

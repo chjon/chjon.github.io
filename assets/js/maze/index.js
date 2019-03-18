@@ -1,6 +1,7 @@
 import * as sketch from '../sketch.js';
 import { MazeGenerator } from './mazeGenerator.js';
 import { MazeSolver } from './mazeSolver.js';
+import { constrainDimensions } from '../array-utils.js/index.js';
 
 let window;
 let maze;
@@ -8,32 +9,15 @@ let mazeGenerator;
 let mazeSolver;
 let solution;
 
-function constrainDimensions({ actualWidth, actualHeight }, { maxWidth, maxHeight }) {
-  const widthInSquares = actualWidth / maxWidth;
-  const heightInSquares = actualHeight / maxHeight;
-  
-  if (widthInSquares > heightInSquares) {
-    return {
-      numCols: maxWidth,
-      numRows: Math.floor(actualHeight / widthInSquares),
-    };
-  } else {
-    return {
-      numCols: Math.floor(actualWidth / heightInSquares),
-      numRows: maxHeight,
-    };
-  }
-}
-
 function setup() {
   sketch.setFrameInterval(100);
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
   mazeGenerator = new MazeGenerator();
   mazeSolver = new MazeSolver();
-  const { numCols, numRows } = constrainDimensions(
-    { actualWidth: window.width, actualHeight: window.height },
-    { maxWidth: 40, maxHeight: 40 },
-  );
+  const [numCols, numRows] = constrainDimensions([
+    { actual: window.width, max: 40 },
+    { actual: window.height, max: 40 },
+  ]);
   maze = mazeGenerator.generate(numCols, numRows, 'Kruskal');
   //solution = mazeSolver.solveDFS(maze);
   //mazeSolver.solveDFSAnimated(maze);
