@@ -7,7 +7,6 @@ let window;
 let maze;
 let mazeGenerator;
 let mazeSolver;
-let solution;
 
 function setup() {
   sketch.setFrameInterval(100);
@@ -19,26 +18,18 @@ function setup() {
     { actual: window.height, max: 40 },
   ]);
   maze = mazeGenerator.generate(numCols, numRows, 'Kruskal');
-  //solution = mazeSolver.solveDFS(maze);
-  //mazeSolver.solveDFSAnimated(maze);
-  mazeSolver.solveWallOnRightAnimated(maze);
+  mazeSolver.initialize(maze, 'KEEP_RIGHT', { dir: 2 });
 }
 
 function draw() {
   sketch.setStroke('#FFF');
   sketch.setLineWidth(2);
 
-  // const hScaleFactor = window.width / maze.width;
-  // const vScaleFactor = window.height / maze.height;
+  const xCellSize = window.width / maze.width;
+  const yCellSize = window.height / maze.height;
 
-  // sketch.setFill('#A00');
-  // solution.forEach(({ x, y }) => {
-  //   sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
-  // });
-
-  mazeSolver.draw(sketch, window.width, window.height);
-  // mazeSolver.solveDFSStep(true);
-  mazeSolver.solveWallOnRightStep();
+  mazeSolver.draw(sketch, xCellSize, yCellSize);
+  mazeSolver.step();
 
   maze.draw(sketch, window.width, window.height);
 }

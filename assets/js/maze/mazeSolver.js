@@ -1,217 +1,190 @@
 import * as maths from '../math-utils.js';
 import * as arrays from '../array-utils.js';
 
-export class MazeSolver {
-  solveDFS(
-    maze,
-    visited = arrays.newNDArray([maze.width, maze.height], false),
-    x1 = 0,
-    y1 = 0,
-    x2 = maze.width - 1,
-    y2 = maze.height - 1,
-  ) {
-    if (x1 === x2 && y1 === y2) {
-      return [{ x: x1, y: y1 }];
+const DFS = {
+  initialize: (maze, algoParams = {}) => {
+    algoParams.stack = [algoParams.startPos];
+    algoParams.visited = arrays.newNDArray([maze.width, maze.height], false);
+  },
+  step: (maze, algoParams) => {
+    const { stack, visited, endPos, randomize } = algoParams;
+    if (!stack.length) {
+      return false;
     }
 
-    let stack;
-    visited[x1][y1] = true;
-    if (maze.openOnTop(x1, y1) && !visited[x1][y1 - 1]) {
-      stack = this.solveDFS(maze, visited, x1, y1 - 1, x2, y2);
-      if (stack) {
-        stack.push({ x: x1, y: y1 });
-        return stack;
-      }
-    }
-
-    if (maze.openOnBottom(x1, y1) && !visited[x1][y1 + 1]) {
-      stack = this.solveDFS(maze, visited, x1, y1 + 1, x2, y2);
-      if (stack) {
-        stack.push({ x: x1, y: y1 });
-        return stack;
-      }
-    }
-
-    if (maze.openOnLeft(x1, y1) && !visited[x1 - 1][y1]) {
-      stack = this.solveDFS(maze, visited, x1 - 1, y1, x2, y2);
-      if (stack) {
-        stack.push({ x: x1, y: y1 });
-        return stack;
-      }
-    }
-
-    if (maze.openOnRight(x1, y1) && !visited[x1 + 1][y1]) {
-      stack = this.solveDFS(maze, visited, x1 + 1, y1, x2, y2);
-      if (stack) {
-        stack.push({ x: x1, y: y1 });
-        return stack;
-      }
-    }
-    visited[x1][y1] = false;
-  }
-
-  solveDFSAnimated(
-    maze,
-    x1 = 0,
-    y1 = 0,
-    x2 = maze.width - 1,
-    y2 = maze.height - 1,
-  ) {
-    this.maze = maze;
-    this.stack = [{ x: x1, y: y1 }];
-    this.visited = arrays.newNDArray([maze.width, maze.height], false);
-    this.dest = { x: x2, y: y2 };
-  }
-
-  solveDFSStep(randomize) {
-    if (!this.stack.length) {
-      return;
-    }
-
-    const { x, y } = this.stack[this.stack.length - 1];
-    this.visited[x][y] = true;
-    if (x !== this.dest.x || y !== this.dest.y) {
-      const numPossibleMoves = this.maze.numPossibleMoves(x, y, this.visited);
+    const { x, y } = stack[stack.length - 1];
+    visited[x][y] = true;
+    if (x !== endPos.x || y !== endPos.y) {
+      const numPossibleMoves = maze.numPossibleMoves(x, y, visited);
       if (numPossibleMoves) {
         let directionToMove = randomize ? maths.randInt(numPossibleMoves) : 0;
-        if (this.maze.openOnRight(x, y) && !this.visited[x + 1][y]) {
+        if (maze.openOnRight(x, y) && !visited[x + 1][y]) {
           if (!directionToMove) {
-            this.stack.push({ x: x + 1, y: y });
+            stack.push({ x: x + 1, y: y });
             return;
           } else {
             directionToMove--;
           }
         }
-        if (this.maze.openOnBottom(x, y) && !this.visited[x][y + 1]) {
+        if (maze.openOnBottom(x, y) && !visited[x][y + 1]) {
           if (!directionToMove) {
-            this.stack.push({ x: x, y: y + 1 });
+            stack.push({ x: x, y: y + 1 });
             return;
           } else {
             directionToMove--;
           }
         }
-        if (this.maze.openOnLeft(x, y) && !this.visited[x - 1][y]) {
+        if (maze.openOnLeft(x, y) && !visited[x - 1][y]) {
           if (!directionToMove) {
-            this.stack.push({ x: x - 1, y: y });
+            stack.push({ x: x - 1, y: y });
             return;
           } else {
             directionToMove--;
           }
         }
-        if (this.maze.openOnTop(x, y) && !this.visited[x][y - 1]) {
+        if (maze.openOnTop(x, y) && !visited[x][y - 1]) {
           if (!directionToMove) {
-            this.stack.push({ x: x, y: y - 1 });
+            stack.push({ x: x, y: y - 1 });
             return;
           } else {
             directionToMove--;
           }
         }
       } else {
-        this.stack.pop();
+        stack.pop();
       }
+    } else {
+      return true;
     }
-  }
-
-  solveWallOnRightAnimated(
-    maze,
-    x1 = 0,
-    y1 = 0,
-    x2 = maze.width - 1,
-    y2 = maze.height - 1,
-  ) {
-    this.maze = maze;
-    this.stack = [{ x: x1, y: y1 }];
-    this.visited = arrays.newNDArray([maze.width, maze.height], false);
-    this.dest = { x: x2, y: y2 };
-    this.dir = 2;
-  }
-
-  solveWallOnRightStep() {
-    if (!this.stack.length) {
-      return;
-    }
-
-    const { x, y } = this.stack[this.stack.length - 1];
-    this.visited[x][y] = true;
-    if (x !== this.dest.x || y !== this.dest.y) {
-      let nextDir = (this.dir + 1) % 4;
-      let nextPos;
-
-      for (let i = 0; i < 4 && !nextPos; i++) {
-        this.dir = nextDir;
-        switch (nextDir) {
-          case 0:
-            if (this.maze.openOnTop(x, y)) {
-              nextPos = { x, y: y - 1 };
-            }
-            break;
-          case 1:
-            if (this.maze.openOnRight(x, y)) {
-              nextPos = { x: x + 1, y };
-            }
-            break;
-          case 2:
-            if (this.maze.openOnBottom(x, y)) {
-              nextPos = { x, y: y + 1 };
-            }
-            break;
-          case 3:
-            if (this.maze.openOnLeft(x, y)) {
-              nextPos = { x: x - 1, y };
-            }
-            break;
-        }
-
-        nextDir = ((nextDir - 1) % 4 + 4) % 4;
-      }
-
-      // Prune the stack
-      if (this.visited[nextPos.x][nextPos.y]) {
-        while (
-          nextPos.x !== this.stack[this.stack.length - 1].x ||
-          nextPos.y !== this.stack[this.stack.length - 1].y
-        ) {
-          this.stack.pop();
-        }
-      } else {
-        this.stack.push(nextPos);
-      }
-    }
-  }
-
-  draw(sketch, width, height) {
-    const hScaleFactor = width / this.maze.width;
-    const vScaleFactor = height / this.maze.height;
+  },
+  draw: (sketch, xCellSize, yCellSize, algoParams) => {
+    const { stack, visited, endPos } = algoParams;
 
     // Draw visited cells
     sketch.setFill('#066');
-    arrays.iterate(this.visited, (visited, [x, y]) => {
+    arrays.forEach(visited, (visited, [x, y]) => {
       if (visited) {
-        sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+        sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
       }
     });
 
     // Draw target destination
     sketch.setFill('#AA0');
     sketch.fillRect(
-      hScaleFactor * this.dest.x,
-      vScaleFactor * this.dest.y,
-      hScaleFactor * (this.dest.x + 1),
-      vScaleFactor * (this.dest.y + 1),
+      xCellSize * endPos.x,
+      yCellSize * endPos.y,
+      xCellSize * (endPos.x + 1),
+      yCellSize * (endPos.y + 1),
     );
 
-    if (this.stack.length) {
-      const { x, y } = this.stack[this.stack.length - 1];
+    if (stack.length) {
+      const { x, y } = stack[stack.length - 1];
 
       // Draw stacked cells
-      sketch.setFill((x === this.dest.x && y === this.dest.y) ? '#A00' : '#050');
-      this.stack.forEach(({ x, y }) => {
-        sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+      sketch.setFill((x === endPos.x && y === endPos.y) ? '#A00' : '#050');
+      stack.forEach(({ x, y }) => {
+        sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
       });
 
       // Draw top of stack
       sketch.setFill('#A00');
-      sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+      sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
     }
+  },
+};
+
+const KEEP_RIGHT = {
+  initialize: (maze, algoParams = {}) => {
+    DFS.initialize(maze, algoParams);
+    algoParams.dir = algoParams.dir | 2;
+  },
+  step: (maze, algoParams) => {
+    const { stack, visited, endPos } = algoParams
+    if (!stack.length) {
+      return false;
+    }
+
+    const { x, y } = stack[stack.length - 1];
+    visited[x][y] = true;
+    if (x !== endPos.x || y !== endPos.y) {
+      let nextDir = (algoParams.dir + 1) % 4;
+      let nextPos;
+
+      for (let i = 0; i < 4 && !nextPos; i++) {
+        algoParams.dir = nextDir;
+        switch (nextDir) {
+          case 0:
+            if (maze.openOnTop(x, y)) {
+              nextPos = { x, y: y - 1 };
+            }
+            break;
+          case 1:
+            if (maze.openOnRight(x, y)) {
+              nextPos = { x: x + 1, y };
+            }
+            break;
+          case 2:
+            if (maze.openOnBottom(x, y)) {
+              nextPos = { x, y: y + 1 };
+            }
+            break;
+          case 3:
+            if (maze.openOnLeft(x, y)) {
+              nextPos = { x: x - 1, y };
+            }
+            break;
+        }
+
+        nextDir = (nextDir + 3) % 4;
+      }
+
+      // Prune the stack
+      if (visited[nextPos.x][nextPos.y]) {
+        while (
+          nextPos.x !== stack[stack.length - 1].x ||
+          nextPos.y !== stack[stack.length - 1].y
+        ) {
+          stack.pop();
+        }
+      } else {
+        stack.push(nextPos);
+      }
+    } else {
+      return true;
+    }
+  },
+  draw: DFS.draw,
+};
+
+export class MazeSolver {
+  constructor() {
+    this.solvers = { DFS, KEEP_RIGHT };
+  }
+
+  initialize(maze, algorithm, algoParams, x1 = 0, y1 = 0, x2 = maze.width - 1, y2 = maze.height - 1) {
+    this.maze = maze;
+    this.algorithm = algorithm;
+    this.algoParams = {
+      ...algoParams,
+      startPos: { x: x1, y: y1 },
+      endPos: { x: x2, y: y2 },
+    };
+    this.solvers[algorithm].initialize(maze, this.algoParams);
+  }
+
+  step() {
+    return this.solvers[this.algorithm].step(this.maze, this.algoParams);
+  }
+
+  draw(sketch, xCellSize, yCellSize) {
+    this.solvers[this.algorithm].draw(sketch, xCellSize, yCellSize, this.algoParams);
+  }
+
+  solve() {
+    let result;
+    while (result === undefined) {
+      result = this.step();
+    }
+    return result;
   }
 }

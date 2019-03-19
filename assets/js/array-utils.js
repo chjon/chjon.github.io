@@ -44,10 +44,10 @@ export function constrainDimensions(dimensions) {
  * @param {Function} callback - the function to apply to each element 
  * @param {number[]} indices - the index of the current array
  */
-export function iterate(array, callback, indices = []) {
+export function forEach(array, callback, indices = []) {
   array.forEach((element, index) => {
     if (Array.isArray(element)) {
-      iterate(element, callback, [...indices, index]);
+      forEach(element, callback, [...indices, index]);
     } else {
       callback(element, [...indices, index]);
     }

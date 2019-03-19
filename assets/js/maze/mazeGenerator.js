@@ -185,7 +185,7 @@ export class MazeGenerator {
 
     // Draw visited cells
     sketch.setFill('#066');
-    arrays.iterate(this.visited, (visited, [x, y]) => {
+    arrays.forEach(this.visited, (visited, [x, y]) => {
       if (visited) {
         sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
       }
