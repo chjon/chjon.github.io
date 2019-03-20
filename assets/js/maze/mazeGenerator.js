@@ -3,40 +3,34 @@ import * as arrays from '../array-utils.js';
 import { DisjointSet } from '../data-structures/disjoint-set.js';
 import { Maze } from './maze.js';
 
-export class MazeGenerator {
-  generate(width, height, generationType) {
-    if (generationType === 'DFS') {
-      return this.generateDFS(width, height);
-    } else if (generationType === 'Kruskal') {
-      return this.generateKruskal(width, height);
-    }
-  }
-
-  generateMazeDFS(width, height) {
-    const stack = [{ x: maths.randInt(width), y: maths.randInt(height) }];
-    const visited = newNDArray([width, height], false);
-    const maze = new Maze(width, height);
-
-    while (stack.length > 0) {
+const DFS = {
+  initialize: (algoParams) => {
+    const maze = algoParams.maze;
+    algoParams.stack = [{ x: maths.randInt(maze.width), y: maths.randInt(maze.height) }];
+    algoParams.visited = arrays.newNDArray([maze.width, maze.height], false);
+  },
+  step: (algoParams) => {
+    const { maze, stack, visited } = algoParams;
+    if (stack.length > 0) {
       const { x, y } = stack[stack.length - 1];
       visited[x][y] = true;
-      const numPossibleMoves = maze.numPossibleMoves(x, y, width, height, visited);
+      const numPossibleMoves = getNumPossibleMoves(x, y, visited);
       if (numPossibleMoves) {
         let directionToMove = maths.randInt(numPossibleMoves);
         if (x > 0 && !visited[x - 1][y]) {
           if (!directionToMove) {
             maze.setVWall(x - 1, y, false);
             stack.push({ x: x - 1, y: y });
-            continue;
+            return;
           } else {
             directionToMove--;
           }
         }
-        if (x < width - 1 && !visited[x + 1][y]) {
+        if (x < maze.width - 1 && !visited[x + 1][y]) {
           if (!directionToMove) {
             maze.setVWall(x, y, false);
             stack.push({ x: x + 1, y: y });
-            continue;
+            return;
           } else {
             directionToMove--;
           }
@@ -45,16 +39,16 @@ export class MazeGenerator {
           if (!directionToMove) {
             maze.setHWall(x, y - 1, false);
             stack.push({ x: x, y: y - 1 });
-            continue;
+            return;
           } else {
             directionToMove--;
           }
         }
-        if (y < height - 1 && !visited[x][y + 1]) {
+        if (y < maze.height - 1 && !visited[x][y + 1]) {
           if (!directionToMove) {
             maze.setHWall(x, y, false);
             stack.push({ x: x, y: y + 1 });
-            continue;
+            return;
           } else {
             directionToMove--;
           }
@@ -62,165 +56,119 @@ export class MazeGenerator {
       } else {
         stack.pop();
       }
-    }
-    
-    return maze;
-  }
-
-  generateDFSAnimated(width, height) {
-    this.width = width;
-    this.height = height;
-    this.stack = [{ x: maths.randInt(width), y: maths.randInt(height) }];
-    this.visited = newNDArray([width, height], false);
-    this.maze = new Maze(width, height);
-  }
-
-  generateDFSStep() {
-    if (this.stack.length > 0) {
-      const { x, y } = this.stack[this.stack.length - 1];
-      this.visited[x][y] = true;
-      const numPossibleMoves = this.maze.numPossibleMoves(x, y, this.width, this.height, this.visited);
-      if (numPossibleMoves) {
-        let directionToMove = maths.randInt(numPossibleMoves);
-        if (x > 0 && !this.visited[x - 1][y]) {
-          if (!directionToMove) {
-            this.maze.setVWall(x - 1, y, false);
-            this.stack.push({ x: x - 1, y: y });
-            return;
-          } else {
-            directionToMove--;
-          }
-        }
-        if (x < this.width - 1 && !this.visited[x + 1][y]) {
-          if (!directionToMove) {
-            this.maze.setVWall(x, y, false);
-            this.stack.push({ x: x + 1, y: y });
-            return;
-          } else {
-            directionToMove--;
-          }
-        }
-        if (y > 0 && !this.visited[x][y - 1]) {
-          if (!directionToMove) {
-            this.maze.setHWall(x, y - 1, false);
-            this.stack.push({ x: x, y: y - 1 });
-            return;
-          } else {
-            directionToMove--;
-          }
-        }
-        if (y < this.height - 1 && !this.visited[x][y + 1]) {
-          if (!directionToMove) {
-            this.maze.setHWall(x, y, false);
-            this.stack.push({ x: x, y: y + 1 });
-            return;
-          } else {
-            directionToMove--;
-          }
-        }
-      } else {
-        this.stack.pop();
-      }
     } else {
-      return this.maze;
+      return maze;
     }
-  }
-
-  generateKruskal(width, height) {
-    const sets = new DisjointSet(width * height);
-    const maze = new Maze(width, height);
-    const walls = maths.shuffleList(maze.getWalls());
-
-    for (let i = 0; i < walls.length && sets.getNumSets() > 1; i++) {
-      const { x, y, isHorizontal } = walls[i];
-      const cell1 = x + y * width;
-      const cell2 = (isHorizontal) ? (x + (y + 1) * width) : (x + 1 + y * width);
-      const set1 = sets.getSet(cell1);
-      const set2 = sets.getSet(cell2);
-      if (set1 !== set2) {
-        sets.join(set1, set2);
-        if (isHorizontal) {
-          maze.setHWall(x, y, false);
-        } else {
-          maze.setVWall(x, y, false);
-        }
-      }
-    }
-
-    return maze;
-  }
-
-  generateKruskalAnimated(width, height) {
-    this.width = width;
-    this.height = height;
-    this.sets = new DisjointSet(width * height);
-    this.maze = new Maze(width, height);
-    this.walls = maths.shuffleList(this.maze.getWalls());
-    return this.maze;
-  }
-
-  generateKruskalStep() {
-    if (!this.walls.length || this.sets.getNumSets() <= 1) {
-      return;
-    }
-
-    const { x, y, isHorizontal } = this.walls.pop();
-    const cell1 = x + y * this.width;
-    const cell2 = (isHorizontal) ? (x + (y + 1) * this.width) : (x + 1 + y * this.width);
-    const set1 = this.sets.getSet(cell1);
-    const set2 = this.sets.getSet(cell2);
-    if (set1 !== set2 || Math.random() < 0.3) {
-      this.sets.join(set1, set2);
-      if (isHorizontal) {
-        this.maze.setHWall(x, y, false);
-      } else {
-        this.maze.setVWall(x, y, false);
-      }
-    }
-  }
-
-  drawDFS(sketch, width, height) {
-    const hScaleFactor = width / this.width;
-    const vScaleFactor = height / this.height;
+  },
+  draw: (sketch, xCellSize, yCellSize, algoParams) => {
+    const { maze, stack, visited } = algoParams;
 
     // Draw visited cells
     sketch.setFill('#066');
-    arrays.forEach(this.visited, (visited, [x, y]) => {
+    arrays.forEach(visited, (visited, [x, y]) => {
       if (visited) {
-        sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+        sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
       }
     });
 
     // Draw stacked cells
     sketch.setFill('#050');
-    this.stack.forEach(({ x, y }) => {
-      sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+    stack.forEach(({ x, y }) => {
+      sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
     });
 
     // Draw top of stack
     sketch.setFill('#A00');
-    if (this.stack.length) {
-      const { x, y } = this.stack[this.stack.length - 1];
-      sketch.fillRect(hScaleFactor * x, vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+    if (stack.length) {
+      const { x, y } = stack[stack.length - 1];
+      sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
     }
 
     // Draw maze walls
-    this.maze.draw(sketch, width, height);
-  }
+    maze.draw(sketch, xCellSize, yCellSize);
+  },
+};
 
-  drawKruskal(sketch, width, height) {
-    this.maze.draw(sketch, width, height);
-    if (this.walls.length && this.sets.getNumSets() > 1) {
-      const hScaleFactor = width / this.width;
-      const vScaleFactor = height / this.height;
-      const { x, y, isHorizontal } = this.walls[this.walls.length - 1];
+const KRUSKAL = {
+  initialize: (algoParams) => {
+    const maze = algoParams.maze;
+    algoParams.sets = new DisjointSet(maze.width * maze.height);
+    algoParams.walls = maths.shuffleList(maze.getWalls());
+  },
+  step: (algoParams) => {
+    const { maze, walls, sets, integrity } = algoParams;
+    if (!walls.length) {
+      return;
+    }
+
+    if (sets.getNumSets() <= 1) {
+      return maze;
+    }
+
+    const { x, y, isHorizontal } = walls.pop();
+    const cell1 = x + y * maze.width;
+    const cell2 = (isHorizontal) ? (x + (y + 1) * maze.width) : (x + 1 + y * maze.width);
+    const set1 = sets.getSet(cell1);
+    const set2 = sets.getSet(cell2);
+    if (set1 !== set2 || (integrity !== undefined && Math.random() >= integrity)) {
+      sets.join(set1, set2);
+      if (isHorizontal) {
+        maze.setHWall(x, y, false);
+      } else {
+        maze.setVWall(x, y, false);
+      }
+    }
+  },
+  draw: (sketch, xCellSize, yCellSize, algoParams) => {
+    const { maze, sets, walls } = algoParams;
+    maze.draw(sketch, xCellSize, yCellSize, algoParams);
+    if (walls.length && sets.getNumSets() > 1) {
+      const { x, y, isHorizontal } = walls[walls.length - 1];
 
       sketch.setStroke('#A00');
       if (isHorizontal) {
-        sketch.line(hScaleFactor * x, vScaleFactor * (y + 1), hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+        sketch.line(xCellSize * x, yCellSize * (y + 1), xCellSize * (x + 1), yCellSize * (y + 1));
       } else {
-        sketch.line(hScaleFactor * (x + 1), vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+        sketch.line(xCellSize * (x + 1), yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
       }
     }
+  }
+}
+
+function getNumPossibleMoves(x, y, visited) {
+  let numPossibleMoves = 0;
+  if (x > 0 && !visited[x - 1][y]) numPossibleMoves++;
+  if (y > 0 && !visited[x][y - 1]) numPossibleMoves++;
+  if (x < visited.length - 1 && !visited[x + 1][y]) numPossibleMoves++;
+  if (y < visited[x].length - 1 && !visited[x][y + 1]) numPossibleMoves++;
+
+  return numPossibleMoves;
+}
+
+export class MazeGenerator {
+  constructor() {
+    this.generators = { DFS, KRUSKAL };
+  }
+
+  initialize(width, height, algorithm, algoParams) {
+    this.algorithm = algorithm.toUpperCase();
+    this.algoParams = { ...algoParams, maze: new Maze(width, height) };
+    this.generators[this.algorithm].initialize(this.algoParams);
+  }
+
+  step() {
+    return this.generators[this.algorithm].step(this.algoParams);
+  }
+
+  draw(sketch, xCellSize, yCellSize) {
+    this.generators[this.algorithm].draw(sketch, xCellSize, yCellSize, this.algoParams);
+  }
+
+  generate() {
+    let maze;
+    while (!maze) {
+      maze = this.step();
+    }
+    return maze;
   }
 }

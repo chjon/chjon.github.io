@@ -61,19 +61,16 @@ export class Maze {
     this.vWalls[x][y] = hasWall;
   }
 
-  draw(sketch, width, height) {
-    const hScaleFactor = width / this.width;
-    const vScaleFactor = height / this.height;
-
+  draw(sketch, xCellSize, yCellSize) {
     arrays.forEach(this.hWalls, (hasWall, [x, y]) => {
       if (hasWall) {
-        sketch.line(hScaleFactor * x, vScaleFactor * (y + 1), hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+        sketch.line(xCellSize * x, yCellSize * (y + 1), xCellSize * (x + 1), yCellSize * (y + 1));
       }
     });
 
     arrays.forEach(this.vWalls, (hasWall, [x, y]) => {
       if (hasWall) {
-        sketch.line(hScaleFactor * (x + 1), vScaleFactor * y, hScaleFactor * (x + 1), vScaleFactor * (y + 1));
+        sketch.line(xCellSize * (x + 1), yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
       }
     });
   }

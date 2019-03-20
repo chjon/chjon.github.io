@@ -163,13 +163,13 @@ export class MazeSolver {
 
   initialize(maze, algorithm, algoParams, x1 = 0, y1 = 0, x2 = maze.width - 1, y2 = maze.height - 1) {
     this.maze = maze;
-    this.algorithm = algorithm;
+    this.algorithm = algorithm.toUpperCase();
     this.algoParams = {
       ...algoParams,
       startPos: { x: x1, y: y1 },
       endPos: { x: x2, y: y2 },
     };
-    this.solvers[algorithm].initialize(maze, this.algoParams);
+    this.solvers[this.algorithm].initialize(maze, this.algoParams);
   }
 
   step() {
