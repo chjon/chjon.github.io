@@ -18,9 +18,9 @@ function setup() {
     { actual: window.width, max: 40 },
     { actual: window.height, max: 40 },
   ]);
-  mazeGenerator.initialize(numCols, numRows, 'KRUSKAL', { integrity: 0.9 });
+  mazeGenerator.initialize(numCols, numRows, 'KRUSKAL', { integrity: 0.1 });
   maze = mazeGenerator.generate();
-  mazeSolver.initialize(maze, 'KEEP_RIGHT', { dir: 2 });
+  mazeSolver.initialize(maze, 'BFS');
 }
 
 function draw() {

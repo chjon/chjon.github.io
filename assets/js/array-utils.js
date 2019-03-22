@@ -8,7 +8,13 @@ export function newNDArray(dimensions, initValue) {
 
   if (dimensions.length === 1) {
     for (let i = 0; i < dimensions[0]; i++) {
-      newArray[i] = initValue;
+      if (Array.isArray(initValue)) {
+        newArray[i] = initValue.slice(0);
+      } else if (typeof initValue === 'object') {
+        newArray[i] = { ...initValue };
+      } else {
+        newArray[i] = initValue;
+      }
     }
   } else {
     const newDimensions = dimensions.slice(1);

@@ -156,9 +156,106 @@ const KEEP_RIGHT = {
   draw: DFS.draw,
 };
 
+const BFS = {
+  initialize: (maze, algoParams = {}) => {
+    algoParams.queue = [algoParams.startPos];
+    algoParams.distances = arrays.newNDArray([maze.width, maze.height], { distance: Number.MAX_VALUE });
+    algoParams.distances[algoParams.startPos.x][algoParams.startPos.y].distance = 0;
+  },
+  step: (maze, algoParams) => {
+    const { queue, distances, endPos } = algoParams;
+    if (!queue.length) {
+      return false;
+    }
+
+    const cur = queue[0];
+    const { x, y } = cur;
+    if (x !== endPos.x || y !== endPos.y) {
+      const curDist = distances[x][y].distance;
+
+      // Add next positions to queue
+      if (maze.openOnTop(x, y) && curDist < distances[x][y - 1].distance) {
+        if (!distances[x][y - 1].prev) {
+          queue.push({ x, y: y - 1 });
+        }
+        distances[x][y - 1].distance = curDist + 1;
+        distances[x][y - 1].prev = cur;
+      }
+      if (maze.openOnBottom(x, y) && curDist < distances[x][y + 1].distance) {
+        if (!distances[x][y + 1].prev) {
+          queue.push({ x, y: y + 1 });
+        }
+        distances[x][y + 1].distance = curDist + 1;
+        distances[x][y + 1].prev = cur;
+      }
+      if (maze.openOnLeft(x, y) && curDist < distances[x - 1][y].distance) {
+        if (!distances[x - 1][y].prev) {
+          queue.push({ x: x - 1, y });
+        }
+        distances[x - 1][y].distance = curDist + 1;
+        distances[x - 1][y].prev = cur;
+      }
+      if (maze.openOnRight(x, y) && curDist < distances[x + 1][y].distance) {
+        if (!distances[x + 1][y].prev) {
+          queue.push({ x: x + 1, y });
+        }
+        distances[x + 1][y].distance = curDist + 1;
+        distances[x + 1][y].prev = cur;
+      }
+      algoParams.prev = queue.shift();
+    } else {
+      return true;
+    }
+  },
+  draw: (sketch, xCellSize, yCellSize, algoParams) => {
+    const { queue, distances, endPos, prev } = algoParams;
+
+    // Draw visited cells
+    sketch.setFill('#066');
+    arrays.forEach(distances, ({ distance }, [x, y]) => {
+      if (distance !== Number.MAX_VALUE) {
+        sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
+      }
+    });
+
+    // Draw target destination
+    sketch.setFill('#AA0');
+    sketch.fillRect(
+      xCellSize * endPos.x,
+      yCellSize * endPos.y,
+      xCellSize * (endPos.x + 1),
+      yCellSize * (endPos.y + 1),
+    );
+
+    if (queue.length) {
+      // Draw queued cells
+      if (queue[0].x === endPos.x && queue[0].y === endPos.y) {
+        sketch.setFill('#A00');
+        let cur = distances[endPos.x][endPos.y].prev;
+        do {
+          sketch.fillRect(xCellSize * cur.x, yCellSize * cur.y, xCellSize * (cur.x + 1), yCellSize * (cur.y + 1));
+          cur = distances[cur.x][cur.y].prev
+        } while(cur);
+      } else {
+        sketch.setFill('#050');
+        queue.forEach(({ x, y }) => {
+          sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
+        });
+
+        // Draw top of queue
+        if (prev) {
+          const { x, y } = prev;
+          sketch.setFill('#A00');
+          sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
+        }
+      }
+    }
+  }
+};
+
 export class MazeSolver {
   constructor() {
-    this.solvers = { DFS, KEEP_RIGHT };
+    this.solvers = { BFS, DFS, KEEP_RIGHT };
   }
 
   initialize(maze, algorithm, algoParams, x1 = 0, y1 = 0, x2 = maze.width - 1, y2 = maze.height - 1) {
