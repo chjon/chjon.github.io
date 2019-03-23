@@ -234,7 +234,7 @@ export function interpolate(list = [], numPoints = list.length) {
 /**
  * Generate a random integer in the range [min, max)
  */
-export function randInt(max = 1, min = 0) {
+export function randInt(min = 0, max = 1) {
   return min + Math.floor((max - min) * Math.random());
 }
 

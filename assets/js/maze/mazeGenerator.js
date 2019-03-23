@@ -6,7 +6,7 @@ import { Maze } from './maze.js';
 const DFS = {
   initialize: (algoParams) => {
     const maze = algoParams.maze;
-    algoParams.stack = [{ x: maths.randInt(maze.width), y: maths.randInt(maze.height) }];
+    algoParams.stack = [{ x: maths.randInt(0, maze.width), y: maths.randInt(0, maze.height) }];
     algoParams.visited = arrays.newNDArray([maze.width, maze.height], false);
   },
   step: (algoParams) => {
@@ -16,7 +16,7 @@ const DFS = {
       visited[x][y] = true;
       const numPossibleMoves = getNumPossibleMoves(x, y, visited);
       if (numPossibleMoves) {
-        let directionToMove = maths.randInt(numPossibleMoves);
+        let directionToMove = maths.randInt(0, numPossibleMoves);
         if (x > 0 && !visited[x - 1][y]) {
           if (!directionToMove) {
             maze.setVWall(x - 1, y, false);

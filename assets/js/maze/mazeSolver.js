@@ -18,7 +18,7 @@ const BACKTRACK_DFS = {
     if (x !== endPos.x || y !== endPos.y) {
       const numPossibleMoves = maze.numPossibleMoves(x, y, visited);
       if (numPossibleMoves) {
-        let directionToMove = randomize ? maths.randInt(numPossibleMoves) : 0;
+        let directionToMove = randomize ? maths.randInt(0, numPossibleMoves) : 0;
         if (maze.openOnRight(x, y) && !visited[x + 1][y]) {
           if (!directionToMove) {
             stack.push({ x: x + 1, y: y });
@@ -166,9 +166,25 @@ const DIJKSTRA = {
     algoParams.queue.push(algoParams.startPos);
     algoParams.distances = arrays.newNDArray([maze.width, maze.height], { distance: Number.MAX_VALUE });
     algoParams.distances[algoParams.startPos.x][algoParams.startPos.y].distance = 0;
+    algoParams.queuePriority = algoParams.queuePriority || ['TOP', 'BOTTOM', 'LEFT', 'RIGHT'];
+    algoParams.validateAndPushList = algoParams.queuePriority
+    .reverse()
+    .map((val) => {
+      const direction = val.toUpperCase();
+      if (direction === 'TOP') {
+        return { validator: 'openOnTop', xOffset: 0, yOffset: -1 };
+      } else if (direction === 'BOTTOM') {
+        return { validator: 'openOnBottom', xOffset: 0, yOffset: 1 };
+      } else if (direction === 'LEFT') {
+        return { validator: 'openOnLeft', xOffset: -1, yOffset: 0 };
+      } else if (direction === 'RIGHT') {
+        return { validator: 'openOnRight', xOffset: 1, yOffset: 0 };
+      }
+    });
+    algoParams.angleOffset = maths.TWO_PI * Math.random();
   },
   step: (maze, algoParams) => {
-    const { queue, distances, endPos } = algoParams;
+    const { queue, distances, endPos, validateAndPushList } = algoParams;
     if (!queue.length()) {
       return false;
     }
@@ -178,50 +194,36 @@ const DIJKSTRA = {
     if (x !== endPos.x || y !== endPos.y) {
       algoParams.prev = queue.pop();
       const curDist = distances[x][y].distance;
+      const tryPush = (x, y) => {
+        if (curDist < algoParams.distances[x][y].distance) {
+          if (!algoParams.distances[x][y].prev) {
+            algoParams.queue.push({ x, y });
+          }
+          algoParams.distances[x][y].distance = curDist + 1;
+          algoParams.distances[x][y].prev = cur;
+        }
+      }
 
       // Add next positions to queue
-      if (maze.openOnTop(x, y) && curDist < distances[x][y - 1].distance) {
-        if (!distances[x][y - 1].prev) {
-          queue.push({ x, y: y - 1 });
+      validateAndPushList.forEach(({ validator, xOffset, yOffset }) => {
+        if (maze[validator](x, y)) {
+          tryPush(x + xOffset, y + yOffset);
         }
-        distances[x][y - 1].distance = curDist + 1;
-        distances[x][y - 1].prev = cur;
-      }
-      if (maze.openOnBottom(x, y) && curDist < distances[x][y + 1].distance) {
-        if (!distances[x][y + 1].prev) {
-          queue.push({ x, y: y + 1 });
-        }
-        distances[x][y + 1].distance = curDist + 1;
-        distances[x][y + 1].prev = cur;
-      }
-      if (maze.openOnLeft(x, y) && curDist < distances[x - 1][y].distance) {
-        if (!distances[x - 1][y].prev) {
-          queue.push({ x: x - 1, y });
-        }
-        distances[x - 1][y].distance = curDist + 1;
-        distances[x - 1][y].prev = cur;
-      }
-      if (maze.openOnRight(x, y) && curDist < distances[x + 1][y].distance) {
-        if (!distances[x + 1][y].prev) {
-          queue.push({ x: x + 1, y });
-        }
-        distances[x + 1][y].distance = curDist + 1;
-        distances[x + 1][y].prev = cur;
-      }
+      })
     } else {
       return true;
     }
   },
   draw: (sketch, xCellSize, yCellSize, algoParams) => {
-    const { queue, distances, endPos, prev } = algoParams;
+    const { queue, distances, startPos, endPos, prev, angleOffset } = algoParams;
 
     // Draw visited cells
     sketch.setFill('#066');
     arrays.forEach(distances, ({ distance }, [x, y]) => {      
       sketch.setFill('rgba(' +
-        `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64 + 2 * maths.TWO_PI / 3)},` +
-        `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64 + maths.TWO_PI / 3)},` +
-        `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64)},` +
+        `${128 + 128 * Math.sin(angleOffset + distance * maths.TWO_PI / 64 + 2 * maths.TWO_PI / 3)},` +
+        `${128 + 128 * Math.sin(angleOffset + distance * maths.TWO_PI / 64 + maths.TWO_PI / 3)},` +
+        `${128 + 128 * Math.sin(angleOffset + distance * maths.TWO_PI / 64)},` +
         `1)`
       );
       if (distance !== Number.MAX_VALUE) {
@@ -229,13 +231,15 @@ const DIJKSTRA = {
       }
     });
 
-    // Draw target destination
+    // Draw start and end positions
     sketch.setFill('#AA0');
     sketch.fillRect(
-      xCellSize * endPos.x,
-      yCellSize * endPos.y,
-      xCellSize * (endPos.x + 1),
-      yCellSize * (endPos.y + 1),
+      xCellSize * startPos.x, yCellSize * startPos.y,
+      xCellSize * (startPos.x + 1), yCellSize * (startPos.y + 1),
+    );
+    sketch.fillRect(
+      xCellSize * endPos.x, yCellSize * endPos.y,
+      xCellSize * (endPos.x + 1), yCellSize * (endPos.y + 1),
     );
 
     if (queue.length()) {
@@ -303,13 +307,19 @@ export class MazeSolver {
     };
   }
 
-  initialize(maze, algorithm, algoParams, x1 = 0, y1 = 0, x2 = maze.width - 1, y2 = maze.height - 1) {
+  initialize(maze, algorithm, algoParams = {}) {
     this.maze = maze;
     this.algorithm = algorithm.toUpperCase();
     this.algoParams = {
       ...algoParams,
-      startPos: { x: x1, y: y1 },
-      endPos: { x: x2, y: y2 },
+      startPos: algoParams.startPos || {
+        x: maths.randInt(0, maze.width),
+        y: maths.randInt(0, maze.height),
+      },
+      endPos: algoParams.endPos || {
+        x: maths.randInt(0, maze.width),
+        y: maths.randInt(0, maze.height),
+      },
     };
     this.solvers[this.algorithm].initialize(maze, this.algoParams);
   }
