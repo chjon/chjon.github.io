@@ -8,20 +8,32 @@ let maze;
 let mazeGenerator;
 let mazeSolver;
 let dimensions;
+const MILLIS_PER_SECOND = 1000;
+const FRAME_INTERVAL = 100;
+const RESET_WAIT_SECONDS = 3;
+let resetCounter;
+
+function checkReset() {
+  if (!resetCounter) {
+    resetCounter = MILLIS_PER_SECOND / FRAME_INTERVAL * RESET_WAIT_SECONDS;
+    mazeGenerator.initialize(dimensions[0], dimensions[1], 'KRUSKAL', { integrity: 1 });
+    maze = mazeGenerator.generate();
+    mazeSolver.initialize(maze, 'DIJKSTRA');
+  } else {
+    resetCounter--;
+  }
+}
 
 function setup() {
-  sketch.setFrameInterval(100);
+  sketch.setFrameInterval(FRAME_INTERVAL);
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
   mazeGenerator = new MazeGenerator();
   mazeSolver = new MazeSolver();
-  const [numCols, numRows] = dimensions = constrainDimensions([
+  dimensions = constrainDimensions([
     { actual: window.width, max: 40 },
     { actual: window.height, max: 40 },
   ]);
-  mazeGenerator.initialize(numCols, numRows, 'KRUSKAL', { integrity: 1 });
-  maze = mazeGenerator.generate();
-  mazeSolver.initialize(maze, 'DIJKSTRA');
-  //mazeSolver.solve();
+  checkReset();
 }
 
 function draw() {
@@ -31,7 +43,9 @@ function draw() {
   const yCellSize = window.height / dimensions[1];
 
   mazeSolver.draw(sketch, xCellSize, yCellSize);
-  mazeSolver.step();
+  if (mazeSolver.step()) {
+    checkReset();
+  }
 
   // mazeGenerator.draw(sketch, xCellSize, yCellSize);
   // mazeGenerator.step();
