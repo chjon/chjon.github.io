@@ -18,13 +18,13 @@ function setup() {
     { actual: window.width, max: 40 },
     { actual: window.height, max: 40 },
   ]);
-  mazeGenerator.initialize(numCols, numRows, 'KRUSKAL', { integrity: 0.1 });
+  mazeGenerator.initialize(numCols, numRows, 'KRUSKAL', { integrity: 1 });
   maze = mazeGenerator.generate();
-  mazeSolver.initialize(maze, 'BFS');
+  mazeSolver.initialize(maze, 'DIJKSTRA');
+  //mazeSolver.solve();
 }
 
 function draw() {
-  sketch.setStroke('#FFF');
   sketch.setLineWidth(2);
 
   const xCellSize = window.width / dimensions[0];
@@ -36,6 +36,7 @@ function draw() {
   // mazeGenerator.draw(sketch, xCellSize, yCellSize);
   // mazeGenerator.step();
 
+  sketch.setStroke('#FFF');
   maze.draw(sketch, xCellSize, yCellSize);
 }
 

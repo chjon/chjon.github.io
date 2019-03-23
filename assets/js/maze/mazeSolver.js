@@ -1,5 +1,6 @@
 import * as maths from '../math-utils.js';
 import * as arrays from '../array-utils.js';
+import { PriorityQueue } from '../data-structures/priority-queue.js'
 
 const DFS = {
   initialize: (maze, algoParams = {}) => {
@@ -158,19 +159,21 @@ const KEEP_RIGHT = {
 
 const BFS = {
   initialize: (maze, algoParams = {}) => {
-    algoParams.queue = [algoParams.startPos];
+    algoParams.queue = new PriorityQueue(algoParams.heuristic || ((a, b) => { return 0 }));
+    algoParams.queue.push(algoParams.startPos);
     algoParams.distances = arrays.newNDArray([maze.width, maze.height], { distance: Number.MAX_VALUE });
     algoParams.distances[algoParams.startPos.x][algoParams.startPos.y].distance = 0;
   },
   step: (maze, algoParams) => {
     const { queue, distances, endPos } = algoParams;
-    if (!queue.length) {
+    if (!queue.length()) {
       return false;
     }
 
-    const cur = queue[0];
+    const cur = queue.peek();
     const { x, y } = cur;
     if (x !== endPos.x || y !== endPos.y) {
+      algoParams.prev = queue.pop();
       const curDist = distances[x][y].distance;
 
       // Add next positions to queue
@@ -202,7 +205,6 @@ const BFS = {
         distances[x + 1][y].distance = curDist + 1;
         distances[x + 1][y].prev = cur;
       }
-      algoParams.prev = queue.shift();
     } else {
       return true;
     }
@@ -212,7 +214,13 @@ const BFS = {
 
     // Draw visited cells
     sketch.setFill('#066');
-    arrays.forEach(distances, ({ distance }, [x, y]) => {
+    arrays.forEach(distances, ({ prev, distance }, [x, y]) => {      
+      sketch.setFill('rgba(' +
+        `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64)},` +
+        `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64 + maths.TWO_PI / 3)},` +
+        `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64 + 2 * maths.TWO_PI / 3)},` +
+        `1)`
+      );
       if (distance !== Number.MAX_VALUE) {
         sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
       }
@@ -227,11 +235,11 @@ const BFS = {
       yCellSize * (endPos.y + 1),
     );
 
-    if (queue.length) {
+    if (queue.length()) {
       // Draw queued cells
-      if (queue[0].x === endPos.x && queue[0].y === endPos.y) {
+      if (queue.peek().x === endPos.x && queue.peek().y === endPos.y) {
         sketch.setFill('#A00');
-        let cur = distances[endPos.x][endPos.y].prev;
+        let cur = endPos;
         do {
           sketch.fillRect(xCellSize * cur.x, yCellSize * cur.y, xCellSize * (cur.x + 1), yCellSize * (cur.y + 1));
           cur = distances[cur.x][cur.y].prev
@@ -250,12 +258,32 @@ const BFS = {
         }
       }
     }
+
+    // Draw shortest paths
+    sketch.setStroke('#600');
+    arrays.forEach(distances, ({ prev, distance }, [x, y]) => {
+      if (prev && distance !== Number.MAX_VALUE) {
+        sketch.line(xCellSize * (prev.x + 0.5), yCellSize * (prev.y + 0.5), xCellSize * (x + 0.5), yCellSize * (y + 0.5));
+      }
+    });
   }
 };
 
+const DIJKSTRA = {
+  initialize: (maze, algoParams = {}) => {
+    const endPos = algoParams.endPos;
+    algoParams.heuristic = (a, b) => {
+      return maths.dist2(a.x, a.y, endPos.x, endPos.y) - maths.dist2(b.x, b.y, endPos.x, endPos.y);
+    };
+    BFS.initialize(maze, algoParams);
+  },
+  step: BFS.step,
+  draw: BFS.draw,
+}
+
 export class MazeSolver {
   constructor() {
-    this.solvers = { BFS, DFS, KEEP_RIGHT };
+    this.solvers = { BFS, DFS, DIJKSTRA, KEEP_RIGHT };
   }
 
   initialize(maze, algorithm, algoParams, x1 = 0, y1 = 0, x2 = maze.width - 1, y2 = maze.height - 1) {
