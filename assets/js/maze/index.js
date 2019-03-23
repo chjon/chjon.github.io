@@ -1,7 +1,7 @@
 import * as sketch from '../sketch.js';
 import { MazeGenerator } from './mazeGenerator.js';
 import { MazeSolver } from './mazeSolver.js';
-import { constrainDimensions } from '../array-utils.js/index.js';
+import { constrainDimensions } from '../array-utils.js';
 
 let window;
 let maze;
