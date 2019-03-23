@@ -1,4 +1,4 @@
-import * as maths from './math-utils.js';
+import * as maths from '../math-utils.js';
 
 export class Quadtree {
   constructor(x, y, width, height, maxBucketSize, maxDepth) {
