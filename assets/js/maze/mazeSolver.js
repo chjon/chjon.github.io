@@ -2,7 +2,7 @@ import * as maths from '../math-utils.js';
 import * as arrays from '../array-utils.js';
 import { PriorityQueue } from '../data-structures/priority-queue.js'
 
-const DFS = {
+const BACKTRACK_DFS = {
   initialize: (maze, algoParams = {}) => {
     algoParams.stack = [algoParams.startPos];
     algoParams.visited = arrays.newNDArray([maze.width, maze.height], false);
@@ -96,7 +96,7 @@ const DFS = {
 
 const KEEP_RIGHT = {
   initialize: (maze, algoParams = {}) => {
-    DFS.initialize(maze, algoParams);
+    BACKTRACK_DFS.initialize(maze, algoParams);
     algoParams.dir = algoParams.dir | 2;
   },
   step: (maze, algoParams) => {
@@ -154,12 +154,15 @@ const KEEP_RIGHT = {
       return true;
     }
   },
-  draw: DFS.draw,
+  draw: BACKTRACK_DFS.draw,
 };
 
-const BFS = {
+const DIJKSTRA = {
   initialize: (maze, algoParams = {}) => {
-    algoParams.queue = new PriorityQueue(algoParams.heuristic || ((a, b) => { return 0 }));
+    const endPos = algoParams.endPos;
+    algoParams.queue = new PriorityQueue(algoParams.heuristic || ((a, b) => {
+      return maths.dist2(a.x, a.y, endPos.x, endPos.y) - maths.dist2(b.x, b.y, endPos.x, endPos.y)
+    }));
     algoParams.queue.push(algoParams.startPos);
     algoParams.distances = arrays.newNDArray([maze.width, maze.height], { distance: Number.MAX_VALUE });
     algoParams.distances[algoParams.startPos.x][algoParams.startPos.y].distance = 0;
@@ -214,11 +217,11 @@ const BFS = {
 
     // Draw visited cells
     sketch.setFill('#066');
-    arrays.forEach(distances, ({ prev, distance }, [x, y]) => {      
+    arrays.forEach(distances, ({ distance }, [x, y]) => {      
       sketch.setFill('rgba(' +
-        `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64)},` +
-        `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64 + maths.TWO_PI / 3)},` +
         `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64 + 2 * maths.TWO_PI / 3)},` +
+        `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64 + maths.TWO_PI / 3)},` +
+        `${128 + 128 * Math.sin(distance * maths.TWO_PI / 64)},` +
         `1)`
       );
       if (distance !== Number.MAX_VALUE) {
@@ -260,7 +263,7 @@ const BFS = {
     }
 
     // Draw shortest paths
-    sketch.setStroke('#600');
+    sketch.setStroke('#000');
     arrays.forEach(distances, ({ prev, distance }, [x, y]) => {
       if (prev && distance !== Number.MAX_VALUE) {
         sketch.line(xCellSize * (prev.x + 0.5), yCellSize * (prev.y + 0.5), xCellSize * (x + 0.5), yCellSize * (y + 0.5));
@@ -269,21 +272,35 @@ const BFS = {
   }
 };
 
-const DIJKSTRA = {
+const BFS = {
+  ...DIJKSTRA,
   initialize: (maze, algoParams = {}) => {
-    const endPos = algoParams.endPos;
-    algoParams.heuristic = (a, b) => {
-      return maths.dist2(a.x, a.y, endPos.x, endPos.y) - maths.dist2(b.x, b.y, endPos.x, endPos.y);
+    algoParams.heuristic = () => {
+      return 1;
     };
-    BFS.initialize(maze, algoParams);
+    DIJKSTRA.initialize(maze, algoParams);
   },
-  step: BFS.step,
-  draw: BFS.draw,
+}
+
+const DFS = {
+  ...DIJKSTRA,
+  initialize: (maze, algoParams = {}) => {
+    algoParams.heuristic = () => {
+      return -1;
+    };
+    DIJKSTRA.initialize(maze, algoParams);
+  },
 }
 
 export class MazeSolver {
   constructor() {
-    this.solvers = { BFS, DFS, DIJKSTRA, KEEP_RIGHT };
+    this.solvers = {
+      BACKTRACK_DFS,
+      BFS,
+      DFS,
+      DIJKSTRA,
+      KEEP_RIGHT,
+    };
   }
 
   initialize(maze, algorithm, algoParams, x1 = 0, y1 = 0, x2 = maze.width - 1, y2 = maze.height - 1) {
