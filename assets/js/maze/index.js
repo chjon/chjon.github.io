@@ -2,6 +2,7 @@ import * as sketch from '../sketch.js';
 import { MazeGenerator } from './mazeGenerator.js';
 import { MazeSolver } from './mazeSolver.js';
 import { constrainDimensions } from '../array-utils.js';
+import { addOptionsToSelect } from '../dom-utils.js';
 
 let window;
 let maze;
@@ -25,6 +26,18 @@ function checkReset() {
 }
 
 function setup() {
+	addOptionsToSelect('gen-selector', [
+		'Kruskal\'s',
+		'DFS',
+	]);
+	addOptionsToSelect('alg-selector', [
+		'Dijkstra\'s',
+		'DFS',
+		'BFS',
+		'Backtrack DFS',
+		'Keep-right'
+	]);
+
   sketch.setFrameInterval(FRAME_INTERVAL);
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
   mazeGenerator = new MazeGenerator();
