@@ -13,12 +13,45 @@ script: /assets/js/maze/index.js
 				<p>Algorithm</p>
 				<select id="gen-selector"></select>
 			</div>
+			<div class="control-row">
+				<input type="checkbox" id="gen-auto-animate" class="control-checkbox">
+				<button id="gen-animate" class="control-button">Animate</button>
+			</div>
+			<div class="control-row">
+				<input type="checkbox" id="gen-auto-reset" class="control-checkbox">
+				<button id="gen-reset" class="control-button">Reset</button>
+			</div>
 		</div>
 		<div class="control-group">
 			<h2 class="control-group-title">Solver</h2>
 			<div class="control-row">
 				<p>Algorithm</p>
 				<select id="alg-selector"></select>
+			</div>
+			<div class="control-row">
+				<input type="checkbox" id="alg-auto-animate" class="control-checkbox">
+				<button id="alg-animate" class="control-button">Animate</button>
+			</div>
+			<div class="control-row">
+				<input type="checkbox" id="alg-auto-reset" class="control-checkbox">
+				<button id="alg-reset" class="control-button">Reset</button>
+			</div>
+		</div>
+		<div class="control-group">
+			<h2 class="control-group-title">End Positions</h2>
+			<div class="control-row">
+				<p>Start</p>
+				<input id="start-x" type="number" class="control-number">
+				<input id="start-y" type="number" class="control-number">
+				<input type="checkbox" id="start-rand" class="control-checkbox">
+				<p>Randomize</p>
+			</div>
+			<div class="control-row">
+				<p>Stop</p>
+				<input id="stop-x" type="number" class="control-number">
+				<input id="stop-y" type="number" class="control-number">
+				<input type="checkbox" id="stop-rand" class="control-checkbox">
+				<p>Randomize</p>
 			</div>
 		</div>
 	</div>
