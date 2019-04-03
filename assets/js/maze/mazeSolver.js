@@ -299,11 +299,11 @@ const DFS = {
 export class MazeSolver {
   constructor() {
     this.solvers = {
-      BACKTRACK_DFS,
+      'BACKTRACK DFS': BACKTRACK_DFS,
       BFS,
       DFS,
-      DIJKSTRA,
-      KEEP_RIGHT,
+      'DIJKSTRA\'S': DIJKSTRA,
+      'KEEP-RIGHT': KEEP_RIGHT,
     };
   }
 
