@@ -35,14 +35,14 @@ script: /assets/js/maze/index.js
 				<p>Start</p>
 				<input id="start-x" type="number" class="control-number" value="0">
 				<input id="start-y" type="number" class="control-number" value="0">
-				<input type="checkbox" id="start-rand" class="control-checkbox">
+				<input type="checkbox" id="start-rand" class="control-checkbox" checked="true">
 				<p>Randomize</p>
 			</div>
 			<div class="control-row">
 				<p>Stop</p>
 				<input id="stop-x" type="number" class="control-number" value="0">
 				<input id="stop-y" type="number" class="control-number" value="0">
-				<input type="checkbox" id="stop-rand" class="control-checkbox">
+				<input type="checkbox" id="stop-rand" class="control-checkbox" checked="true">
 				<p>Randomize</p>
 			</div>
 			<div class="control-row">
