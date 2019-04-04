@@ -3,7 +3,12 @@ import * as maths from '../math-utils.js';
 import { MazeGenerator } from './mazeGenerator.js';
 import { MazeSolver } from './mazeSolver.js';
 import { constrainDimensions } from '../array-utils.js';
-import { addOptionsToSelect, tieButtonToHandler, setProperties } from '../dom-utils.js';
+import {
+	addOptionsToSelect,
+	tieButtonToHandler,
+	setPropertiesById,
+	setPropertiesByClass,
+} from '../dom-utils.js';
 
 let window;
 let maze;
@@ -14,24 +19,28 @@ const MILLIS_PER_SECOND = 1000;
 const FRAME_INTERVAL = 100;
 const RESET_WAIT_SECONDS = 3;
 let resetCounter;
-const inputs = {};
+const inputs = { options: { autoReset: true } };
 const solverArgs = {};
+let state = 'GENERATE';
 
 function resetMaze() {
+	getInputs();
 	maze = mazeGenerator.initialize(dimensions[0], dimensions[1], inputs.generator.alg);
 	if (!inputs.generator.autoAnimate) {
 		mazeGenerator.generate();
+		state = 'SOLVE'
 	}
 }
 
 function resetPositions() {
+	getInputs();
 	if (inputs.options.startPos.rand) {
 		solverArgs.startPos = {
 			x: maths.randInt(0, maze.width),
 			y: maths.randInt(0, maze.height),
 		};
-		setProperties('start-x', { value: solverArgs.startPos.x });
-		setProperties('start-y', { value: solverArgs.startPos.y });
+		setPropertiesById('start-x', { value: solverArgs.startPos.x });
+		setPropertiesById('start-y', { value: solverArgs.startPos.y });
 	} else {
 		solverArgs.startPos = inputs.options.startPos;
 	}
@@ -40,14 +49,15 @@ function resetPositions() {
 			x: maths.randInt(0, maze.width),
 			y: maths.randInt(0, maze.height),
 		};
-		setProperties('stop-x', { value: solverArgs.endPos.x });
-		setProperties('stop-y', { value: solverArgs.endPos.y });
+		setPropertiesById('stop-x', { value: solverArgs.endPos.x });
+		setPropertiesById('stop-y', { value: solverArgs.endPos.y });
 	} else {
 		solverArgs.endPos = inputs.options.endPos;
 	}
 }
 
 function resetSolver() {
+	getInputs();
 	mazeSolver.initialize(maze, inputs.solver.alg, solverArgs);
 	if (!inputs.solver.autoAnimate) {
 		mazeSolver.solve();
@@ -55,30 +65,25 @@ function resetSolver() {
 }
 
 function checkReset() {
-  if (!resetCounter) {
-		getInputs();
-		const { generator, solver, options } = inputs;
+	resetCounter = MILLIS_PER_SECOND / FRAME_INTERVAL * RESET_WAIT_SECONDS;
+	state = 'GENERATE';
+	getInputs();
+	const { generator, options } = inputs;
 
-    resetCounter = MILLIS_PER_SECOND / FRAME_INTERVAL * RESET_WAIT_SECONDS;
+	if (!maze) {
+		maze = mazeGenerator.initialize(dimensions[0], dimensions[1], generator.alg, { integrity: 1 });
+	}
 
-		if (!maze) {
-    	maze = mazeGenerator.initialize(dimensions[0], dimensions[1], generator.alg, { integrity: 1 });
-		}
-
-		switch (options.autoReset) {
-			case 'ALL':
-				resetMaze();
-			case 'SOLVER AND POSITIONS':
-				resetPositions();
-			case 'SOLVER ONLY':
-				resetSolver();
-			default:
-				break;
-		}
-
-  } else {
-    resetCounter--;
-  }
+	switch (options.resetLevel) {
+		case 'ALL':
+			resetMaze();
+		case 'SOLVER AND POSITIONS':
+			resetPositions();
+		case 'SOLVER ONLY':
+			resetSolver();
+		default:
+			break;
+	}
 }
 
 function getInputs() {
@@ -91,7 +96,8 @@ function getInputs() {
 		autoAnimate: document.getElementById('alg-auto-animate').checked,
 	};
 	inputs.options = {
-		autoReset: document.getElementById('auto-reset').value.toUpperCase(),
+		...inputs.options,
+		resetLevel: document.getElementById('reset-level').value.toUpperCase(),
 		startPos: {
 			x: parseInt(document.getElementById('start-x').value),
 			y: parseInt(document.getElementById('start-y').value),
@@ -117,15 +123,17 @@ function setup() {
 		'Backtrack DFS',
 		'Keep-right'
 	]);
-	addOptionsToSelect('auto-reset', [
+	addOptionsToSelect('reset-level', [
 		'All',
 		'Solver and positions',
 		'Solver only',
-		'None',
 	]);
 	tieButtonToHandler('reset', () => {
 		resetCounter = 0;
 		checkReset();
+	});
+	tieButtonToHandler('auto-reset', (button) => {
+		inputs.options.autoReset = button.checked;
 	});
 
   sketch.setFrameInterval(FRAME_INTERVAL);
@@ -136,6 +144,13 @@ function setup() {
     { actual: window.width, max: 40 },
     { actual: window.height, max: 40 },
   ]);
+
+	setPropertiesByClass('control-number', { min: 0, value: 0, step: 1 });
+	setPropertiesById('start-x', { max: dimensions[0] - 1 });
+	setPropertiesById('start-y', { max: dimensions[1] - 1 });
+	setPropertiesById('stop-x', { max: dimensions[0] - 1 });
+	setPropertiesById('stop-y', { max: dimensions[1] - 1 });
+
   checkReset();
 }
 
@@ -145,16 +160,35 @@ function draw() {
   const xCellSize = window.width / dimensions[0];
   const yCellSize = window.height / dimensions[1];
 
-  mazeSolver.draw(sketch, xCellSize, yCellSize);
-  if (mazeSolver.step()) {
-    checkReset();
-  }
+	if (state === 'GENERATE') {
+		if (mazeGenerator.step()) {
+			switch (inputs.options.resetLevel) {
+				case 'SOLVER AND POSITIONS':
+					resetPositions();
+				case 'SOLVER ONLY':
+					resetSolver();
+				default:
+					state = 'SOLVE';
+					break;
+			}
+		}
+	
+  	sketch.setStroke('#FFF');
+		maze.draw(sketch, xCellSize, yCellSize);
+  	mazeGenerator.draw(sketch, xCellSize, yCellSize);
+	} else if (state === 'SOLVE') {
+		if (mazeSolver.step()) {
+			resetCounter--;
+			
+			if (resetCounter <= 0 && inputs.options.autoReset) {
+				checkReset();
+			}
+		}
 
-  // mazeGenerator.draw(sketch, xCellSize, yCellSize);
-  // mazeGenerator.step();
-
-  sketch.setStroke('#FFF');
-  maze.draw(sketch, xCellSize, yCellSize);
+		mazeSolver.draw(sketch, xCellSize, yCellSize);
+		sketch.setStroke('#FFF');
+		maze.draw(sketch, xCellSize, yCellSize);
+	}
 }
 
 sketch.init(setup, draw);

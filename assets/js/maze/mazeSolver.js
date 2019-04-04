@@ -298,6 +298,7 @@ const DFS = {
 
 export class MazeSolver {
   constructor() {
+		this.initialized = false;
     this.solvers = {
       'BACKTRACK DFS': BACKTRACK_DFS,
       BFS,
@@ -322,6 +323,7 @@ export class MazeSolver {
       },
     };
     this.solvers[this.algorithm].initialize(maze, this.algoParams);
+		this.initialized = true;
   }
 
   step() {

@@ -25,7 +25,7 @@ script: /assets/js/maze/index.js
 				<select id="alg-selector"></select>
 			</div>
 			<div class="control-row">
-				<input type="checkbox" id="alg-auto-animate" class="control-checkbox">
+				<input type="checkbox" id="alg-auto-animate" class="control-checkbox" checked="true">
 				<p>Animate</p>
 			</div>
 		</div>
@@ -46,11 +46,13 @@ script: /assets/js/maze/index.js
 				<p>Randomize</p>
 			</div>
 			<div class="control-row">
-				<p>Autoreset</p>
-				<select id="auto-reset"></select>
+				<p>Reset</p>
+				<select id="reset-level"></select>
 			</div>
 			<div class="control-row">
 				<button id="reset" class="control-button">Manual reset</button>
+				<input type="checkbox" id="auto-reset" class="control-checkbox" checked="true">
+				<p>Auto-reset</p>
 			</div>
 		</div>
 	</div>

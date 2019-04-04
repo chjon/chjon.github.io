@@ -120,8 +120,7 @@ const KRUSKAL = {
     }
   },
   draw: (sketch, xCellSize, yCellSize, algoParams) => {
-    const { maze, sets, walls } = algoParams;
-    maze.draw(sketch, xCellSize, yCellSize, algoParams);
+    const { sets, walls } = algoParams;
     if (walls.length && sets.getNumSets() > 1) {
       const { x, y, isHorizontal } = walls[walls.length - 1];
 

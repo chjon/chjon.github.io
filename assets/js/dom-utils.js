@@ -8,13 +8,26 @@ export function addOptionsToSelect(selectId, optionNames) {
 }
 
 export function tieButtonToHandler(buttonId, handler) {
-	setProperties(buttonId, { onclick: handler });
+	const button = document.getElementById(buttonId);
+	button.onclick = () => {
+		handler(button);
+	}
 }
 
-export function setProperties(inputId, properties = {}) {
+export function setPropertiesById(inputId, properties = {}) {
 	const obj = document.getElementById(inputId);
 	Object.keys(properties)
 	.forEach((key) => {
 		obj[key] = properties[key];
+	});
+}
+
+export function setPropertiesByClass(className, properties = {}) {
+	const objs = Object.values(document.getElementsByClassName(className));
+	objs.forEach((obj) => {
+		Object.keys(properties)
+		.forEach((key) => {
+			obj[key] = properties[key];
+		});
 	});
 }
