@@ -120,8 +120,7 @@ const KRUSKAL = {
     }
   },
   draw: (sketch, xCellSize, yCellSize, algoParams) => {
-    const { maze, sets, walls } = algoParams;
-    maze.draw(sketch, xCellSize, yCellSize, algoParams);
+    const { sets, walls } = algoParams;
     if (walls.length && sets.getNumSets() > 1) {
       const { x, y, isHorizontal } = walls[walls.length - 1];
 
@@ -147,13 +146,14 @@ function getNumPossibleMoves(x, y, visited) {
 
 export class MazeGenerator {
   constructor() {
-    this.generators = { DFS, KRUSKAL };
+    this.generators = { DFS, 'KRUSKAL\'S': KRUSKAL };
   }
 
   initialize(width, height, algorithm, algoParams) {
     this.algorithm = algorithm.toUpperCase();
     this.algoParams = { ...algoParams, maze: new Maze(width, height) };
     this.generators[this.algorithm].initialize(this.algoParams);
+		return this.algoParams.maze;
   }
 
   step() {

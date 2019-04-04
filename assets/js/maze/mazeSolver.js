@@ -298,12 +298,13 @@ const DFS = {
 
 export class MazeSolver {
   constructor() {
+		this.initialized = false;
     this.solvers = {
-      BACKTRACK_DFS,
+      'BACKTRACK DFS': BACKTRACK_DFS,
       BFS,
       DFS,
-      DIJKSTRA,
-      KEEP_RIGHT,
+      'DIJKSTRA\'S': DIJKSTRA,
+      'KEEP-RIGHT': KEEP_RIGHT,
     };
   }
 
@@ -322,6 +323,7 @@ export class MazeSolver {
       },
     };
     this.solvers[this.algorithm].initialize(maze, this.algoParams);
+		this.initialized = true;
   }
 
   step() {
