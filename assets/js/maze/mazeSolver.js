@@ -231,39 +231,13 @@ const DIJKSTRA = {
       }
     });
 
-    // Draw start and end positions
-    sketch.setFill('#AA0');
-    sketch.fillRect(
-      xCellSize * startPos.x, yCellSize * startPos.y,
-      xCellSize * (startPos.x + 1), yCellSize * (startPos.y + 1),
-    );
-    sketch.fillRect(
-      xCellSize * endPos.x, yCellSize * endPos.y,
-      xCellSize * (endPos.x + 1), yCellSize * (endPos.y + 1),
-    );
-
     if (queue.length()) {
-      // Draw queued cells
-      if (queue.peek().x === endPos.x && queue.peek().y === endPos.y) {
-        sketch.setFill('#A00');
-        let cur = endPos;
-        do {
-          sketch.fillRect(xCellSize * cur.x, yCellSize * cur.y, xCellSize * (cur.x + 1), yCellSize * (cur.y + 1));
-          cur = distances[cur.x][cur.y].prev
-        } while(cur);
-      } else {
-        sketch.setFill('#050');
-        queue.forEach(({ x, y }) => {
-          sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
-        });
-
-        // Draw top of queue
-        if (prev) {
-          const { x, y } = prev;
-          sketch.setFill('#A00');
-          sketch.fillRect(xCellSize * x, yCellSize * y, xCellSize * (x + 1), yCellSize * (y + 1));
-        }
-      }
+			sketch.setFill('#A00');
+			let cur = queue.peek();
+			do {
+				sketch.fillRect(xCellSize * cur.x, yCellSize * cur.y, xCellSize * (cur.x + 1), yCellSize * (cur.y + 1));
+				cur = distances[cur.x][cur.y].prev
+			} while(cur);
     }
 
     // Draw shortest paths
@@ -273,6 +247,17 @@ const DIJKSTRA = {
         sketch.line(xCellSize * (prev.x + 0.5), yCellSize * (prev.y + 0.5), xCellSize * (x + 0.5), yCellSize * (y + 0.5));
       }
     });
+
+		// Draw start and end positions
+    sketch.setFill('#FF0');
+    sketch.fillRect(
+      xCellSize * startPos.x, yCellSize * startPos.y,
+      xCellSize * (startPos.x + 1), yCellSize * (startPos.y + 1),
+    );
+    sketch.fillRect(
+      xCellSize * endPos.x, yCellSize * endPos.y,
+      xCellSize * (endPos.x + 1), yCellSize * (endPos.y + 1),
+    );
   }
 };
 
