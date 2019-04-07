@@ -6,8 +6,9 @@
   height: 100%;
   margin: 0;
 
-	position: fixed;
+	position: absolute;
 	display: flex;
+	flex-direction: row;
 }
 
 .control-pane {
@@ -17,6 +18,7 @@
 	align-items: center;
 	padding: 1em;
 	background: #111111;
+	min-width: 17rem;
 }
 
 .control-group {
@@ -58,4 +60,14 @@ hr {
 
 .canvas-wrapper {
 	flex: 4;
+}
+
+@media (max-device-width: 800px), (max-width: 850px) {
+  .main-wrapper {
+		display: block;
+	}
+
+	.canvas-wrapper {
+		height: 100vh;
+	}
 }
