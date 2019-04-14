@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    {%- if page.title -%}
+      <title>{{ site.title | append: ' • ' | append: page.title }}</title>
+    {%- else -%}
+      <title>{{ site.title }}</title>
+    {% endif %}
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Exo+2:100">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300">
+    {%- if page.stylesheet -%}
+      <link rel="stylesheet" href="{{ page.stylesheet }}">
+    {%- endif -%}
+    {% feed_meta %}
+    {% seo %}
+  </head>
+  <body>
+    <section class="main-wrapper">
+      <div class="control-pane">
+        <header class="control-header">
+          <h1>{{ page.title }}</h1>
+          <hr/>
+        </header>
+        <section class="control-section">
+          {{ content }}
+        </section>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="background-canvas"></canvas>
+      </div>
+    </section>
+
+    {%- if page.script -%}
+      <script type="module" src="{{ page.script }}"></script>
+    {%- endif -%}
+  </body>
+</html>
