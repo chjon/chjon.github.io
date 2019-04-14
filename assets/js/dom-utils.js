@@ -31,3 +31,16 @@ export function setPropertiesByClass(className, properties = {}) {
 		});
 	});
 }
+
+export function decodeURI() {
+  const safeURI = decodeURIComponent(window.location.href);
+  const uriComponents = safeURI.split('?');
+  const url = uriComponents[0] || '';
+  const queryComponents = (uriComponents[1] || '').split('&');
+  const query = queryComponents.reduce((query, queryParam) => {
+    const [key, value] = queryParam.split('=');
+    query[key] = value;
+    return query;
+  }, {});
+  return { url, query };
+}

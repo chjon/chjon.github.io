@@ -16,9 +16,27 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 1em;
 	background: #111111;
 	min-width: 17rem;
+  overflow-x: auto;
+
+  hr {
+    width: 100%;
+  }
+
+  header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em 1em 0em 1em;
+  }
+
+  section {
+    width: 100%;
+    overflow-y: auto;
+    padding: 1em;
+  }
 }
 
 .control-group {
@@ -49,13 +67,14 @@
 		width: 100%;
 	}
 
+  .control-textarea {
+    width: 100%;
+    resize: vertical;
+  }
+
 	.control-number {
 		width: 15%;
 	}
-}
-
-hr {
-	width: 100%;
 }
 
 .canvas-wrapper {
