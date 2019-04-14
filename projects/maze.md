@@ -1,7 +1,6 @@
 ---
 title: Mazes
 layout: vis
-stylesheet: /assets/css/vis.css
 script: /assets/js/maze/index.js
 ---
 <div class="control-group">
