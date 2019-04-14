@@ -11,6 +11,36 @@ let inputSignal = { x: [], y: [] };
 let outputSignal = { x: [], y: [] };
 let wave;
 
+const B64LUT = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-';
+
+function toBase64(num) {
+  const rounded = Math.round(num);
+  const quo = Math.floor(rounded / 64);
+  const rem = rounded - quo * 64;
+  return B64LUT.charAt(quo) + B64LUT.charAt(rem);
+}
+
+function fromBase64(val) {
+  return B64LUT.indexOf(val.charAt(0)) * 64 + B64LUT.indexOf(val.charAt(1))
+}
+
+function uriEncode(data) {
+  return data.reduce((encoded, { x, y }) => {
+    return encoded + `${toBase64(x)}${toBase64(y)}`;
+  }, '');
+}
+
+function uriDecode(data) {
+  const decoded = [];
+  for (let i = 0; i < data.length; i = i + 4) {
+    decoded.push({
+      x: fromBase64(data.charAt(i + 0) + data.charAt(i + 1)),
+      y: fromBase64(data.charAt(i + 2) + data.charAt(i + 3)),
+    });
+  }
+  return JSON.stringify(decoded);
+}
+
 function loadStartFunction(inputString) {
   let points = JSON.parse(inputString);
   
@@ -93,6 +123,7 @@ function drawEpicycles(vals, centerX, centerY, isXAxis) {
 
 function reset() {
   const data = document.getElementById('data-input').value;
+  console.log(encodeURIComponent(uriEncode(JSON.parse(data))));
   pointDensity = document.getElementById('density').value;
 
   counter = 0;
@@ -114,9 +145,17 @@ function reset() {
 function setup() {
   sketch.setFrameInterval(20);
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
-  document.getElementById('data-input').value = initialData;
+  const { query } = dom.decodeURI();
+  const message = query.m;
+  const density = query.d;
+  document.getElementById('data-input').value = message ? uriDecode(message) : initialData;
   dom.tieButtonToHandler('reset', reset);
-  dom.setPropertiesById('density', { value: 0.08, step: 0.01, min: 0.02, max: 0.2 });
+  dom.setPropertiesById('density', {
+    value: density ? parseInt(density) * 0.01 : 0.08,
+    step: 0.01,
+    min: 0.02,
+    max: 0.2,
+  });
   reset();
 }
 
