@@ -171,9 +171,8 @@ document.onmousemove = (e) => {
     return;
   }
 
-  closest = clickedTree.getClosestWithin(e.pageX, e.pageY, GRAB_RADIUS * GRAB_RADIUS);
-  mousePos.x = e.pageX;
-  mousePos.y = e.pageY;
+  mousePos = sketch.getMousePos(e);
+  closest = clickedTree.getClosestWithin(mousePos.x, mousePos.y, GRAB_RADIUS * GRAB_RADIUS);
 }
 
 document.onmousedown = (e) => {
@@ -181,17 +180,21 @@ document.onmousedown = (e) => {
     return;
   }
 
+  const { x, y } = sketch.getMousePos(e);
+  const pageX = x;
+  const pageY = y;
+
   if (mode === 'Drawing') {
     // Add a new point
     if (!e.ctrlKey) {
-      closest = { x: e.pageX, y: e.pageY };
+      closest = { x: pageX, y: pageY };
       clickedTree.push(closest);
 
     // Remove an existing point
     } else if (closest) {
       disconnect(closest);
       clickedTree.pop(closest);
-      closest = clickedTree.getClosestWithin(e.pageX, e.pageY, GRAB_RADIUS * GRAB_RADIUS);
+      closest = clickedTree.getClosestWithin(pageX, pageY, GRAB_RADIUS * GRAB_RADIUS);
     }
   } else if (mode === 'Connecting') {
     // Disconnect point
@@ -205,19 +208,19 @@ document.onmousedown = (e) => {
     }
   } else if (mode === 'Moving') {
     if (prevPoint) {
-      move(e.pageX - prevPoint.x, e.pageY - prevPoint.y);
+      move(pageX - prevPoint.x, pageY - prevPoint.y);
       prevPoint = undefined;
     } else {
-      prevPoint = { x: e.pageX, y: e.pageY };
+      prevPoint = { x: pageX, y: pageY };
     }
   } else if (mode === 'Printing') {
     printFrom(closest);
   } else if (mode === 'Rotating') {
     if (prevPoint) {
-      rotate(prevPoint.x, prevPoint.y, e.pageX, e.pageY);
+      rotate(prevPoint.x, prevPoint.y, pageX, pageY);
       prevPoint = undefined;
     } else {
-      prevPoint = { x: e.pageX, y: e.pageY };
+      prevPoint = { x: pageX, y: pageY };
     }
   } else if (mode === 'Selecting') {
     if (closest) {
@@ -227,7 +230,7 @@ document.onmousedown = (e) => {
           select(closest);
         }
     } else if (prevPoint) {
-      const foundPoints = clickedTree.getAllWithin(prevPoint.x, prevPoint.y, e.pageX, e.pageY);
+      const foundPoints = clickedTree.getAllWithin(prevPoint.x, prevPoint.y, pageX, pageY);
       foundPoints.forEach((obj) => {
         if (e.ctrlKey) {
           deselect(obj);
@@ -237,14 +240,14 @@ document.onmousedown = (e) => {
       });
       prevPoint = undefined;
     } else {
-      prevPoint = { x: e.pageX, y: e.pageY };
+      prevPoint = { x: pageX, y: pageY };
     }
   } else if (mode === 'Scaling') {
     if (prevPoint) {
-      scale(prevPoint.x, prevPoint.y, e.pageX, e.pageY);
+      scale(prevPoint.x, prevPoint.y, pageX, pageY);
       prevPoint = undefined;
     } else {
-      prevPoint = { x: e.pageX, y: e.pageY };
+      prevPoint = { x: pageX, y: pageY };
     }
   }
 }
@@ -257,6 +260,7 @@ document.onkeyup = (e) => {
   switch (e.keyCode) {
     // Cancel current operation
     case 27:
+      selected = undefined;
       prevPoint = undefined;
       break;
 

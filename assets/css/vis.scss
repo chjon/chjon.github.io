@@ -90,3 +90,14 @@
 		height: 100vh;
 	}
 }
+
+.button-array {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  button {
+    flex: 1;
+    min-width: 50%;
+  }
+}
