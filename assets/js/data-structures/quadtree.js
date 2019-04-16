@@ -254,4 +254,13 @@ export class Quadtree {
       .concat(this.se.getAll())
       .concat(this.sw.getAll());
   }
+
+  clear() {
+    this.bucket = [];
+    this.length = 0;
+    this.ne = undefined;
+    this.nw = undefined;
+    this.se = undefined;
+    this.sw = undefined;
+  }
 }

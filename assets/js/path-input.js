@@ -1,17 +1,19 @@
 import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
+import * as dom from './dom-utils.js';
 import { Quadtree } from './data-structures/quadtree.js';
 
 const GRAB_RADIUS = 10;
 let clickedTree;
 
 const modeLabel = document.getElementById('mode-label');
-let mode = 'Drawing';
+let mode = 'Draw';
 let selected = undefined;
 let closest = undefined;
 let prevPoint = undefined;
 let selection = [];
 let mousePos = { x: 0, y: 0 };
+let startPoint = undefined;
 
 // Connect the two given objects
 function connect(a, b) {
@@ -41,9 +43,40 @@ function disconnect(toDisconnect) {
   }
 }
 
+const B64LUT = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-';
+
+function toBase64(num) {
+  const rounded = Math.round(num);
+  const quo = Math.floor(rounded / 64);
+  const rem = rounded - quo * 64;
+  return B64LUT.charAt(quo) + B64LUT.charAt(rem);
+}
+
+function fromBase64(val) {
+  return B64LUT.indexOf(val.charAt(0)) * 64 + B64LUT.indexOf(val.charAt(1))
+}
+
+function uriEncode(data) {
+  return data.reduce((encoded, { x, y }) => {
+    return encoded + `${toBase64(x)}${toBase64(y)}`;
+  }, '');
+}
+
+function uriDecode(data) {
+  const decoded = [];
+  for (let i = 0; i < data.length; i = i + 4) {
+    decoded.push({
+      x: fromBase64(data.charAt(i + 0) + data.charAt(i + 1)),
+      y: fromBase64(data.charAt(i + 2) + data.charAt(i + 3)),
+    });
+  }
+  return JSON.stringify(decoded);
+}
+
 // Output a list of all the points after the current one
 function printFrom(startPoint) {
   if (!startPoint) {
+    alert('Cannot output; missing start point');
     return;
   }
 
@@ -54,7 +87,12 @@ function printFrom(startPoint) {
     curPoint = curPoint.next;
   }
 
-  console.log(JSON.stringify(toPrint));
+  if (!curPoint) {
+    alert('Cannot output; points must be connected');
+    return;
+  }
+
+  return uriEncode(toPrint);
 }
 
 // Translate the currently selected points
@@ -183,8 +221,16 @@ document.onmousedown = (e) => {
   const { x, y } = sketch.getMousePos(e);
   const pageX = x;
   const pageY = y;
+  if (
+    pageX < 0 ||
+    pageX >= sketch.getWidth() ||
+    pageY < 0 ||
+    pageY >= sketch.getHeight()
+  ) {
+    return;
+  }
 
-  if (mode === 'Drawing') {
+  if (mode === 'Draw') {
     // Add a new point
     if (!e.ctrlKey) {
       closest = { x: pageX, y: pageY };
@@ -196,7 +242,7 @@ document.onmousedown = (e) => {
       clickedTree.pop(closest);
       closest = clickedTree.getClosestWithin(pageX, pageY, GRAB_RADIUS * GRAB_RADIUS);
     }
-  } else if (mode === 'Connecting') {
+  } else if (mode === 'Connect') {
     // Disconnect point
     if (e.ctrlKey) {
       disconnect(closest);
@@ -206,23 +252,21 @@ document.onmousedown = (e) => {
       connect(selected, closest);
       selected = closest;
     }
-  } else if (mode === 'Moving') {
+  } else if (mode === 'Move') {
     if (prevPoint) {
       move(pageX - prevPoint.x, pageY - prevPoint.y);
       prevPoint = undefined;
     } else {
       prevPoint = { x: pageX, y: pageY };
     }
-  } else if (mode === 'Printing') {
-    printFrom(closest);
-  } else if (mode === 'Rotating') {
+  } else if (mode === 'Rotate') {
     if (prevPoint) {
       rotate(prevPoint.x, prevPoint.y, pageX, pageY);
       prevPoint = undefined;
     } else {
       prevPoint = { x: pageX, y: pageY };
     }
-  } else if (mode === 'Selecting') {
+  } else if (mode === 'Select') {
     if (closest) {
       if (e.ctrlKey) {
           deselect(closest);
@@ -242,22 +286,24 @@ document.onmousedown = (e) => {
     } else {
       prevPoint = { x: pageX, y: pageY };
     }
-  } else if (mode === 'Scaling') {
+  } else if (mode === 'Scale') {
     if (prevPoint) {
       scale(prevPoint.x, prevPoint.y, pageX, pageY);
       prevPoint = undefined;
     } else {
       prevPoint = { x: pageX, y: pageY };
     }
+  } else if (mode === 'Set start point') {
+    startPoint = closest;
   }
 }
 
-document.onkeyup = (e) => {
+function updateMode(keyCode) {
   if (!clickedTree) {
     return;
   }
 
-  switch (e.keyCode) {
+  switch (keyCode) {
     // Cancel current operation
     case 27:
       selected = undefined;
@@ -274,20 +320,20 @@ document.onkeyup = (e) => {
 
     // Switch to drawing mode
     case 'D'.charCodeAt(0):
-      mode = 'Drawing';
+      mode = 'Draw';
       selected = undefined;
       selection = [];
       break;
 
     // Switch to connecting mode
     case 'C'.charCodeAt(0):
-      mode = 'Connecting';
+      mode = 'Connect';
       selection = [];
       break;
     
     // Switch to moving mode
     case 'M'.charCodeAt(0):
-      mode = 'Moving';
+      mode = 'Move';
       selected = undefined;
       break;
 
@@ -298,29 +344,29 @@ document.onkeyup = (e) => {
 
     // Output the points in order of connection if all of them are connected
     case 'P'.charCodeAt(0):
-      mode = 'Printing';
+      mode = 'Set start point';
       break;
 
     // Switch to rotating mode
     case 'R'.charCodeAt(0):
-      mode = 'Rotating';
+      mode = 'Rotate';
       selected = undefined;
       break;
 
     // Switch to selecting mode
     case 'S'.charCodeAt(0):
-      mode = 'Selecting';
+      mode = 'Select';
       selected = undefined;
       break;
 
     // Switch to scaling mode
     case 'T'.charCodeAt(0):
-      mode = 'Scaling';
+      mode = 'Scale';
       selected = undefined;
       break;
 
     case 'V'.charCodeAt(0):
-      mode = 'Viewing';
+      mode = 'View';
       selected = undefined;
       selection = [];
       break;
@@ -329,17 +375,45 @@ document.onkeyup = (e) => {
       break;
   }
 
-  modeLabel.textContent='Current mode: ' + mode;
+  modeLabel.textContent = 'Current mode: ' + mode;
+}
+
+document.onkeyup = (e) => {
+  updateMode(e.keyCode);
 }
 
 function setup() {
   sketch.setFrameInterval(20);
   clickedTree = new Quadtree(0, 0, sketch.getWidth(), sketch.getHeight(), 4, 6);
+  dom.tieButtonToHandler('mode-draw', () => { updateMode('D'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-connect', () => { updateMode('C'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-select', () => { updateMode('S'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-move', () => { updateMode('M'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-rotate', () => { updateMode('R'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-scale', () => { updateMode('T'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-view', () => { updateMode('V'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-set-start', () => { updateMode('P'.charCodeAt(0)); });
+
+  dom.tieButtonToHandler('data-output', () => {
+    const data = printFrom(startPoint);
+    if (data) {
+      document.getElementById('data').value = data;
+    }
+  });
+  dom.tieButtonToHandler('data-input', () => {
+    const points = uriDecode(document.getElementById('data').value);
+    clickedTree.clear();
+    for (let i = 0; i < points.length; i++) {
+      points[i].next = points[(i + 1) % points.length];
+      points[i].prev = points[(i + points.length - 1) % points.length];
+      clickedTree.push(points[i]);
+    }
+  });
 }
 
 function draw() {
   sketch.setStroke('#FFFFFF');
-  if (mode === 'Viewing') {
+  if (mode === 'View') {
     drawQuadtree(clickedTree, 1);
   } else {
     drawQuadtree(clickedTree, 5);
@@ -372,9 +446,9 @@ function draw() {
   });
 
   if (prevPoint) {
-    if (mode === 'Selecting') {
+    if (mode === 'Select') {
       sketch.rect(prevPoint.x, prevPoint.y, mousePos.x, mousePos.y);
-    } else if (mode === 'Moving' || mode === 'Scaling' || mode === 'Rotating') {
+    } else if (mode === 'Move' || mode === 'Scale' || mode === 'Rotate') {
       sketch.line(prevPoint.x, prevPoint.y, mousePos.x, mousePos.y);
     }
   }
