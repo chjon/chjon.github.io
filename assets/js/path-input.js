@@ -401,8 +401,12 @@ function setup() {
     }
   });
   dom.tieButtonToHandler('data-input', () => {
-    const points = uriDecode(document.getElementById('data').value);
     clickedTree.clear();
+    selection = [];
+    selected = undefined;
+    prevPoint = undefined;
+    startPoint = undefined;
+    const points = JSON.parse(uriDecode(document.getElementById('data').value));
     for (let i = 0; i < points.length; i++) {
       points[i].next = points[(i + 1) % points.length];
       points[i].prev = points[(i + points.length - 1) % points.length];
