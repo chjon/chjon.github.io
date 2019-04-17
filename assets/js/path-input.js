@@ -41,6 +41,10 @@ function disconnect(toDisconnect) {
     toDisconnect.next.prev = undefined;
     toDisconnect.next = undefined;
   }
+
+  if (toDisconnect === startPoint) {
+    startPoint = undefined;
+  }
 }
 
 const B64LUT = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-';
@@ -233,6 +237,9 @@ document.onmousedown = (e) => {
 
     // Remove an existing point
     } else if (closest) {
+      if (closest === startPoint) {
+        startPoint = undefined;
+      }
       disconnect(closest);
       clickedTree.pop(closest);
       closest = clickedTree.getClosestWithin(pageX, pageY, GRAB_RADIUS * GRAB_RADIUS);
@@ -310,6 +317,9 @@ function updateMode(keyCode) {
     // Delete selection
     case 46:
       selection.forEach((obj) => {
+        if (obj === startPoint) {
+          startPoint = undefined;
+        }
         clickedTree.pop(obj);
       });
       selection = [];
