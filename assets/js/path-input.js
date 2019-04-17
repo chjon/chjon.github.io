@@ -345,6 +345,7 @@ function updateMode(keyCode) {
     // Output the points in order of connection if all of them are connected
     case 'P'.charCodeAt(0):
       mode = 'Set start point';
+      selected = undefined;
       break;
 
     // Switch to rotating mode
@@ -455,6 +456,10 @@ function draw() {
     } else if (mode === 'Move' || mode === 'Scale' || mode === 'Rotate') {
       sketch.line(prevPoint.x, prevPoint.y, mousePos.x, mousePos.y);
     }
+  }
+
+  if (mode === 'Set start point' && startPoint) {
+    sketch.ellipse(startPoint.x, startPoint.y, GRAB_RADIUS, GRAB_RADIUS);
   }
 }
 
