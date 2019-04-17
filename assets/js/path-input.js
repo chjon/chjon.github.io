@@ -87,12 +87,7 @@ function printFrom(startPoint) {
     curPoint = curPoint.next;
   }
 
-  if (!curPoint) {
-    alert('Cannot output; points must be connected');
-    return;
-  }
-
-  return uriEncode(toPrint);
+  return toPrint;
 }
 
 // Translate the currently selected points
@@ -294,7 +289,9 @@ document.onmousedown = (e) => {
       prevPoint = { x: pageX, y: pageY };
     }
   } else if (mode === 'Set start point') {
-    startPoint = closest;
+    if (closest) {
+      startPoint = closest;
+    }
   }
 }
 
@@ -383,6 +380,82 @@ document.onkeyup = (e) => {
   updateMode(e.keyCode);
 }
 
+function scaleAndShift(data, width, height, shiftX, shiftY) {
+  const limits = data.reduce((limits, { x, y }) => {
+    limits.minX = Math.min(limits.minX, x);
+    limits.maxX = Math.max(limits.maxX, x);
+    limits.minY = Math.min(limits.minY, y);
+    limits.maxY = Math.max(limits.maxY, y);
+    return limits;
+  }, { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity });
+  const range = {
+    x: limits.maxX - limits.minX,
+    y: limits.maxY - limits.minY,
+  }
+  const scaleFactors = {
+    x: width ? width / range.x : 0,
+    y: height ? height / range.y : 0,
+  }
+  const scaleFactor = (range.x * scaleFactors.y <= width) ? scaleFactors.y : scaleFactors.x;
+  const offset = {
+    x: (width - (limits.maxX - limits.minX) * scaleFactor) / 2,
+    y: (height - (limits.maxY - limits.minY) * scaleFactor) / 2,
+  }
+  return data.map(({ x, y }) => {
+    const scaled = {
+      x: (x - limits.minX) * scaleFactor,
+      y: (y - limits.minY) * scaleFactor,
+    };
+    const centered = {
+      x: scaled.x + offset.x,
+      y: scaled.y + offset.y,
+    };
+    const shifted = {
+      x: centered.x + shiftX,
+      y: centered.y + shiftY,
+    }
+    return shifted;
+  });
+}
+
+function dataImport() {
+  clickedTree.clear();
+  selection = [];
+  selected = undefined;
+  prevPoint = undefined;
+  startPoint = undefined;
+  const points = JSON.parse(uriDecode(document.getElementById('data').value));
+  const scaledPoints = scaleAndShift(
+    points,
+    0.8 * sketch.getWidth(),
+    0.8 * sketch.getHeight(),
+    0.1 * sketch.getWidth(),
+    0.1 * sketch.getHeight(),
+  );
+  for (let i = 0; i < scaledPoints.length; i++) {
+    scaledPoints[i].next = scaledPoints[(i + 1) % scaledPoints.length];
+    scaledPoints[i].prev = scaledPoints[(i + scaledPoints.length - 1) % scaledPoints.length];
+    clickedTree.push(scaledPoints[i]);
+  }
+}
+
+function dataExport() {
+  // Check connections
+  const isDisconnected = clickedTree.getAll().find(({ next }) => {
+    return !next;
+  });
+  if (isDisconnected) {
+    alert('Cannot output; points must be connected');
+    return;
+  }
+
+  const data = printFrom(startPoint);
+  if (data) {
+    const scaledData = scaleAndShift(data, 64 * 64 - 1, 64 * 64 - 1, 0, 0);
+    document.getElementById('data').value = uriEncode(scaledData);
+  }
+}
+
 function setup() {
   sketch.setFrameInterval(20);
   clickedTree = new Quadtree(0, 0, sketch.getWidth(), sketch.getHeight(), 4, 6);
@@ -395,25 +468,8 @@ function setup() {
   dom.tieButtonToHandler('mode-view', () => { updateMode('V'.charCodeAt(0)); });
   dom.tieButtonToHandler('mode-set-start', () => { updateMode('P'.charCodeAt(0)); });
 
-  dom.tieButtonToHandler('data-output', () => {
-    const data = printFrom(startPoint);
-    if (data) {
-      document.getElementById('data').value = data;
-    }
-  });
-  dom.tieButtonToHandler('data-input', () => {
-    clickedTree.clear();
-    selection = [];
-    selected = undefined;
-    prevPoint = undefined;
-    startPoint = undefined;
-    const points = JSON.parse(uriDecode(document.getElementById('data').value));
-    for (let i = 0; i < points.length; i++) {
-      points[i].next = points[(i + 1) % points.length];
-      points[i].prev = points[(i + points.length - 1) % points.length];
-      clickedTree.push(points[i]);
-    }
-  });
+  dom.tieButtonToHandler('data-output', dataExport);
+  dom.tieButtonToHandler('data-input', dataImport);
 }
 
 function draw() {
