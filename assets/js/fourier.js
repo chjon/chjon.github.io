@@ -41,8 +41,55 @@ function uriDecode(data) {
   return JSON.stringify(decoded);
 }
 
+function scaleAndShift(data, width, height, shiftX, shiftY) {
+  const limits = data.reduce((limits, { x, y }) => {
+    limits.minX = Math.min(limits.minX, x);
+    limits.maxX = Math.max(limits.maxX, x);
+    limits.minY = Math.min(limits.minY, y);
+    limits.maxY = Math.max(limits.maxY, y);
+    return limits;
+  }, { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity });
+  const range = {
+    x: limits.maxX - limits.minX,
+    y: limits.maxY - limits.minY,
+  }
+  const scaleFactors = {
+    x: width ? width / range.x : 0,
+    y: height ? height / range.y : 0,
+  }
+  const scaleFactor = (range.x * scaleFactors.y <= width) ? scaleFactors.y : scaleFactors.x;
+  const offset = {
+    x: (width - (limits.maxX - limits.minX) * scaleFactor) / 2,
+    y: (height - (limits.maxY - limits.minY) * scaleFactor) / 2,
+  }
+  return data.map(({ x, y }) => {
+    const scaled = {
+      x: (x - limits.minX) * scaleFactor,
+      y: (y - limits.minY) * scaleFactor,
+    };
+    const centered = {
+      x: scaled.x + offset.x,
+      y: scaled.y + offset.y,
+    };
+    const shifted = {
+      x: centered.x + shiftX,
+      y: centered.y + shiftY,
+    }
+    return shifted;
+  });
+}
+
 function loadStartFunction(inputString) {
-  let points = JSON.parse(inputString);
+  const rawData = JSON.parse(inputString).map(({ x, y }) => {
+    return { x, y: -y };
+  });
+  let points = scaleAndShift(
+    rawData,
+    0.5 * window.width,
+    0.5 * window.height,
+    0.1 * window.width,
+    0.1 * window.height,
+  );
   
   let totalDist = 0;
   for (let i = 0; i < points.length - 1; i = i + 1) {
@@ -57,20 +104,8 @@ function loadStartFunction(inputString) {
     inputSignal.y.push(point.y);
   });
 
-  const range = {
-    x: maths.getBounds(inputSignal.x),
-    y: maths.getBounds(inputSignal.y),
-  }
-
-  const scales = {
-    x: 0.4 * window.width / (range.x.max - range.x.min),
-    y: 0.4 * window.height / (range.y.max - range.y.min),
-  }
-
-  const scale = Math.min(scales.x, scales.y);
-
-  inputSignal.x = maths.scale(maths.shiftCenter(inputSignal.x), scale);
-  inputSignal.y = maths.scale(maths.shiftCenter(inputSignal.y), -scale);
+  inputSignal.x = maths.shiftCenter(inputSignal.x);
+  inputSignal.y = maths.shiftCenter(inputSignal.y);
 
   return inputSignal;
 }
@@ -151,7 +186,7 @@ function setup() {
   document.getElementById('data-input').value = message ? uriDecode(message) : initialData;
   dom.tieButtonToHandler('reset', reset);
   dom.setPropertiesById('density', {
-    value: density ? parseInt(density) * 0.01 : 0.08,
+    value: density ? parseInt(density) * 0.01 : 0.16,
     step: 0.01,
     min: 0.02,
     max: 0.2,
