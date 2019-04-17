@@ -2,7 +2,7 @@ import * as maths from './math-utils.js';
 import * as dom from './dom-utils.js';
 import * as sketch from './sketch.js';
 
-const initialData = '[{"x":823,"y":382},{"x":806,"y":380},{"x":775,"y":380},{"x":741,"y":384},{"x":711,"y":383},{"x":698,"y":384},{"x":664,"y":384},{"x":629,"y":391},{"x":611,"y":389},{"x":606,"y":373},{"x":606,"y":358},{"x":606,"y":347},{"x":606,"y":331},{"x":597,"y":319},{"x":584,"y":315},{"x":565,"y":314},{"x":564,"y":329},{"x":562,"y":343},{"x":563,"y":355},{"x":562,"y":373},{"x":564,"y":392},{"x":550,"y":388},{"x":535,"y":388},{"x":521,"y":385},{"x":519,"y":365},{"x":516,"y":339},{"x":513,"y":317},{"x":514,"y":298},{"x":513,"y":285},{"x":514,"y":260},{"x":513,"y":238},{"x":511,"y":222},{"x":515,"y":208},{"x":520,"y":191},{"x":537,"y":187},{"x":558,"y":186},{"x":560,"y":198},{"x":561,"y":211},{"x":561,"y":223},{"x":562,"y":247},{"x":566,"y":272},{"x":583,"y":275},{"x":602,"y":273},{"x":602,"y":259},{"x":602,"y":240},{"x":602,"y":223},{"x":599,"y":202},{"x":600,"y":192},{"x":598,"y":181},{"x":618,"y":183},{"x":636,"y":186},{"x":634,"y":203},{"x":635,"y":221},{"x":635,"y":239},{"x":637,"y":258},{"x":638,"y":280},{"x":640,"y":304},{"x":639,"y":317},{"x":641,"y":332},{"x":641,"y":353},{"x":645,"y":368},{"x":645,"y":384},{"x":683,"y":383},{"x":680,"y":359},{"x":680,"y":341},{"x":681,"y":326},{"x":679,"y":302},{"x":679,"y":282},{"x":678,"y":267},{"x":676,"y":252},{"x":674,"y":234},{"x":674,"y":211},{"x":674,"y":199},{"x":675,"y":181},{"x":688,"y":181},{"x":702,"y":180},{"x":719,"y":180},{"x":720,"y":200},{"x":722,"y":217},{"x":722,"y":236},{"x":722,"y":250},{"x":722,"y":263},{"x":723,"y":280},{"x":723,"y":297},{"x":723,"y":313},{"x":722,"y":333},{"x":724,"y":354},{"x":724,"y":370},{"x":726,"y":383},{"x":756,"y":384},{"x":791,"y":381},{"x":821,"y":376},{"x":831,"y":361},{"x":833,"y":342},{"x":835,"y":323},{"x":841,"y":303},{"x":841,"y":283},{"x":840,"y":266},{"x":841,"y":249},{"x":839,"y":230},{"x":838,"y":206},{"x":827,"y":178},{"x":811,"y":145},{"x":793,"y":122},{"x":765,"y":100},{"x":732,"y":86},{"x":705,"y":77},{"x":673,"y":73},{"x":644,"y":64},{"x":601,"y":63},{"x":576,"y":63},{"x":544,"y":67},{"x":502,"y":86},{"x":467,"y":106},{"x":448,"y":129},{"x":433,"y":158},{"x":422,"y":195},{"x":414,"y":224},{"x":408,"y":248},{"x":411,"y":276},{"x":407,"y":300},{"x":406,"y":320},{"x":409,"y":349},{"x":414,"y":379},{"x":424,"y":402},{"x":432,"y":416},{"x":445,"y":443},{"x":466,"y":468},{"x":482,"y":483},{"x":501,"y":493},{"x":527,"y":504},{"x":554,"y":513},{"x":582,"y":514},{"x":618,"y":514},{"x":645,"y":519},{"x":669,"y":519},{"x":689,"y":516},{"x":718,"y":510},{"x":748,"y":495},{"x":773,"y":468},{"x":787,"y":449},{"x":805,"y":428},{"x":816,"y":406}]';
+const initialData = 'Ct5_Cc5yC75yBb60B75-Aw60AO609r679Z659U5r9U5c9U5R9U5B9L4-984x8r4w8q598o5N8p5Z8o5r8q688c648N648961875j845J814z824g814T8244813k7-3U833G882-8P2x8k2w8m368n3J8n3V8o3t8s4G974J9Q4H9Q439Q3m9Q3V9N3A9O309M2r9g2t9y2w9w3B9x3T9x3l9z429_4OA04m9-4zA15CA15XA55mA560Ah5-Ae5dAe5LAf56Ad4kAd4QAc4BAa3yAY3gAY3JAY37AZ2rAm2rA_2qBF2qBG38BI3PBI3iBI3wBI47BJ4OBJ4fBJ4vBI5DBK5YBK5oBM5-Bq60CN5zCr5uC-5fD15MD353D94lD94RD84AD93vD73cD63ECx2oCh2HCP1wBz1aBS1MB11DAX19A4109P0-900-8W137s1M7J1g70216n2U6c336U3W6O3u6R4K6N4i6M506P5T6U5x6e6I6m6W6z6x7I7K7Y7Z7r7j8F7u8g8196829g82A587AT87An84BE7_Bi7lC57KCJ71Cb6iCm6M';
 
 let pointDensity = 0.08;
 let window = { width: 0, height: 0 };
@@ -13,21 +13,8 @@ let wave;
 
 const B64LUT = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-';
 
-function toBase64(num) {
-  const rounded = Math.round(num);
-  const quo = Math.floor(rounded / 64);
-  const rem = rounded - quo * 64;
-  return B64LUT.charAt(quo) + B64LUT.charAt(rem);
-}
-
 function fromBase64(val) {
   return B64LUT.indexOf(val.charAt(0)) * 64 + B64LUT.indexOf(val.charAt(1))
-}
-
-function uriEncode(data) {
-  return data.reduce((encoded, { x, y }) => {
-    return encoded + `${toBase64(x)}${toBase64(y)}`;
-  }, '');
 }
 
 function uriDecode(data) {
@@ -158,13 +145,12 @@ function drawEpicycles(vals, centerX, centerY, isXAxis) {
 
 function reset() {
   const data = document.getElementById('data-input').value;
-  console.log(encodeURIComponent(uriEncode(JSON.parse(data))));
   pointDensity = document.getElementById('density').value;
 
   counter = 0;
   wave = [];
   inputSignal = { x: [], y: [] };
-  inputSignal = loadStartFunction(data);
+  inputSignal = loadStartFunction(uriDecode(data));
   outputSignal = {
     x: maths.dft(inputSignal.x).map(({ re, im }) => {
       const { r, a } = maths.toPolar(re, im);
@@ -183,7 +169,7 @@ function setup() {
   const { query } = dom.decodeURI();
   const message = query.m;
   const density = query.d;
-  document.getElementById('data-input').value = message ? uriDecode(message) : initialData;
+  document.getElementById('data-input').value = message || initialData;
   dom.tieButtonToHandler('reset', reset);
   dom.setPropertiesById('density', {
     value: density ? parseInt(density) * 0.01 : 0.16,
