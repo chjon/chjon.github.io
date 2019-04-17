@@ -1,17 +1,19 @@
 import * as maths from './math-utils.js';
 import * as sketch from './sketch.js';
+import * as dom from './dom-utils.js';
 import { Quadtree } from './data-structures/quadtree.js';
 
 const GRAB_RADIUS = 10;
 let clickedTree;
 
 const modeLabel = document.getElementById('mode-label');
-let mode = 'Drawing';
+let mode = 'Draw';
 let selected = undefined;
 let closest = undefined;
 let prevPoint = undefined;
 let selection = [];
 let mousePos = { x: 0, y: 0 };
+let startPoint = undefined;
 
 // Connect the two given objects
 function connect(a, b) {
@@ -39,11 +41,46 @@ function disconnect(toDisconnect) {
     toDisconnect.next.prev = undefined;
     toDisconnect.next = undefined;
   }
+
+  if (toDisconnect === startPoint) {
+    startPoint = undefined;
+  }
+}
+
+const B64LUT = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-';
+
+function toBase64(num) {
+  const rounded = Math.round(num);
+  const quo = Math.floor(rounded / 64);
+  const rem = rounded - quo * 64;
+  return B64LUT.charAt(quo) + B64LUT.charAt(rem);
+}
+
+function fromBase64(val) {
+  return B64LUT.indexOf(val.charAt(0)) * 64 + B64LUT.indexOf(val.charAt(1))
+}
+
+function uriEncode(data) {
+  return data.reduce((encoded, { x, y }) => {
+    return encoded + `${toBase64(x)}${toBase64(y)}`;
+  }, '');
+}
+
+function uriDecode(data) {
+  const decoded = [];
+  for (let i = 0; i < data.length; i = i + 4) {
+    decoded.push({
+      x: fromBase64(data.charAt(i + 0) + data.charAt(i + 1)),
+      y: fromBase64(data.charAt(i + 2) + data.charAt(i + 3)),
+    });
+  }
+  return JSON.stringify(decoded);
 }
 
 // Output a list of all the points after the current one
 function printFrom(startPoint) {
   if (!startPoint) {
+    alert('Cannot output; missing start point');
     return;
   }
 
@@ -54,7 +91,7 @@ function printFrom(startPoint) {
     curPoint = curPoint.next;
   }
 
-  console.log(JSON.stringify(toPrint));
+  return toPrint;
 }
 
 // Translate the currently selected points
@@ -171,9 +208,8 @@ document.onmousemove = (e) => {
     return;
   }
 
-  closest = clickedTree.getClosestWithin(e.pageX, e.pageY, GRAB_RADIUS * GRAB_RADIUS);
-  mousePos.x = e.pageX;
-  mousePos.y = e.pageY;
+  mousePos = sketch.getMousePos(e);
+  closest = clickedTree.getClosestWithin(mousePos.x, mousePos.y, GRAB_RADIUS * GRAB_RADIUS);
 }
 
 document.onmousedown = (e) => {
@@ -181,19 +217,34 @@ document.onmousedown = (e) => {
     return;
   }
 
-  if (mode === 'Drawing') {
+  const { x, y } = sketch.getMousePos(e);
+  const pageX = x;
+  const pageY = y;
+  if (
+    pageX < 0 ||
+    pageX >= sketch.getWidth() ||
+    pageY < 0 ||
+    pageY >= sketch.getHeight()
+  ) {
+    return;
+  }
+
+  if (mode === 'Draw') {
     // Add a new point
     if (!e.ctrlKey) {
-      closest = { x: e.pageX, y: e.pageY };
+      closest = { x: pageX, y: pageY };
       clickedTree.push(closest);
 
     // Remove an existing point
     } else if (closest) {
+      if (closest === startPoint) {
+        startPoint = undefined;
+      }
       disconnect(closest);
       clickedTree.pop(closest);
-      closest = clickedTree.getClosestWithin(e.pageX, e.pageY, GRAB_RADIUS * GRAB_RADIUS);
+      closest = clickedTree.getClosestWithin(pageX, pageY, GRAB_RADIUS * GRAB_RADIUS);
     }
-  } else if (mode === 'Connecting') {
+  } else if (mode === 'Connect') {
     // Disconnect point
     if (e.ctrlKey) {
       disconnect(closest);
@@ -203,23 +254,21 @@ document.onmousedown = (e) => {
       connect(selected, closest);
       selected = closest;
     }
-  } else if (mode === 'Moving') {
+  } else if (mode === 'Move') {
     if (prevPoint) {
-      move(e.pageX - prevPoint.x, e.pageY - prevPoint.y);
+      move(pageX - prevPoint.x, pageY - prevPoint.y);
       prevPoint = undefined;
     } else {
-      prevPoint = { x: e.pageX, y: e.pageY };
+      prevPoint = { x: pageX, y: pageY };
     }
-  } else if (mode === 'Printing') {
-    printFrom(closest);
-  } else if (mode === 'Rotating') {
+  } else if (mode === 'Rotate') {
     if (prevPoint) {
-      rotate(prevPoint.x, prevPoint.y, e.pageX, e.pageY);
+      rotate(prevPoint.x, prevPoint.y, pageX, pageY);
       prevPoint = undefined;
     } else {
-      prevPoint = { x: e.pageX, y: e.pageY };
+      prevPoint = { x: pageX, y: pageY };
     }
-  } else if (mode === 'Selecting') {
+  } else if (mode === 'Select') {
     if (closest) {
       if (e.ctrlKey) {
           deselect(closest);
@@ -227,7 +276,7 @@ document.onmousedown = (e) => {
           select(closest);
         }
     } else if (prevPoint) {
-      const foundPoints = clickedTree.getAllWithin(prevPoint.x, prevPoint.y, e.pageX, e.pageY);
+      const foundPoints = clickedTree.getAllWithin(prevPoint.x, prevPoint.y, pageX, pageY);
       foundPoints.forEach((obj) => {
         if (e.ctrlKey) {
           deselect(obj);
@@ -237,32 +286,40 @@ document.onmousedown = (e) => {
       });
       prevPoint = undefined;
     } else {
-      prevPoint = { x: e.pageX, y: e.pageY };
+      prevPoint = { x: pageX, y: pageY };
     }
-  } else if (mode === 'Scaling') {
+  } else if (mode === 'Scale') {
     if (prevPoint) {
-      scale(prevPoint.x, prevPoint.y, e.pageX, e.pageY);
+      scale(prevPoint.x, prevPoint.y, pageX, pageY);
       prevPoint = undefined;
     } else {
-      prevPoint = { x: e.pageX, y: e.pageY };
+      prevPoint = { x: pageX, y: pageY };
+    }
+  } else if (mode === 'Set start point') {
+    if (closest) {
+      startPoint = closest;
     }
   }
 }
 
-document.onkeyup = (e) => {
+function updateMode(keyCode) {
   if (!clickedTree) {
     return;
   }
 
-  switch (e.keyCode) {
+  switch (keyCode) {
     // Cancel current operation
     case 27:
+      selected = undefined;
       prevPoint = undefined;
       break;
 
     // Delete selection
     case 46:
       selection.forEach((obj) => {
+        if (obj === startPoint) {
+          startPoint = undefined;
+        }
         clickedTree.pop(obj);
       });
       selection = [];
@@ -270,20 +327,20 @@ document.onkeyup = (e) => {
 
     // Switch to drawing mode
     case 'D'.charCodeAt(0):
-      mode = 'Drawing';
+      mode = 'Draw';
       selected = undefined;
       selection = [];
       break;
 
     // Switch to connecting mode
     case 'C'.charCodeAt(0):
-      mode = 'Connecting';
+      mode = 'Connect';
       selection = [];
       break;
     
     // Switch to moving mode
     case 'M'.charCodeAt(0):
-      mode = 'Moving';
+      mode = 'Move';
       selected = undefined;
       break;
 
@@ -294,29 +351,30 @@ document.onkeyup = (e) => {
 
     // Output the points in order of connection if all of them are connected
     case 'P'.charCodeAt(0):
-      mode = 'Printing';
+      mode = 'Set start point';
+      selected = undefined;
       break;
 
     // Switch to rotating mode
     case 'R'.charCodeAt(0):
-      mode = 'Rotating';
+      mode = 'Rotate';
       selected = undefined;
       break;
 
     // Switch to selecting mode
     case 'S'.charCodeAt(0):
-      mode = 'Selecting';
+      mode = 'Select';
       selected = undefined;
       break;
 
     // Switch to scaling mode
     case 'T'.charCodeAt(0):
-      mode = 'Scaling';
+      mode = 'Scale';
       selected = undefined;
       break;
 
     case 'V'.charCodeAt(0):
-      mode = 'Viewing';
+      mode = 'View';
       selected = undefined;
       selection = [];
       break;
@@ -325,17 +383,108 @@ document.onkeyup = (e) => {
       break;
   }
 
-  modeLabel.textContent='Current mode: ' + mode;
+  modeLabel.textContent = 'Current mode: ' + mode;
+}
+
+document.onkeyup = (e) => {
+  updateMode(e.keyCode);
+}
+
+function scaleAndShift(data, width, height, shiftX, shiftY) {
+  const limits = data.reduce((limits, { x, y }) => {
+    limits.minX = Math.min(limits.minX, x);
+    limits.maxX = Math.max(limits.maxX, x);
+    limits.minY = Math.min(limits.minY, y);
+    limits.maxY = Math.max(limits.maxY, y);
+    return limits;
+  }, { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity });
+  const range = {
+    x: limits.maxX - limits.minX,
+    y: limits.maxY - limits.minY,
+  }
+  const scaleFactors = {
+    x: width ? width / range.x : 0,
+    y: height ? height / range.y : 0,
+  }
+  const scaleFactor = (range.x * scaleFactors.y <= width) ? scaleFactors.y : scaleFactors.x;
+  const offset = {
+    x: (width - (limits.maxX - limits.minX) * scaleFactor) / 2,
+    y: (height - (limits.maxY - limits.minY) * scaleFactor) / 2,
+  }
+  return data.map(({ x, y }) => {
+    const scaled = {
+      x: (x - limits.minX) * scaleFactor,
+      y: (y - limits.minY) * scaleFactor,
+    };
+    const centered = {
+      x: scaled.x + offset.x,
+      y: scaled.y + offset.y,
+    };
+    const shifted = {
+      x: centered.x + shiftX,
+      y: centered.y + shiftY,
+    }
+    return shifted;
+  });
+}
+
+function dataImport() {
+  clickedTree.clear();
+  selection = [];
+  selected = undefined;
+  prevPoint = undefined;
+  startPoint = undefined;
+  const points = JSON.parse(uriDecode(document.getElementById('data').value));
+  const scaledPoints = scaleAndShift(
+    points,
+    0.8 * sketch.getWidth(),
+    0.8 * sketch.getHeight(),
+    0.1 * sketch.getWidth(),
+    0.1 * sketch.getHeight(),
+  );
+  for (let i = 0; i < scaledPoints.length; i++) {
+    scaledPoints[i].next = scaledPoints[(i + 1) % scaledPoints.length];
+    scaledPoints[i].prev = scaledPoints[(i + scaledPoints.length - 1) % scaledPoints.length];
+    clickedTree.push(scaledPoints[i]);
+  }
+}
+
+function dataExport() {
+  // Check connections
+  const isDisconnected = clickedTree.getAll().find(({ next }) => {
+    return !next;
+  });
+  if (isDisconnected) {
+    alert('Cannot output; points must be connected');
+    return;
+  }
+
+  const data = printFrom(startPoint);
+  if (data) {
+    const scaledData = scaleAndShift(data, 64 * 64 - 1, 64 * 64 - 1, 0, 0);
+    document.getElementById('data').value = uriEncode(scaledData);
+  }
 }
 
 function setup() {
   sketch.setFrameInterval(20);
   clickedTree = new Quadtree(0, 0, sketch.getWidth(), sketch.getHeight(), 4, 6);
+  dom.tieButtonToHandler('mode-draw', () => { updateMode('D'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-connect', () => { updateMode('C'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-select', () => { updateMode('S'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-move', () => { updateMode('M'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-rotate', () => { updateMode('R'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-scale', () => { updateMode('T'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-view', () => { updateMode('V'.charCodeAt(0)); });
+  dom.tieButtonToHandler('mode-set-start', () => { updateMode('P'.charCodeAt(0)); });
+
+  dom.tieButtonToHandler('data-output', dataExport);
+  dom.tieButtonToHandler('data-input', dataImport);
 }
 
 function draw() {
   sketch.setStroke('#FFFFFF');
-  if (mode === 'Viewing') {
+  if (mode === 'View') {
     drawQuadtree(clickedTree, 1);
   } else {
     drawQuadtree(clickedTree, 5);
@@ -368,11 +517,15 @@ function draw() {
   });
 
   if (prevPoint) {
-    if (mode === 'Selecting') {
+    if (mode === 'Select') {
       sketch.rect(prevPoint.x, prevPoint.y, mousePos.x, mousePos.y);
-    } else if (mode === 'Moving' || mode === 'Scaling' || mode === 'Rotating') {
+    } else if (mode === 'Move' || mode === 'Scale' || mode === 'Rotate') {
       sketch.line(prevPoint.x, prevPoint.y, mousePos.x, mousePos.y);
     }
+  }
+
+  if (mode === 'Set start point' && startPoint) {
+    sketch.ellipse(startPoint.x, startPoint.y, GRAB_RADIUS, GRAB_RADIUS);
   }
 }
 

@@ -14,6 +14,14 @@ export function getHeight() {
   return canvas.height;
 }
 
+export function getMousePos({ clientX, clientY }) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (clientX - rect.left) * canvas.width / rect.width,
+    y: (clientY - rect.top) * canvas.height / rect.height,
+  };
+}
+
 // Setters
 
 export function setFrameInterval(newInterval) {
