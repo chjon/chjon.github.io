@@ -252,3 +252,51 @@ export function shuffleList(list = []) {
 
   return list;
 }
+
+/**
+ * Linearly map a value from one range to another
+ * @param { number } sourceVal the value in the source range
+ * @param { number } sourceLo the lower end of the source range
+ * @param { number } sourceHi the upper end of the source range
+ * @param { number } targetLo the lower end of the target range
+ * @param { number } targetHi the upper end of the target range
+ */
+export function linearMap(sourceVal, sourceLo, sourceHi, targetLo, targetHi) {
+  return (sourceVal - sourceLo) * (targetHi - targetLo) / (sourceHi - sourceLo) + targetLo;
+}
+
+/**
+ * Get the scale factors to scale the source to the target
+ * @param {{ x: number, y: number }} source 
+ * @param {{ x: number, y: number }} target 
+ * @param { boolean } preserveAspectRatio Whether to preserve the aspect ratio
+ * 
+ * @returns {{ x: number, y: number }}
+ */
+export function getScaleForBounds(source, target, preserveAspectRatio = false) {
+  const scaleFactors = {
+    x: target.x / source.x,
+    y: target.y / source.y,
+  };
+
+  if (!preserveAspectRatio) {
+    return scaleFactors;
+  }
+
+  const scaleFactor = (scaleFactors.y * source.x > target.x)
+    ? (scaleFactors.x)
+    : (scaleFactors.y);
+
+  return { x: scaleFactor, y: scaleFactor };
+}
+
+/**
+ * Get the distance between the centers of the two ranges
+ * @param { number } sourceLo the lower end of the source range
+ * @param { number } sourceHi the upper end of the source range
+ * @param { number } targetLo the lower end of the target range
+ * @param { number } targetHi the upper end of the target range
+ */
+export function getOffsetToCenter(sourceLo, sourceHi, targetLo, targetHi) {
+  return ((targetHi - targetLo) - (sourceHi - sourceLo)) / 2;
+}
