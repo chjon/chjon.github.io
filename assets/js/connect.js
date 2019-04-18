@@ -2,14 +2,16 @@ import * as sketch from './sketch.js';
 import * as maths from './math-utils.js';
 import * as arrays from './array-utils.js';
 
-const dimensions = { x: 16, y: 9 };
-const board = arrays.newNDArray([dimensions.x, dimensions.y], null);
-let scaleFactors = { x: 0, y: 0 };
-let offsetToCenter = { x: 0, y: 0 };
+const dimensions = { x: 7, y: 6 };
+let board;
+let scaleFactors;
+let offsetToCenter;
+let boardPos = { x: 0, y: 0 };
+let curTurn = 1;
 
-document.onmouseup = function(e) {
+function onMouseMove(e) {
   const mousePos = sketch.getMousePos(e);
-  const boardPos = {
+  boardPos = {
     x: Math.floor(maths.linearMap(
       mousePos.x - offsetToCenter.x,
       0, dimensions.x * scaleFactors.x,
@@ -21,50 +23,86 @@ document.onmouseup = function(e) {
       0, dimensions.y,
     )),
   };
-  board[boardPos.x][boardPos.y] = 1;
+}
+
+function onMouseUp(e) {
+  // Ensure mouse is on canvas
+  if (
+    boardPos.x < 0 || boardPos.x >= dimensions.x ||
+    boardPos.y < 0 || boardPos.y >= dimensions.y
+  ) {
+    return;
+  }
+
+  // Find the bottom-most spot
+  let freeRow = dimensions.y - 1;
+  while (freeRow >= 0 && board[boardPos.x][freeRow]) {
+    freeRow--;
+  }
+
+  if (freeRow === -1) {
+    return;
+  }
+
+  board[boardPos.x][freeRow] = curTurn;
+  curTurn = curTurn % 2 + 1;
 }
 
 function setup() {
+  document.onmousemove = onMouseMove;
+  document.onmouseup = onMouseUp;
+
+  board = arrays.newNDArray([dimensions.x, dimensions.y], 0);
   scaleFactors = maths.getScaleForBounds(
-    dimensions,
+    { x: dimensions.x, y: dimensions.y + 1 },
     { x: sketch.getWidth(), y: sketch.getHeight() },
     true,
   );
 
   offsetToCenter = {
     x: maths.getOffsetToCenter(0, dimensions.x * scaleFactors.x, 0, sketch.getWidth()),
-    y: maths.getOffsetToCenter(0, dimensions.y * scaleFactors.y, 0, sketch.getHeight()),
+    y: maths.getOffsetToCenter(0, dimensions.y * scaleFactors.y, 0, sketch.getHeight() + scaleFactors.y),
   };
 }
 
+function drawPieceAt(x, y) {
+  const screenPos = {
+    x: x * scaleFactors.x,
+    y: y * scaleFactors.y,
+  };
+  sketch.ellipse(
+    screenPos.x + scaleFactors.x / 2,
+    screenPos.y + scaleFactors.y / 2,
+    scaleFactors.x / 2,
+    scaleFactors.y / 2,
+  );
+}
+
+function getColorForTeam(team) {
+  switch(team) {
+    case 1:
+      return '#00FF00';
+    case 2:
+      return '#FF0000';
+    default:
+      return '#333333';
+  }
+}
+
 function draw() {
-  sketch.setStroke('#FFFFFF');
-  // Draw board
   sketch.pushState();
   sketch.translate(offsetToCenter.x, offsetToCenter.y);
-  arrays.forEach(board, (boardVal, [x, y]) => {
-    switch(boardVal) {
-      case 1:
-        sketch.setFill('#00FF00');
-        break;
-      case 2:
-        sketch.setFill('#FF0000');
-        break;
-      default:
-        sketch.setFill('#FFFFFF');
-        break;
-    }
 
-    const screenPos = {
-      x: x * scaleFactors.x,
-      y: y * scaleFactors.y,
-    };
-    sketch.fillRect(
-      screenPos.x,
-      screenPos.y,
-      screenPos.x + scaleFactors.x,
-      screenPos.y + scaleFactors.y,
-    );
+  // Draw selected row indicator
+  sketch.setStroke(getColorForTeam(curTurn));
+  if (boardPos.x >= 0 && boardPos.x < dimensions.x) {
+    drawPieceAt(boardPos.x, -1);
+  }
+
+  // Draw board contents
+  arrays.forEach(board, (boardVal, [x, y]) => {
+    sketch.setStroke(getColorForTeam(boardVal));
+    drawPieceAt(x, y);
   });
   sketch.popState();
 }
