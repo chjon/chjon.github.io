@@ -3,11 +3,23 @@ import * as maths from './math-utils.js';
 import * as arrays from './array-utils.js';
 
 const dimensions = { x: 7, y: 6 };
+const teamColours = [
+  '#FF0000',
+  '#00FF00',
+];
 let board;
+let rowBottom;
+let remainingMoves;
 let scaleFactors;
 let offsetToCenter;
 let boardPos = { x: 0, y: 0 };
-let curTurn = 1;
+let curTurn = 0;
+
+function reset() {
+  board = arrays.newNDArray([dimensions.x, dimensions.y], undefined);
+  rowBottom = arrays.newNDArray([dimensions.x], dimensions.y - 1);
+  remainingMoves = dimensions.x;
+}
 
 function onMouseMove(e) {
   const mousePos = sketch.getMousePos(e);
@@ -34,35 +46,39 @@ function onMouseUp(e) {
     return;
   }
 
-  // Find the bottom-most spot
-  let freeRow = dimensions.y - 1;
-  while (freeRow >= 0 && board[boardPos.x][freeRow]) {
-    freeRow--;
-  }
-
-  if (freeRow === -1) {
+  if (remainingMoves === 0) {
+    reset();
     return;
   }
 
-  board[boardPos.x][freeRow] = curTurn;
-  curTurn = curTurn % 2 + 1;
+  // Find the bottom-most spot
+  if (rowBottom[boardPos.x] === -1) {
+    return;
+  }
+
+  board[boardPos.x][rowBottom[boardPos.x]] = curTurn;
+  rowBottom[boardPos.x]--;
+  curTurn = (curTurn + 1) % teamColours.length;
+
+  if (rowBottom[boardPos.x] === -1) {
+    remainingMoves--;
+  }
 }
 
 function setup() {
   document.onmousemove = onMouseMove;
   document.onmouseup = onMouseUp;
-
-  board = arrays.newNDArray([dimensions.x, dimensions.y], 0);
   scaleFactors = maths.getScaleForBounds(
     { x: dimensions.x, y: dimensions.y + 1 },
     { x: sketch.getWidth(), y: sketch.getHeight() },
     true,
   );
-
   offsetToCenter = {
     x: maths.getOffsetToCenter(0, dimensions.x * scaleFactors.x, 0, sketch.getWidth()),
     y: maths.getOffsetToCenter(0, dimensions.y * scaleFactors.y, 0, sketch.getHeight() + scaleFactors.y),
   };
+
+  reset();
 }
 
 function drawPieceAt(x, y) {
@@ -79,14 +95,8 @@ function drawPieceAt(x, y) {
 }
 
 function getColorForTeam(team) {
-  switch(team) {
-    case 1:
-      return '#00FF00';
-    case 2:
-      return '#FF0000';
-    default:
-      return '#333333';
-  }
+  if (team === undefined) return '#333333';
+  return teamColours[team];
 }
 
 function draw() {
