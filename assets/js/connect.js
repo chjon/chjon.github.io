@@ -144,12 +144,12 @@ function onMouseUp(e) {
 }
 
 function setup() {
-  const { c, r, v } = dom.decodeURI().query;
+  const { c, r, n } = dom.decodeURI().query;
   dimensions = {
     x: c ? parseInt(c) : 7,
     y: r ? parseInt(r) : 6,
   };
-  valToWin = v ? parseInt(v) : 4;
+  valToWin = n ? parseInt(n) : 4;
 
   document.onmousemove = onMouseMove;
   document.onmouseup = onMouseUp;
