@@ -95,6 +95,10 @@ function onMouseUp(e) {
 
   // Update spot
   const selected = { x: boardPos.x, y: rowBottom[boardPos.x] };
+  rowBottom[boardPos.x]--;
+  if (rowBottom[boardPos.x] === -1) {
+    remainingMoves--;
+  }
 
   const increasing = 1 +
     getChainLength({ x: selected.x - 1, y: selected.y - 1 }, { x: -1, y: -1 }) +
@@ -135,12 +139,7 @@ function onMouseUp(e) {
     vertical,
   };
 
-  rowBottom[boardPos.x]--;
   curTurn = (curTurn + 1) % teamColours.length;
-
-  if (rowBottom[boardPos.x] === -1) {
-    remainingMoves--;
-  }
 }
 
 function setup() {
