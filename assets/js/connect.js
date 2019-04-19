@@ -162,6 +162,7 @@ function setup() {
     x: maths.getOffsetToCenter(0, dimensions.x * scaleFactors.x, 0, sketch.getWidth()),
     y: maths.getOffsetToCenter(0, dimensions.y * scaleFactors.y, 0, sketch.getHeight() + scaleFactors.y),
   };
+  sketch.setLineWidth(2);
 
   reset();
 }
