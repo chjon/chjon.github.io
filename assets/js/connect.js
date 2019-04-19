@@ -3,6 +3,7 @@ import * as maths from './math-utils.js';
 import * as arrays from './array-utils.js';
 
 const dimensions = { x: 7, y: 6 };
+const valToWin = 4;
 const teamColours = [
   '#FF0000',
   '#00FF00',
@@ -15,8 +16,33 @@ let offsetToCenter;
 let boardPos = { x: 0, y: 0 };
 let curTurn = 0;
 
+function isOnBoard(x, y, dimensions) {
+  return (
+    x >= 0 && x < dimensions.x &&
+    y >= 0 && y < dimensions.y
+  );
+}
+
+function getChainLength(pos, vel) {
+  if (!isOnBoard(pos.x, pos.y, dimensions) || board[pos.x][pos.y].team != curTurn) {
+    return 0;
+  }
+
+  const newPos = { x: pos.x + vel.x, y: pos.y + vel.y };
+  return getChainLength(newPos, vel) + 1;
+}
+
 function reset() {
   board = arrays.newNDArray([dimensions.x, dimensions.y], undefined);
+  arrays.forEach(board, (val, [x, y]) => {
+    board[x][y] = {
+      team: undefined,
+      increasing: 0,
+      decreasing: 0,
+      horizontal: 0,
+      vertical: 0,
+    };
+  });
   rowBottom = arrays.newNDArray([dimensions.x], dimensions.y - 1);
   remainingMoves = dimensions.x;
 }
@@ -56,7 +82,39 @@ function onMouseUp(e) {
     return;
   }
 
-  board[boardPos.x][rowBottom[boardPos.x]] = curTurn;
+  // Update spot
+  const selected = { x: boardPos.x, y: rowBottom[boardPos.x] };
+
+  const increasing = 1 +
+    getChainLength({ x: selected.x - 1, y: selected.y - 1 }, { x: -1, y: -1 }) +
+    getChainLength({ x: selected.x + 1, y: selected.y + 1 }, { x:  1, y:  1 });
+  const decreasing = 1 +
+    getChainLength({ x: selected.x - 1, y: selected.y + 1 }, { x: -1, y:  1 }) +
+    getChainLength({ x: selected.x + 1, y: selected.y - 1 }, { x:  1, y: -1 });
+  const horizontal = 1 +
+    getChainLength({ x: selected.x - 1, y: selected.y }, { x: -1, y: 0 }) +
+    getChainLength({ x: selected.x + 1, y: selected.y }, { x:  1, y: 0 });
+  const vertical = 1 +
+    getChainLength({ x: selected.x, y: selected.y + 1 }, { x: 0, y: 1 });
+
+  board[selected.x][selected.y] = {
+    team: curTurn,
+    increasing,
+    decreasing,
+    horizontal,
+    vertical,
+  };
+
+  // Check if the game is over
+  if (
+    increasing >= valToWin ||
+    decreasing >= valToWin ||
+    horizontal >= valToWin ||
+    vertical >= valToWin
+  ) {
+    remainingMoves = 0;
+  }
+
   rowBottom[boardPos.x]--;
   curTurn = (curTurn + 1) % teamColours.length;
 
@@ -81,7 +139,7 @@ function setup() {
   reset();
 }
 
-function drawPieceAt(x, y) {
+function drawPieceAt(x, y, scale = 1) {
   const screenPos = {
     x: x * scaleFactors.x,
     y: y * scaleFactors.y,
@@ -89,8 +147,8 @@ function drawPieceAt(x, y) {
   sketch.ellipse(
     screenPos.x + scaleFactors.x / 2,
     screenPos.y + scaleFactors.y / 2,
-    scaleFactors.x / 2,
-    scaleFactors.y / 2,
+    scale * scaleFactors.x / 2,
+    scale * scaleFactors.y / 2,
   );
 }
 
@@ -104,15 +162,24 @@ function draw() {
   sketch.translate(offsetToCenter.x, offsetToCenter.y);
 
   // Draw selected row indicator
-  sketch.setStroke(getColorForTeam(curTurn));
+  sketch.setStroke(getColorForTeam(remainingMoves ? curTurn : undefined));
   if (boardPos.x >= 0 && boardPos.x < dimensions.x) {
     drawPieceAt(boardPos.x, -1);
   }
 
   // Draw board contents
-  arrays.forEach(board, (boardVal, [x, y]) => {
-    sketch.setStroke(getColorForTeam(boardVal));
+  arrays.forEach(board, ({ team, increasing, decreasing, horizontal, vertical }, [x, y]) => {
+    sketch.setStroke(getColorForTeam(team));
     drawPieceAt(x, y);
+
+    if (
+      increasing >= valToWin ||
+      decreasing >= valToWin ||
+      horizontal >= valToWin ||
+      vertical >= valToWin
+    ) {
+      drawPieceAt(x, y, 0.5)
+    }
   });
   sketch.popState();
 }
