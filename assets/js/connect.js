@@ -32,6 +32,16 @@ function getChainLength(pos, vel) {
   return getChainLength(newPos, vel) + 1;
 }
 
+function setChainProperty(pos, vel, key, val) {
+  if (!isOnBoard(pos.x, pos.y, dimensions) || board[pos.x][pos.y].team != curTurn) {
+    return 0;
+  }
+
+  board[pos.x][pos.y][key] = val;
+  const newPos = { x: pos.x + vel.x, y: pos.y + vel.y };
+  return setChainProperty(newPos, vel, key, val);
+}
+
 function reset() {
   board = arrays.newNDArray([dimensions.x, dimensions.y], undefined);
   arrays.forEach(board, (val, [x, y]) => {
@@ -88,14 +98,33 @@ function onMouseUp(e) {
   const increasing = 1 +
     getChainLength({ x: selected.x - 1, y: selected.y - 1 }, { x: -1, y: -1 }) +
     getChainLength({ x: selected.x + 1, y: selected.y + 1 }, { x:  1, y:  1 });
+  if (increasing >= valToWin) {
+    setChainProperty({ x: selected.x - 1, y: selected.y - 1 }, { x: -1, y: -1 }, 'increasing', increasing);
+    setChainProperty({ x: selected.x + 1, y: selected.y + 1 }, { x:  1, y:  1 }, 'increasing', increasing);
+    remainingMoves = 0;
+  }
   const decreasing = 1 +
     getChainLength({ x: selected.x - 1, y: selected.y + 1 }, { x: -1, y:  1 }) +
     getChainLength({ x: selected.x + 1, y: selected.y - 1 }, { x:  1, y: -1 });
+  if (decreasing >= valToWin) {
+    setChainProperty({ x: selected.x - 1, y: selected.y + 1 }, { x: -1, y:  1 }, 'decreasing', decreasing);
+    setChainProperty({ x: selected.x + 1, y: selected.y - 1 }, { x:  1, y: -1 }, 'decreasing', decreasing);
+    remainingMoves = 0;
+  }
   const horizontal = 1 +
     getChainLength({ x: selected.x - 1, y: selected.y }, { x: -1, y: 0 }) +
     getChainLength({ x: selected.x + 1, y: selected.y }, { x:  1, y: 0 });
+  if (horizontal >= valToWin) {
+    setChainProperty({ x: selected.x - 1, y: selected.y }, { x: -1, y: 0 }, 'horizontal', horizontal);
+    setChainProperty({ x: selected.x + 1, y: selected.y }, { x:  1, y: 0 }, 'horizontal', horizontal);
+    remainingMoves = 0;
+  }
   const vertical = 1 +
     getChainLength({ x: selected.x, y: selected.y + 1 }, { x: 0, y: 1 });
+  if (vertical >= valToWin) {
+    setChainProperty({ x: selected.x, y: selected.y + 1 }, { x: 0, y: 1 }, 'vertical', vertical);
+    remainingMoves = 0;
+  }
 
   board[selected.x][selected.y] = {
     team: curTurn,
@@ -104,16 +133,6 @@ function onMouseUp(e) {
     horizontal,
     vertical,
   };
-
-  // Check if the game is over
-  if (
-    increasing >= valToWin ||
-    decreasing >= valToWin ||
-    horizontal >= valToWin ||
-    vertical >= valToWin
-  ) {
-    remainingMoves = 0;
-  }
 
   rowBottom[boardPos.x]--;
   curTurn = (curTurn + 1) % teamColours.length;
@@ -139,7 +158,7 @@ function setup() {
   reset();
 }
 
-function drawPieceAt(x, y, scale = 1) {
+function drawPieceAt(x, y, scale = 0.9) {
   const screenPos = {
     x: x * scaleFactors.x,
     y: y * scaleFactors.y,
