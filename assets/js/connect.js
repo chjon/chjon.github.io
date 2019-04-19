@@ -1,9 +1,10 @@
 import * as sketch from './sketch.js';
 import * as maths from './math-utils.js';
 import * as arrays from './array-utils.js';
+import * as dom from './dom-utils.js';
 
-const dimensions = { x: 7, y: 6 };
-const valToWin = 4;
+let dimensions;
+let valToWin;
 const teamColours = [
   '#FF0000',
   '#00FF00',
@@ -143,6 +144,13 @@ function onMouseUp(e) {
 }
 
 function setup() {
+  const { c, r, v } = dom.decodeURI().query;
+  dimensions = {
+    x: c ? parseInt(c) : 7,
+    y: r ? parseInt(r) : 6,
+  };
+  valToWin = v ? parseInt(v) : 4;
+
   document.onmousemove = onMouseMove;
   document.onmouseup = onMouseUp;
   scaleFactors = maths.getScaleForBounds(
