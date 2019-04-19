@@ -1,6 +1,6 @@
 /**
  * Generate an n-dimensional array
- * @param {number} dimensions - the dimensions for the new array
+ * @param {number[]} dimensions - the dimensions for the new array
  * @param {any} initValue - the initial value for each element
  */
 export function newNDArray(dimensions, initValue) {
