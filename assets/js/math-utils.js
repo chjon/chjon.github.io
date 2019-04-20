@@ -239,7 +239,7 @@ export function randInt(min = 0, max = 1) {
 }
 
 /**
- * Put a list into a random number (mutates the list)
+ * Put a list into a random order (mutates the list)
  * @param {any[]} list - the list to shuffle
  */
 export function shuffleList(list = []) {
