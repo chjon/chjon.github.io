@@ -7,6 +7,8 @@ let dimensions;
 let board;
 let scaleFactors;
 let offsetToCenter;
+const candidateValues = [0, 1, 2];
+const pow = [1];
 
 function generateTiles(board, values, numTiles = 1) {
   const freeSpots = [];
@@ -156,7 +158,7 @@ function onKeyDown(e) {
   }
 
   if (!performedMerge && performedMove) {
-    generateTiles(board, [0, 1, 2]);
+    generateTiles(board, candidateValues);
   }
 }
 
@@ -178,9 +180,14 @@ function setup() {
   sketch.setFill('#FFFFFF');
   sketch.textAlign('center');
   sketch.textBaseline('middle');
-  sketch.textStyle(`${Math.floor(scaleFactors.x / 2)}px Helvetica`);
+  sketch.textStyle(`${Math.floor(scaleFactors.x * 0.33)}px Helvetica`);
 
-  generateTiles(board, [0, 1, 2]);
+  generateTiles(board, candidateValues);
+
+  const maxPow = dimensions.x * dimensions.y;
+  for (let i = 1; i < maxPow; i++) {
+    pow[i] = pow[i - 1] << 1;
+  } 
 }
 
 function draw() {
@@ -203,7 +210,7 @@ function draw() {
     sketch.text(
       screenPos.x + scaleFactors.x / 2,
       screenPos.y + scaleFactors.y / 2,
-      (val === undefined) ? '' : `${val}`,
+      (val === undefined) ? '' : `${pow[val]}`,
       true,
     );
   });
