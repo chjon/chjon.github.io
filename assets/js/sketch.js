@@ -92,6 +92,26 @@ export function setFill(style) {
   ctx.fillStyle = style;
 }
 
+export function textStyle(style) {
+  ctx.font = style;
+}
+
+export function textAlign(style) {
+  ctx.textAlign = style;
+}
+
+export function textBaseline(style) {
+  ctx.textBaseline = style;
+}
+
+export function text(x, y, message, fill = false) {
+  if (fill) {
+    ctx.fillText(message, x, y);
+  } else {
+    ctx.strokeText(message, x, y);
+  }
+}
+
 export function line(x1, y1, x2, y2) {
   ctx.save();
   ctx.beginPath();
