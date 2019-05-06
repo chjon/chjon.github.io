@@ -1,7 +1,6 @@
 import * as maths from './math-utils.js';
 import * as arrays from './array-utils.js';
 import * as sketch from './sketch.js';
-import * as dom from './dom-utils.js';
 
 let dimensions;
 let board;
