@@ -1,6 +1,7 @@
 import * as maths from './math-utils.js';
 import * as arrays from './array-utils.js';
 import * as sketch from './sketch.js';
+import * as dom from './dom-utils.js';
 
 let dimensions;
 let board;
@@ -163,7 +164,11 @@ function onKeyDown(e) {
 
 function setup() {
   document.onkeydown = onKeyDown;
-  dimensions = { x: 4, y: 4 };
+  const { r, c } = dom.decodeURI().query;
+  dimensions = {
+    x: c || 4,
+    y: r || 4,
+  };
   board = arrays.newNDArray([dimensions.x, dimensions.y], undefined);
   scaleFactors = maths.getScaleForBounds(
     { x: dimensions.x, y: dimensions.y },
