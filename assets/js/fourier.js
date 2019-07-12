@@ -5,7 +5,7 @@ import * as sketch from './sketch.js';
 const initialData = 'Ct5_Cc5yC75yBb60B75-Aw60AO609r679Z659U5r9U5c9U5R9U5B9L4-984x8r4w8q598o5N8p5Z8o5r8q688c648N648961875j845J814z824g814T8244813k7-3U833G882-8P2x8k2w8m368n3J8n3V8o3t8s4G974J9Q4H9Q439Q3m9Q3V9N3A9O309M2r9g2t9y2w9w3B9x3T9x3l9z429_4OA04m9-4zA15CA15XA55mA560Ah5-Ae5dAe5LAf56Ad4kAd4QAc4BAa3yAY3gAY3JAY37AZ2rAm2rA_2qBF2qBG38BI3PBI3iBI3wBI47BJ4OBJ4fBJ4vBI5DBK5YBK5oBM5-Bq60CN5zCr5uC-5fD15MD353D94lD94RD84AD93vD73cD63ECx2oCh2HCP1wBz1aBS1MB11DAX19A4109P0-900-8W137s1M7J1g70216n2U6c336U3W6O3u6R4K6N4i6M506P5T6U5x6e6I6m6W6z6x7I7K7Y7Z7r7j8F7u8g8196829g82A587AT87An84BE7_Bi7lC57KCJ71Cb6iCm6M';
 
 let pointDensity = 0.08;
-let depth = 1;
+let numCircles = 0;
 let window = { width: 0, height: 0 };
 let counter = 0;
 let inputSignal = { x: [], y: [] };
@@ -108,7 +108,7 @@ function drawEpicycles(vals, centerX, centerY) {
   const time = counter * maths.TWO_PI / vals.length;
   const endPoint = { x: centerX, y: centerY };
 
-  for (let freq = 0; freq < depth * vals.length; freq = freq + 1) {
+  for (let freq = 0; freq < numCircles; freq = freq + 1) {
     const val = vals[freq];
     if (!val.r) continue;
 
@@ -131,8 +131,7 @@ function drawEpicycles(vals, centerX, centerY) {
 function reset() {
   const data = document.getElementById('data-input').value;
   pointDensity = document.getElementById('density').value;
-  depth = document.getElementById('depth').value;
-
+  
   counter = 0;
   wave = [];
   inputSignal = { x: [], y: [] };
@@ -140,6 +139,10 @@ function reset() {
   outputSignal = maths.cft(inputSignal).map(({ re, im }) => {
     return maths.toPolar(re, im);
   });
+  
+  const depth = document.getElementById('depth').value;
+  numCircles = Math.floor(outputSignal.length * depth);
+  dom.setPropertiesById('num-circles', { value: numCircles });
 }
 
 function setup() {
@@ -158,7 +161,7 @@ function setup() {
     max: 0.2,
   });
   dom.setPropertiesById('depth', {
-    value: depth ? parseInt(depth) : 1,
+    value: depth ? parseInt(depth) * 0.001 : 1,
     step: 0.001,
     min: 0,
     max: 1,
@@ -167,7 +170,7 @@ function setup() {
 }
 
 function draw() {
-  sketch.setStroke('rgba(255, 255, 255, 0.1)');
+  sketch.setStroke('rgba(255, 255, 255, 0.2)');
   const point = drawEpicycles(outputSignal, window.width * 0.5, window.height * 0.5);
 
   sketch.setStroke('#FFFFFF');

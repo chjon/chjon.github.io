@@ -21,6 +21,10 @@ script: /assets/js/fourier.js
     <input id="depth" type="number" class="control-number">
   </div>
   <div class="control-row">
+    <p>Num circles</p>
+    <input id="num-circles" type="number" class="control-number" disabled>
+  </div>
+  <div class="control-row">
     <button id="reset" class="control-button">Reset</button>
   </div>
 </div>
