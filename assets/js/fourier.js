@@ -8,7 +8,7 @@ let pointDensity = 0.08;
 let window = { width: 0, height: 0 };
 let counter = 0;
 let inputSignal = { x: [], y: [] };
-let outputSignal = { x: [], y: [] };
+let outputSignal = [];
 let wave;
 
 const B64LUT = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-';
@@ -46,13 +46,13 @@ function scaleAndShift(data, width, height, shiftX, shiftY) {
   }
   const scaleFactor = (range.x * scaleFactors.y <= width) ? scaleFactors.y : scaleFactors.x;
   const offset = {
-    x: (width - (limits.maxX - limits.minX) * scaleFactor) / 2,
-    y: (height - (limits.maxY - limits.minY) * scaleFactor) / 2,
+    x: (width - (limits.maxX - limits.minX) * scaleFactors.x) / 2,
+    y: (height - (limits.maxY - limits.minY) * scaleFactors.y) / 2,
   }
   return data.map(({ x, y }) => {
     const scaled = {
-      x: (x - limits.minX) * scaleFactor,
-      y: (y - limits.minY) * scaleFactor,
+      x: (x - limits.minX - (limits.maxX - limits.minX) / 2) * scaleFactor,
+      y: (y - limits.minY - (limits.maxY - limits.minY) / 2) * scaleFactor,
     };
     const centered = {
       x: scaled.x + offset.x,
@@ -72,10 +72,10 @@ function loadStartFunction(inputString) {
   });
   let points = scaleAndShift(
     rawData,
-    0.5 * window.width,
-    0.5 * window.height,
-    0.1 * window.width,
-    0.1 * window.height,
+    0.75 * window.width,
+    0.75 * window.height,
+    0,
+    0,
   );
   
   let totalDist = 0;
@@ -84,17 +84,8 @@ function loadStartFunction(inputString) {
   }
   totalDist += maths.dist(points[points.length - 1].x, points[points.length - 1].y, points[0].x, points[0].y);
   const numPoints = Math.floor(totalDist * pointDensity);
-
   points = maths.interpolate(points, numPoints);
-  points.forEach((point) => {
-    inputSignal.x.push(point.x);
-    inputSignal.y.push(point.y);
-  });
-
-  inputSignal.x = maths.shiftCenter(inputSignal.x);
-  inputSignal.y = maths.shiftCenter(inputSignal.y);
-
-  return inputSignal;
+  return points;
 }
 
 function drawEpicycles(vals, centerX, centerY, isXAxis) {
@@ -151,16 +142,9 @@ function reset() {
   wave = [];
   inputSignal = { x: [], y: [] };
   inputSignal = loadStartFunction(uriDecode(data));
-  outputSignal = {
-    x: maths.dft(inputSignal.x).map(({ re, im }) => {
-      const { r, a } = maths.toPolar(re, im);
-      return { r, a };
-    }),
-    y: maths.dft(inputSignal.y).map(({ re, im }) => {
-      const { r, a } = maths.toPolar(re, im);
-      return { r, a: a + Math.PI / 2 };
-    }),
-  }
+  outputSignal = maths.cft(inputSignal).map(({ re, im }) => {
+    return maths.toPolar(re, im);
+  });
 }
 
 function setup() {
@@ -182,16 +166,15 @@ function setup() {
 
 function draw() {
   sketch.setStroke('rgba(255, 255, 255, 0.1)');
-  const pointY = drawEpicycles(outputSignal.y, window.width * 0.1, window.height * 0.5, true).y;
-  const pointX = drawEpicycles(outputSignal.x, window.width * 0.5, window.height * 0.1, false).x;
+  const point = drawEpicycles(outputSignal, window.width * 0.5, window.height * 0.5);
 
   sketch.setStroke('#FFFFFF');
-  wave[counter] = wave[counter] || { x: pointX, y: pointY };
+  wave[counter] = wave[counter] || point;
   for (let i = 0; i < counter; i = i + 1) {
     sketch.line(wave[i].x, wave[i].y, wave[i + 1].x, wave[i + 1].y);
   }
 
-  counter = (counter + 1) % outputSignal.x.length;
+  counter = (counter + 1) % outputSignal.length;
 }
 
 sketch.init(setup, draw);

@@ -158,6 +158,35 @@ export function dft(x = []) {
   return X;
 }
 
+/**
+ * Calculate the Complex Fourier Transform of an input function
+ * @param { { x: number, y: number}[] } f a list of equidistant samples of the input function
+ * @returns {{ re: number, im: number }[] } an array of complex numbers, where re
+ * is the real component and im is the imaginary component
+ */
+export function cft(f = []) {
+  const N = f.length;
+  const phi_0 = TWO_PI / N;
+
+  const F = [];
+
+  for (let k = 0; k < N; k = k + 1) {
+    let re = 0, im = 0;
+    const phi_1 = phi_0 * k;
+    for (let n = 0; n < N; n = n + 1) {
+      const phi_2 = phi_1 * n;
+      const cos = Math.cos(phi_2);
+      const sin = Math.sin(phi_2);
+      re += f[n].x * cos + f[n].y * sin;
+      im += f[n].y * cos - f[n].x * sin;
+    }
+
+    F[k] = { re: re / N, im: im / N };
+  }
+
+  return F;
+}
+
 export function avg(a, b) {
   return (a + b) / 2;
 }
