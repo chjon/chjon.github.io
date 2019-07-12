@@ -88,7 +88,7 @@ function loadStartFunction(inputString) {
   return points;
 }
 
-function drawEpicycles(vals, centerX, centerY, isXAxis) {
+function drawEpicycles(vals, centerX, centerY) {
   class Circle {
     constructor(x, y, r, a) {
       this.x = x;
@@ -122,13 +122,6 @@ function drawEpicycles(vals, centerX, centerY, isXAxis) {
     endPoint.x = circle.x + circle.r * Math.cos(circle.a);
     endPoint.y = circle.y - circle.r * Math.sin(circle.a);
   };
-
-  // Draw the line from the endpoint
-  if (isXAxis) {
-    sketch.line(endPoint.x, endPoint.y, window.width, endPoint.y);
-  } else {
-    sketch.line(endPoint.x, endPoint.y, endPoint.x, window.height);
-  }
   
   // Add a point to the output
   return endPoint;
