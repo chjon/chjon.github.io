@@ -17,6 +17,10 @@ script: /assets/js/fourier.js
     <input id="density" type="number" class="control-number">
   </div>
   <div class="control-row">
+    <p>Circle depth</p>
+    <input id="depth" type="number" class="control-number">
+  </div>
+  <div class="control-row">
     <button id="reset" class="control-button">Reset</button>
   </div>
 </div>
