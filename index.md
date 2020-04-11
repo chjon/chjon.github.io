@@ -19,7 +19,7 @@ In the past, I've worked at:
 
 - [Behaviour Interactive](https://www.bhvr.com/), developing backend infrastructure to support new features for various games. I designed and implemented a rich presence system and worked on REST API endpoints.
 
-- [Universe Projects]("https://www.universeprojects.com/"), implementing features for their video game, Voidspace. I developed an item collection system and a quest system for synchronizing and displaying game objectives. 
+- [Universe Projects](https://www.universeprojects.com/), implementing features for their video game, Voidspace. I developed an item collection system and a quest system for synchronizing and displaying game objectives. 
 
 - New York Theological Education Center, where I built and deployed a library system management application using MySQL and VBA.
 
