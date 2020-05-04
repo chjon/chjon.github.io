@@ -2,6 +2,7 @@
 layout: home
 stylesheet: /assets/css/home.css
 script: /assets/js/gol.js
+seo: true
 ---
 
 {% capture about-content %}
