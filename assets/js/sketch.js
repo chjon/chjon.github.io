@@ -134,7 +134,7 @@ export function path(points) {
   ctx.save();  
   ctx.beginPath();
 
-  ctx.moveTo(points[0].x, points[1].y);
+  ctx.moveTo(points[0].x, points[0].y);
   points.forEach(point => {
     ctx.lineTo(point.x, point.y);
   });
@@ -142,6 +142,20 @@ export function path(points) {
   ctx.closePath();
   ctx.restore();
   ctx.stroke();
+}
+
+export function poly(points) {
+  ctx.save();  
+  ctx.beginPath();
+
+  ctx.moveTo(points[0].x, points[0].y);
+  points.forEach(point => {
+    ctx.lineTo(point.x, point.y);
+  });
+
+  ctx.closePath();
+  ctx.restore();
+  ctx.fill();
 }
 
 export function arc(x, y, r, sAngle, eAngle) {
