@@ -219,6 +219,48 @@ function decodePlaintext(msg) {
   return words;
 }
 
+function centerAndScale(wordWalls, maxWidth, maxHeight) {
+  const paddingPercent = 0.1;
+  const padding = new Vector(maxWidth * paddingPercent, maxHeight * paddingPercent);
+  maxWidth = maxWidth - 2 * padding.x;
+  maxHeight = maxHeight - 2 * padding.y;
+  const bounds = wordWalls.reduce((bounds, lineWalls) => {
+    return lineWalls.reduce((bounds, wall) => {
+      return {
+        min: new Vector(Math.min(bounds.min.x, wall.p1.x, wall.p2.x), Math.min(bounds.min.y, wall.p1.y, wall.p2.y)),
+        max: new Vector(Math.max(bounds.max.x, wall.p1.x, wall.p2.x), Math.max(bounds.max.y, wall.p1.y, wall.p2.y)),
+      };
+    }, bounds);
+  }, { min: new Vector(Infinity, Infinity), max: new Vector(-Infinity, -Infinity) });
+  const size = new Vector(bounds.max.x - bounds.min.x, bounds.max.y - bounds.min.y);
+  const center = new Vector((bounds.max.x + bounds.min.x) / 2, (bounds.max.y + bounds.min.y) / 2);
+  const scale = new Vector(maxWidth / size.x, maxHeight / size.y);
+  const scaleFactor = scale.x * size.y > maxHeight ? scale.y : scale.x;
+  return wordWalls.map((lineWalls) => {
+    const lineBounds = lineWalls.reduce(({ min, max }, wall) => {
+      return { min: Math.min(min, wall.p1.x, wall.p2.x), max: Math.max(max, wall.p1.x, wall.p2.x) };
+    }, { min: Infinity, max: -Infinity });
+    const delta = (lineBounds.max + lineBounds.min) / 2;
+    return lineWalls.map((wall) => {
+      return new Wall(
+        new Vector((wall.p1.x - delta) * scaleFactor + maxWidth / 2 + padding.x, (wall.p1.y - center.y) * scaleFactor + maxHeight / 2 + padding.y),
+        new Vector((wall.p2.x - delta) * scaleFactor + maxWidth / 2 + padding.x, (wall.p2.y - center.y) * scaleFactor + maxHeight / 2 + padding.y)
+      );
+    });
+  });
+}
+
+function flatten(list) {
+  return list.reduce((flatList, element) => {
+    if (Array.isArray(element)) {
+      flatList = flatList.concat(flatten(element));
+    } else {
+      flatList.push(element);
+    }
+    return flatList;
+  }, []);
+}
+
 function setup() {
   sketch.setFrameInterval(20);
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
@@ -235,11 +277,7 @@ function setup() {
   if (query.d) {
     walls = walls.concat(decodeB64(query.d));
   } else {
-    walls = walls.concat(decodePlaintext(msg).reduce((wordWalls, wallList) => {
-      return wordWalls.concat(wallList.map((wall) => {
-        return new Wall(wall.p1.mul(25), wall.p2.mul(25));
-      }));
-    }, []));
+    walls = walls.concat(flatten(centerAndScale(decodePlaintext(msg), window.width, window.height)));
   }
 
   mousePos = new Vector(0, 0);
