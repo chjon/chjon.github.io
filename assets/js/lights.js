@@ -6,7 +6,9 @@ let mousePos;
 let mouseDown = false;
 let light;
 let walls = [];
-let angleDelta = 0.000001;
+const ANGLE_DELTA = 0.000001;
+const SPACE_SIZE = 5;
+const LINE_WIDTH = 32;
 
 class Vector {
   constructor(x, y) {
@@ -88,8 +90,8 @@ class Light {
     let intersections = [];
     const castRay = ({ x, y }) => {
       const dir = new Vector(x - this.pos.x, y - this.pos.y);
-      intersections.push(this.getIntersection(dir.rotate(+angleDelta), walls));
-      intersections.push(this.getIntersection(dir.rotate(-angleDelta), walls));
+      intersections.push(this.getIntersection(dir.rotate(+ANGLE_DELTA), walls));
+      intersections.push(this.getIntersection(dir.rotate(-ANGLE_DELTA), walls));
     };
 
     walls.forEach((wall) => {
@@ -134,18 +136,38 @@ function decodeB64(data) {
     }
   }
 
-  return decoded.map((wall) => {
-    return new Wall(wall.p1.mul(25), wall.p2.mul(25));
-  });
+  return decoded;
 }
 
 const letterEncoding = {
-  a: "0202020C040C04080608060C080C0802080204040406060606040604",
+  a: "0203020C040C04080608060C080C080307020302030204040406060606040604",
   b: "0202020C070C080B080807070806080307020702040404060606060406040408040A060A06080608",
+  c: "0203020B030C080C080A040A04040804080203020302",
+  d: "0202020C070C080B0803070207020404040A060A06040604",
+  e: "0202020C080C080A040A04080808080604060404080408020802",
+  f: "0202020C040C04080808080604060404080408020802",
+  g: "0203020B030C070C080B08080608060A040A04040804080203020302",
   h: "0202020C040C04080608060C080C080206020606040604020402",
   i: "0202020C040C04020402",
-  p: "0202020C040C040808080802080204040406060606040604",
-  y: "020202080408040C060C06080808080206020606040604020402",
+  j: "020A020C080C08020602060A060A",
+  k: "0202020C040C0408060C080C060708020602040604020402",
+  l: "0202020C080C080A040A04020402",
+  m: "0202020C040C0406060A0806080C0A0C0A020802060604020402",
+  n: "0202020C040C0406060C080C08020602060804020402",
+  o: "0203020B030C070C080B08030702030203020404040A060A06040604",
+  p: "0202020C040C04080708080708030702070204040406060606040604",
+  q: "0203020B030C080C070B080A08030702030203020404040A060A06040604",
+  r: "0202020C040C0408060C080C06080708080708030702070204040406060606040604",
+  s: "0203020703080608060A020A020C070C080B08070706040604040804080203020302",
+  t: "020202040404040C060C0604080408020802",
+  u: "0202020B030C070C080B08020602060A040A04020402",
+  v: "0202040C060C08020602050804020402",
+  w: "0202040C060C0709080C0A0C0C020A0209090706050904020402",
+  x: "02020407020C040C0509060C080C060708020602050504020402",
+  y: "02020408040C060C060808020602050604020402",
+  z: "020202040604020A020C080C080A040A080408020802",
+  "'": "0202020403040206040404020402",
+  "!": "02020208040804020402020A020C040C040A040A",
 };
 
 const letterWallMap = Object.keys(letterEncoding).reduce((letterWallMap, key) => {
@@ -154,23 +176,47 @@ const letterWallMap = Object.keys(letterEncoding).reduce((letterWallMap, key) =>
 }, {});
 
 function decodePlaintext(msg) {
-  let msgWalls = [];
-  let offset = 0;
+  let words = [];
+  let wordWalls = [];
+  let offset = new Vector(0, 0);
+  let prevWordWidth = 0;
+  let curWordWidth = 0;
+  let lineHeight = 0;
   for (let i = 0; i < msg.length; ++i) {
-    let letterWalls = letterWallMap[msg.charAt(i)];
-    const width = letterWalls.reduce((max, wall) => {
-      return Math.max(max, wall.p1.x, wall.p2.x);
-    }, -Infinity);
-    msgWalls = msgWalls.concat(letterWalls.map((wall) => {
-      return new Wall(
-        new Vector(wall.p1.x + offset, wall.p1.y),
-        new Vector(wall.p2.x + offset, wall.p2.y)
-      );
-    }));
-    offset += width;
+    let letterWalls = letterWallMap[msg.charAt(i)] || [];
+    if (msg.charAt(i) == ' ') {
+      if (prevWordWidth + curWordWidth > LINE_WIDTH) {
+        words.push(wordWalls);
+        wordWalls = [];
+        offset.x = 0;
+        offset.y += lineHeight;
+        lineHeight = 0;
+      } else {
+        prevWordWidth += SPACE_SIZE;
+        offset.x += SPACE_SIZE;
+      }
+    } else {
+      const { width, height } = letterWalls.reduce(({ width, height }, wall) => {
+        return { width: Math.max(width, wall.p1.x, wall.p2.x), height: Math.max(height, wall.p1.y, wall.p2.y) };
+      }, { width: 0, height: lineHeight });
+      lineHeight = height;
+
+      curWordWidth += width;
+      wordWalls = wordWalls.concat(letterWalls.map((wall) => {
+        return new Wall(
+          new Vector(wall.p1.x + offset.x, wall.p1.y + offset.y),
+          new Vector(wall.p2.x + offset.x, wall.p2.y + offset.y)
+        );
+      }));
+      offset.x += width;
+    }
   }
 
-  return msgWalls;
+  if (prevWordWidth + curWordWidth > LINE_WIDTH) {
+    words.push(wordWalls);
+  }
+
+  return words;
 }
 
 function setup() {
@@ -184,32 +230,32 @@ function setup() {
   walls.push(new Wall({ x: window.width, y: 0 }, { x: 0, y: 0 }));
   
   const { query } = dom.decodeURI();
-  const msg = query.m || "m";
+  const msg = query.m || "lights";
 
-  if (msg) {
-    walls = walls.concat(decodePlaintext(msg));
-  } else if (query.d) {
+  if (query.d) {
     walls = walls.concat(decodeB64(query.d));
+  } else {
+    walls = walls.concat(decodePlaintext(msg).reduce((wordWalls, wallList) => {
+      return wordWalls.concat(wallList.map((wall) => {
+        return new Wall(wall.p1.mul(25), wall.p2.mul(25));
+      }));
+    }, []));
   }
-  
-  console.log(walls);
-
 
   mousePos = new Vector(0, 0);
   light = new Light(mousePos, 1);
 }
 
 function draw() {
-
   // Drawing
-  sketch.setStroke('#FFFFFFFF');
-  walls.forEach((wall) => { wall.draw(); });
-
+  sketch.setFill('#FFFF007F');
+  light.draw(walls);
+  
   if (mouseDown) {
-    sketch.setFill('#FFFF007F');
-    light.draw(walls);
+    sketch.setStroke('#FFFFFFFF');
+    walls.forEach((wall) => { wall.draw(); });
   }
-
+  
   // Calculation
   light.pos = mousePos;
 }
