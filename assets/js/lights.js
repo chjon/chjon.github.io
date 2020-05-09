@@ -151,15 +151,15 @@ class LightGroup {
 
   draw(polygons) {
     this.lights.forEach((light) => {
-      /*let ctx = sketch.getContext();
+      let ctx = sketch.getContext();
       var grd = ctx.createRadialGradient(
         light.pos.x, light.pos.y, Math.floor(0.05 * Math.min(window.width, window.height)),
         light.pos.x, light.pos.y, Math.floor(0.4 * Math.min(window.width, window.height))
       );
-      grd.addColorStop(0, `#${lightColor}7F`);
+      grd.addColorStop(0, `#${lightColor}2F`);
       grd.addColorStop(1, `#${lightColor}00`);
-      ctx.fillStyle = grd;*/
-      sketch.setFill(`#${lightColor}7F`);
+      ctx.fillStyle = grd;
+      //sketch.setFill(`#${lightColor}7F`);
       light.draw(polygons);
     });
   }
