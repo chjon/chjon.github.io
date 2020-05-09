@@ -203,9 +203,16 @@ function uriSub(str) {
     if (char == '_') {
       char = ' ';
     }
+    if (char == '%') {
+      if (str.charAt(i + 1) == '2' && str.charAt(i + 2) == '1') {
+        char = '!';
+      }
+      i += 3;
+    } else {
+      ++i;
+    }
 
     outStr = outStr.concat(char);
-    ++i;
   }
   return outStr;
 }
