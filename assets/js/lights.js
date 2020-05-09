@@ -5,7 +5,7 @@ let window;
 let mousePos;
 let mouseDown = false;
 let light;
-let walls = [];
+let polygons = [];
 let lightColor;
 let numLights;
 let enableHiding;
@@ -51,6 +51,16 @@ class Wall {
   }
 }
 
+class Poly {
+  constructor(points) {
+    this.points = points;
+  }
+
+  draw() {
+    sketch.path(this.points);
+  }
+}
+
 class Light {
   constructor(pos) {
     this.pos = pos;
@@ -63,42 +73,46 @@ class Light {
   /**
    * Find the wall with the closest intersection
    * @param {Vector} dir
-   * @param {Wall[]} walls 
+   * @param {Poly[]} polygons 
    */
-  getIntersection(dir, walls) {
-    const { x, y } = walls.reduce((min, wall) => {
-      const wallScale = (dir.y * (wall.p1.x - this.pos.x) - dir.x * (wall.p1.y - this.pos.y)) / (dir.y * (wall.p1.x - wall.p2.x) - dir.x * (wall.p1.y - wall.p2.y));
-      if (wallScale >= 0 && wallScale <= 1) {
-        const dirScale = (wall.p1.x + wallScale * (wall.p2.x - wall.p1.x) - this.pos.x) / dir.x;
-        if (dirScale >= 0) {
-          const x = wall.p1.x + wallScale * (wall.p2.x - wall.p1.x);
-          const y = wall.p1.y + wallScale * (wall.p2.y - wall.p1.y);
-          const dx = x - this.pos.x;
-          const dy = y - this.pos.y;
-          const dist2 = dx * dx + dy * dy;
-          if (dist2 < min.dist2) return { x, y, dist2 };
+  getIntersection(dir, polygons) {
+    const { x, y } = polygons.reduce((min, polygon) => {
+      return polygon.points.reduce((min, p1, i) => {
+        const p2 = polygon.points[(i + 1) % polygon.points.length];
+        const wallScale = (dir.y * (p1.x - this.pos.x) - dir.x * (p1.y - this.pos.y)) / (dir.y * (p1.x - p2.x) - dir.x * (p1.y - p2.y));
+        if (wallScale >= 0 && wallScale <= 1) {
+          const dirScale = (p1.x + wallScale * (p2.x - p1.x) - this.pos.x) / dir.x;
+          if (dirScale >= 0) {
+            const x = p1.x + wallScale * (p2.x - p1.x);
+            const y = p1.y + wallScale * (p2.y - p1.y);
+            const dx = x - this.pos.x;
+            const dy = y - this.pos.y;
+            const dist2 = dx * dx + dy * dy;
+            if (dist2 < min.dist2) return { x, y, dist2 };
+          }
         }
-      }
-      return min;
+        return min;
+      }, min);
     }, { x: 0, y: 0, dist2: Infinity });
     return { x, y };
   }
 
   /**
    * Draw light
-   * @param {Wall[]} walls 
+   * @param {Poly[]} walls 
    */
-  draw(walls) {
+  draw(polygons) {
     let intersections = [];
     const castRay = ({ x, y }) => {
       const dir = new Vector(x - this.pos.x, y - this.pos.y);
-      intersections.push(this.getIntersection(dir.rotate(+ANGLE_DELTA), walls));
-      intersections.push(this.getIntersection(dir.rotate(-ANGLE_DELTA), walls));
+      intersections.push(this.getIntersection(dir.rotate(+ANGLE_DELTA), polygons));
+      intersections.push(this.getIntersection(dir.rotate(-ANGLE_DELTA), polygons));
     };
 
-    walls.forEach((wall) => {
-      castRay(wall.p1);
-      castRay(wall.p2);
+    polygons.forEach((polygon) => {
+      polygon.points.forEach((point) => {
+        castRay(point);
+      });
     });
 
     intersections.sort((a, b) => {
@@ -130,23 +144,23 @@ class LightGroup {
   setPos(pos) {
     const delta = new Vector(pos.x - this.pos.x, pos.y - this.pos.y);
     this.pos = pos;
-    console.log(delta);
     this.lights.forEach((light) => {
       light.setPos(new Vector(light.pos.x + delta.x, light.pos.y + delta.y));
     });
   }
 
-  draw(walls) {
+  draw(polygons) {
     this.lights.forEach((light) => {
-      let ctx = sketch.getContext();
+      /*let ctx = sketch.getContext();
       var grd = ctx.createRadialGradient(
         light.pos.x, light.pos.y, Math.floor(0.05 * Math.min(window.width, window.height)),
         light.pos.x, light.pos.y, Math.floor(0.4 * Math.min(window.width, window.height))
       );
       grd.addColorStop(0, `#${lightColor}7F`);
       grd.addColorStop(1, `#${lightColor}00`);
-      ctx.fillStyle = grd;
-      light.draw(walls);
+      ctx.fillStyle = grd;*/
+      sketch.setFill(`#${lightColor}7F`);
+      light.draw(polygons);
     });
   }
 }
@@ -159,25 +173,23 @@ function fromBase64(val) {
 
 function decodeB64(data) {
   const decoded = [];
-  let last;
-  let first;
+  let points = [];
   for (let i = 0; i < data.length; i = i + 4) {
     const cur = new Vector(
       fromBase64(data.charAt(i + 0) + data.charAt(i + 1)),
       fromBase64(data.charAt(i + 2) + data.charAt(i + 3))
     );
 
-    if (last && cur.x === last.x && cur.y === last.y) {
-      decoded.push(new Wall(first, last));
-      last = undefined;
+    if (points.length > 0 && cur.x === points[points.length - 1].x && cur.y === points[points.length - 1].y) {
+      decoded.push(new Poly(points));
+      points = [];
     } else {
-      if (last) {
-        decoded.push(new Wall(last, cur));
-      } else {
-        first = cur;
-      }
-      last = cur;
+      points.push(cur);
     }
+  }
+
+  if (points.length > 0) {
+    decoded.push(new Poly(points));
   }
 
   return decoded;
@@ -236,17 +248,17 @@ const letterWallMap = Object.keys(letterEncoding).reduce((letterWallMap, key) =>
 
 function decodePlaintext(msg) {
   let words = [];
-  let wordWalls = [];
+  let wordPolys = [];
   let offset = new Vector(0, 0);
   let prevWordWidth = 0;
   let curWordWidth = 0;
   let lineHeight = 0;
   for (let i = 0; i < msg.length; ++i) {
-    let letterWalls = letterWallMap[msg.charAt(i)] || [];
+    let letterPolys = letterWallMap[msg.charAt(i)] || [];
     if (msg.charAt(i) == ' ') {
       if (prevWordWidth + curWordWidth > LINE_WIDTH) {
-        words.push(wordWalls);
-        wordWalls = [];
+        words.push(wordPolys);
+        wordPolys = [];
         offset.x = 0;
         offset.y += lineHeight;
         lineHeight = 0;
@@ -255,56 +267,58 @@ function decodePlaintext(msg) {
         offset.x += SPACE_SIZE;
       }
     } else {
-      const { width, height } = letterWalls.reduce(({ width, height }, wall) => {
-        return { width: Math.max(width, wall.p1.x, wall.p2.x), height: Math.max(height, wall.p1.y, wall.p2.y) };
+      const { width, height } = letterPolys.reduce(({ width, height }, poly) => {
+        return poly.points.reduce(({ width, height }, p) => {
+          return { width: Math.max(width, p.x), height: Math.max(height, p.y) };
+        }, { width, height });
       }, { width: 0, height: lineHeight });
       lineHeight = height;
-
       curWordWidth += width;
-      wordWalls = wordWalls.concat(letterWalls.map((wall) => {
-        return new Wall(
-          new Vector(wall.p1.x + offset.x, wall.p1.y + offset.y),
-          new Vector(wall.p2.x + offset.x, wall.p2.y + offset.y)
-        );
+
+      wordPolys = wordPolys.concat(letterPolys.map((letterPoly) => {
+        return new Poly(letterPoly.points.map((p) => {
+          return new Vector(p.x + offset.x, p.y + offset.y);
+        }));
       }));
       offset.x += width;
     }
   }
 
-  if (prevWordWidth + curWordWidth > LINE_WIDTH) {
-    words.push(wordWalls);
-  }
+  words.push(wordPolys);
 
   return words;
 }
 
-function centerAndScale(wordWalls, maxWidth, maxHeight) {
+function centerAndScale(wordPolys, maxWidth, maxHeight) {
   const paddingPercent = 0.1;
   const padding = new Vector(maxWidth * paddingPercent, maxHeight * paddingPercent);
   maxWidth = maxWidth - 2 * padding.x;
   maxHeight = maxHeight - 2 * padding.y;
-  const bounds = wordWalls.reduce((bounds, lineWalls) => {
-    return lineWalls.reduce((bounds, wall) => {
-      return {
-        min: new Vector(Math.min(bounds.min.x, wall.p1.x, wall.p2.x), Math.min(bounds.min.y, wall.p1.y, wall.p2.y)),
-        max: new Vector(Math.max(bounds.max.x, wall.p1.x, wall.p2.x), Math.max(bounds.max.y, wall.p1.y, wall.p2.y)),
-      };
+  const bounds = wordPolys.reduce((bounds, linePolys) => {
+    return linePolys.reduce((bounds, poly) => {
+      return poly.points.reduce((bounds, p) => {
+        return {
+          min: new Vector(Math.min(bounds.min.x, p.x), Math.min(bounds.min.y, p.y)),
+          max: new Vector(Math.max(bounds.max.x, p.x), Math.max(bounds.max.y, p.y)),
+        };
+      }, bounds);
     }, bounds);
   }, { min: new Vector(Infinity, Infinity), max: new Vector(-Infinity, -Infinity) });
   const size = new Vector(bounds.max.x - bounds.min.x, bounds.max.y - bounds.min.y);
   const center = new Vector((bounds.max.x + bounds.min.x) / 2, (bounds.max.y + bounds.min.y) / 2);
   const scale = new Vector(maxWidth / size.x, maxHeight / size.y);
   const scaleFactor = scale.x * size.y > maxHeight ? scale.y : scale.x;
-  return wordWalls.map((lineWalls) => {
-    const lineBounds = lineWalls.reduce(({ min, max }, wall) => {
-      return { min: Math.min(min, wall.p1.x, wall.p2.x), max: Math.max(max, wall.p1.x, wall.p2.x) };
+  return wordPolys.map((linePolys) => {
+    const lineBounds = linePolys.reduce((bounds, poly) => {
+      return poly.points.reduce(({ min, max }, p) => {
+        return { min: Math.min(min, p.x), max: Math.max(max, p.x) };
+      }, bounds);
     }, { min: Infinity, max: -Infinity });
     const delta = (lineBounds.max + lineBounds.min) / 2;
-    return lineWalls.map((wall) => {
-      return new Wall(
-        new Vector((wall.p1.x - delta) * scaleFactor + maxWidth / 2 + padding.x, (wall.p1.y - center.y) * scaleFactor + maxHeight / 2 + padding.y),
-        new Vector((wall.p2.x - delta) * scaleFactor + maxWidth / 2 + padding.x, (wall.p2.y - center.y) * scaleFactor + maxHeight / 2 + padding.y)
-      );
+    return linePolys.map((poly) => {
+      return new Poly(poly.points.map((p) => {
+        return new Vector((p.x - delta) * scaleFactor + maxWidth / 2 + padding.x, (p.y - center.y) * scaleFactor + maxHeight / 2 + padding.y) 
+      }));
     });
   });
 }
@@ -325,10 +339,12 @@ function setup() {
   window = { width: sketch.getWidth(), height: sketch.getHeight() };
 
   // Window borders
-  walls.push(new Wall({ x: 0, y: 0 }, { x: 0, y: window.height }));
-  walls.push(new Wall({ x: 0, y: window.height }, { x: window.width, y: window.height }));
-  walls.push(new Wall({ x: window.width, y: window.height }, { x: window.width, y: 0 }));
-  walls.push(new Wall({ x: window.width, y: 0 }, { x: 0, y: 0 }));
+  polygons.push(new Poly([
+    { x: 0, y: 0 },
+    { x: 0, y: window.height },
+    { x: window.width, y: window.height },
+    { x: window.width, y: 0 },
+  ]));
   
   const { query } = dom.decodeURI();
   const msg = query.m || "lights";
@@ -337,9 +353,9 @@ function setup() {
   enableHiding = query.h;
 
   if (query.d) {
-    walls = walls.concat(decodeB64(query.d));
+    polygons = polygons.concat(decodeB64(query.d));
   } else {
-    walls = walls.concat(flatten(centerAndScale(decodePlaintext(uriSub(msg)), window.width, window.height)));
+    polygons = polygons.concat(flatten(centerAndScale(decodePlaintext(uriSub(msg)), window.width, window.height)));
   }
 
   mousePos = new Vector(0, 0);
@@ -348,11 +364,11 @@ function setup() {
 
 function draw() {
   // Drawing
-  light.draw(walls);
+  light.draw(polygons);
   
   if (!enableHiding || mouseDown) {
     sketch.setStroke(`#${lightColor}`);
-    walls.forEach((wall) => { wall.draw(); });
+    polygons.forEach((polygon) => { polygon.draw(); });
   }
   
   // Calculation
