@@ -204,8 +204,9 @@ function uriSub(str) {
       char = ' ';
     }
     if (char == '%') {
-      if (str.charAt(i + 1) == '2' && str.charAt(i + 2) == '1') {
-        char = '!';
+      if (str.charAt(i + 1) == '2') {
+        if (str.charAt(i + 2) == '1') char = '!';
+        if (str.charAt(i + 2) == '7') char = '\'';
       }
       i += 3;
     } else {
