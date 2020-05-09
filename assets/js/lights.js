@@ -6,6 +6,9 @@ let mousePos;
 let mouseDown = false;
 let light;
 let walls = [];
+let lightColor;
+let numLights;
+let enableHiding;
 const ANGLE_DELTA = 0.000001;
 const SPACE_SIZE = 5;
 const LINE_WIDTH = 32;
@@ -49,9 +52,8 @@ class Wall {
 }
 
 class Light {
-  constructor(pos, alpha) {
+  constructor(pos) {
     this.pos = pos;
-    this.alpha = alpha;
   }
 
   setPos(pos) {
@@ -107,6 +109,48 @@ class Light {
   }
 }
 
+class LightGroup {
+  constructor(pos, numLights, radius) {
+    this.pos = pos;
+    this.numLights = numLights;
+    this.radius = radius;
+    this.lights = [];
+    if (numLights == 1) {
+      this.lights.push(new Light(pos));
+    } else {
+      for (let i = 0; i < numLights; ++i) {
+        this.lights.push(new Light(new Vector(
+          pos.x + radius * Math.cos(2 * i * Math.PI / numLights),
+          pos.y + radius * Math.sin(2 * i * Math.PI / numLights),
+        )));
+      }
+    }
+  }
+
+  setPos(pos) {
+    const delta = new Vector(pos.x - this.pos.x, pos.y - this.pos.y);
+    this.pos = pos;
+    console.log(delta);
+    this.lights.forEach((light) => {
+      light.setPos(new Vector(light.pos.x + delta.x, light.pos.y + delta.y));
+    });
+  }
+
+  draw(walls) {
+    this.lights.forEach((light) => {
+      let ctx = sketch.getContext();
+      var grd = ctx.createRadialGradient(
+        light.pos.x, light.pos.y, Math.floor(0.05 * Math.min(window.width, window.height)),
+        light.pos.x, light.pos.y, Math.floor(0.4 * Math.min(window.width, window.height))
+      );
+      grd.addColorStop(0, `#${lightColor}7F`);
+      grd.addColorStop(1, `#${lightColor}00`);
+      ctx.fillStyle = grd;
+      light.draw(walls);
+    });
+  }
+}
+
 const B64LUT = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-';
 
 function fromBase64(val) {
@@ -137,6 +181,21 @@ function decodeB64(data) {
   }
 
   return decoded;
+}
+
+function uriSub(str) {
+  let outStr = "";
+  let i = 0;
+  while (i < str.length) {
+    let char = str.charAt(i);
+    if (char == '_') {
+      char = ' ';
+    }
+
+    outStr = outStr.concat(char);
+    ++i;
+  }
+  return outStr;
 }
 
 const letterEncoding = {
@@ -273,36 +332,31 @@ function setup() {
   
   const { query } = dom.decodeURI();
   const msg = query.m || "lights";
+  lightColor = query.c || "FFFF00";
+  numLights = query.n || 4;
+  enableHiding = query.h;
 
   if (query.d) {
     walls = walls.concat(decodeB64(query.d));
   } else {
-    walls = walls.concat(flatten(centerAndScale(decodePlaintext(msg), window.width, window.height)));
+    walls = walls.concat(flatten(centerAndScale(decodePlaintext(uriSub(msg)), window.width, window.height)));
   }
 
   mousePos = new Vector(0, 0);
-  light = new Light(mousePos, 1);
+  light = new LightGroup(mousePos, numLights, 0.01 * Math.min(window.width, window.height));
 }
 
 function draw() {
   // Drawing
-  let ctx = sketch.getContext();
-  var grd = ctx.createRadialGradient(
-    light.pos.x, light.pos.y, Math.floor(0.1 * Math.min(window.width, window.height)),
-    light.pos.x, light.pos.y, Math.floor(0.4 * Math.min(window.width, window.height))
-  );
-  grd.addColorStop(0, '#FFFF007F');
-  grd.addColorStop(1, '#FFFF0000');
-  ctx.fillStyle = grd;
   light.draw(walls);
   
-  if (mouseDown) {
-    sketch.setStroke('#FFFFFFFF');
+  if (!enableHiding || mouseDown) {
+    sketch.setStroke(`#${lightColor}`);
     walls.forEach((wall) => { wall.draw(); });
   }
   
   // Calculation
-  light.pos = mousePos;
+  light.setPos(mousePos);
 }
 
 document.onmousemove = (e) => {
