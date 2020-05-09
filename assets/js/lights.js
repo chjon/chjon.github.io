@@ -286,7 +286,14 @@ function setup() {
 
 function draw() {
   // Drawing
-  sketch.setFill('#FFFF007F');
+  let ctx = sketch.getContext();
+  var grd = ctx.createRadialGradient(
+    light.pos.x, light.pos.y, Math.floor(0.1 * Math.min(window.width, window.height)),
+    light.pos.x, light.pos.y, Math.floor(0.4 * Math.min(window.width, window.height))
+  );
+  grd.addColorStop(0, '#FFFF007F');
+  grd.addColorStop(1, '#FFFF0000');
+  ctx.fillStyle = grd;
   light.draw(walls);
   
   if (mouseDown) {

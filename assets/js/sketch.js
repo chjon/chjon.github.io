@@ -22,6 +22,10 @@ export function getMousePos({ clientX, clientY }) {
   };
 }
 
+export function getContext() {
+  return ctx;
+}
+
 // Setters
 
 export function setFrameInterval(newInterval) {
