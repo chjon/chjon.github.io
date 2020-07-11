@@ -58,6 +58,14 @@ export function init(
   }
 }
 
+export function onResize(resizeFunc) {
+	window.onresize = () => {
+		ctx.canvas.width  = window.innerWidth;
+		ctx.canvas.height = window.innerHeight;
+		resizeFunc(window.innerWidth, window.innerHeight);
+	};
+}
+
 // Graphics
 
 export function pushState() {
