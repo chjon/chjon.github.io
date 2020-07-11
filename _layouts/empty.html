@@ -10,8 +10,10 @@
       {%- endif -%}
     {%- else -%}
       <title>{{ site.title }}</title>
-    {%- endif -%}
-    <link rel="stylesheet" href="/assets/css/styles.css">
+	{%- endif -%}
+	{%- unless page.override_stylesheet -%}
+		<link rel="stylesheet" href="/assets/css/styles.css">
+	{%- endunless -%}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Exo+2:100">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300">
     {%- if page.stylesheet -%}
