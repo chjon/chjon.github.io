@@ -1,15 +1,17 @@
+import { newNDArray, forEach } from './array-utils.js';
+
 const FPS = 60;
 let canvases;
 let tetris;
-const gamePieces = {
-	i: [[0, 0, 0, 0],[1, 1, 1, 1],[0, 0, 0, 0],[0, 0, 0, 0]],
-	j: [[0, 0, 0],[1, 1, 1],[0, 0, 1]],
-	l: [[0, 0, 0],[1, 1, 1],[1, 0, 0]],
-	o: [[1, 1],[1, 1]],
-	s: [[0, 0, 0],[0, 1, 1],[1, 1, 0]],
-	t: [[0, 1, 0],[1, 1, 0],[0, 1, 0]],
-	z: [[0, 0, 0],[1, 1, 0],[0, 1, 1]],
-};
+const gamePieces = [
+	/* I */ { color: "#4ECAD9", collisionMap: [[0, 0, 0, 0],[1, 1, 1, 1],[0, 0, 0, 0],[0, 0, 0, 0]] },
+	/* J */ { color: "#DE9B31", collisionMap: [[0, 0, 0],[1, 1, 1],[0, 0, 1]] },
+	/* L */ { color: "#3228DE", collisionMap: [[0, 0, 0],[1, 1, 1],[1, 0, 0]] },
+	/* O */ { color: "#F8DC1F", collisionMap: [[1, 1],[1, 1]] },
+	/* S */ { color: "#FA451C", collisionMap: [[0, 0, 0],[0, 1, 1],[1, 1, 0]] },
+	/* T */ { color: "#CC3EFA", collisionMap: [[0, 1, 0],[1, 1, 0],[0, 1, 0]] },
+	/* Z */ { color: "#51FF36", collisionMap: [[0, 0, 0],[1, 1, 0],[0, 1, 1]] },
+];
 
 function line(ctx, x1, y1, x2, y2) {
 	ctx.save();
@@ -100,6 +102,11 @@ class GamePiece {
 	}
 }
 
+function getRandomGamePiece() {
+	const randIdx = Math.floor(Math.random() * gamePieces.length);
+	return new GamePiece(gamePieces[randIdx].collisionMap, gamePieces[randIdx].color);
+}
+
 class PreviewCanvas {
 	constructor(previewCanvas) {
 		this.ctx = previewCanvas;
@@ -114,6 +121,8 @@ class PreviewCanvas {
 	}
 
 	draw(gamePiece) {
+		if (!gamePiece) return;
+
 		const tileSize = Math.min(this.dims.x / gamePiece.width, this.dims.y / gamePiece.height);
 		const offset = {
 			x: this.ctx.canvas.width  / 2 - gamePiece.width  * tileSize / 2,
@@ -158,7 +167,7 @@ class Tetris {
 		this.nextCanvas = new PreviewCanvas(canvases.next);
 		this.ctx = canvases.game;
 		this.gridDim = { x: 10, y: 20 };
-		this.pos = { x: Math.floor(this.gridDim.x / 2) - 1, y: 0 }; // Position of upper left corner of current game piece
+		this.grid = newNDArray([this.gridDim.y, this.gridDim.x], undefined);
 	}
 
 	onResize() {
@@ -170,9 +179,32 @@ class Tetris {
 		this.nextCanvas.onResize();
 	}
 
+	resetPosition() {
+		this.pos = { x: Math.floor(this.gridDim.x / 2 - this.curGamePiece.width / 2), y: -this.curGamePiece.heightMin }; // Position of upper left corner of current game piece
+	}
+
+	resetGamePiece() {
+		this.curGamePiece = this.nextGamePiece;
+		this.nextGamePiece = getRandomGamePiece();
+		this.resetPosition();
+	}
+
+	swapGamePiece() {
+		if (this.holdGamePiece) {
+			const tmp = this.holdGamePiece;
+			this.holdGamePiece = this.curGamePiece;
+			this.curGamePiece = tmp;
+		} else {
+			this.holdGamePiece = this.curGamePiece;
+			this.resetGamePiece();
+		}
+		this.resetPosition();
+	}
+
 	init() {
 		this.onResize();
-		this.curGamePiece = new GamePiece(gamePieces.t, "#00FF00");
+		this.nextGamePiece = getRandomGamePiece();
+		this.resetGamePiece();
 	}
 
 	drawGameGrid() {
@@ -193,6 +225,18 @@ class Tetris {
 		}
 	}
 
+	drawPlacedPieces() {
+		forEach(this.grid, (color, [y, x]) => {
+			if (color) {
+				this.ctx.fillStyle = color;
+				this.ctx.fillRect(
+					x * this.gridTileDim.x, y * this.gridTileDim.y,
+					this.gridTileDim.x, this.gridTileDim.y
+				);
+			}
+		});
+	}
+
 	drawGamePiece() {
 		this.ctx.fillStyle = this.curGamePiece.color;
 		for (let c_i = 0, i = 0; c_i <= this.curGamePiece.heightMax; ++c_i) {
@@ -210,6 +254,9 @@ class Tetris {
 	}
 
 	draw() {
+		// Draw placed pieces
+		this.drawPlacedPieces();
+
 		// Draw current piece
 		this.drawGamePiece();
 
@@ -217,8 +264,30 @@ class Tetris {
 		this.drawGameGrid();
 
 		// Draw previews
-		this.holdCanvas.draw(new GamePiece(gamePieces.z, "#FFFFFF"));
-		this.nextCanvas.draw(new GamePiece(gamePieces.j, "#FFFFFF"));
+		this.holdCanvas.draw(this.holdGamePiece);
+		this.nextCanvas.draw(this.nextGamePiece);
+	}
+
+	onMove() {
+		this.pos.x = Math.max(
+			Math.min(this.pos.x, this.gridDim.x - this.curGamePiece.widthMax  - 1),
+			-this.curGamePiece.widthMin
+		);
+		this.pos.y = Math.max(
+			Math.min(this.pos.y, this.gridDim.y - this.curGamePiece.heightMax - 1),
+			-this.curGamePiece.heightMin - this.curGamePiece.height
+		);
+	}
+
+	placeGamePiece() {
+		for (let c_i = 0; c_i <= this.curGamePiece.heightMax; ++c_i) {
+			for (let c_j = 0; c_j <= this.curGamePiece.widthMax; ++c_j) {
+				if (this.curGamePiece.collisionMap[c_i][c_j]) {
+					this.grid[this.pos.y + c_i][this.pos.x + c_j] = this.curGamePiece.color;
+				}
+			}
+		}
+		this.resetGamePiece();
 	}
 
 	handleKeyDown(event) {
@@ -236,23 +305,22 @@ class Tetris {
 			case "ArrowRight":
 				this.pos.x += 1;
 				break;
-			case "z":
+			case "a":
 				this.curGamePiece.rotateCCW();
 				break;
-			case "x":
+			case "d":
 				this.curGamePiece.rotateCW();
 				break;
+			case "s":
+				this.placeGamePiece();
+				return;
+			case "w":
+				this.swapGamePiece();
+				return;
 			default: return;
 		}
 
-		this.pos.x = Math.max(
-			Math.min(this.pos.x, this.gridDim.x - this.curGamePiece.widthMax  - 1),
-			-this.curGamePiece.widthMin
-		);
-		this.pos.y = Math.max(
-			Math.min(this.pos.y, this.gridDim.y - this.curGamePiece.heightMax - 1),
-			-this.curGamePiece.heightMin - this.curGamePiece.height
-		);
+		this.onMove();
 	}
 }
 
