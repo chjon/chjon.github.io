@@ -37,7 +37,7 @@ function arrayCopy2D(collisionMap) {
 }
 
 class GamePiece {
-	constructor(collisionMap, color, rotation = 0) {
+	constructor(collisionMap, color) {
 		this.collisionMap = arrayCopy2D(collisionMap);
 		this.color = color;
 		this.dims = { x: collisionMap[0].length, y: collisionMap.length };
@@ -104,7 +104,15 @@ class GamePiece {
 
 function getRandomGamePiece() {
 	const randIdx = Math.floor(Math.random() * gamePieces.length);
-	return new GamePiece(gamePieces[randIdx].collisionMap, gamePieces[randIdx].color);
+	const randAng = Math.floor(Math.random() * 4);
+	let gamePiece = new GamePiece(gamePieces[randIdx].collisionMap, gamePieces[randIdx].color);
+	if (randAng > 0) {
+		gamePiece.rotateCW();
+		if (randAng == 1) gamePiece.rotateCW();
+	} else if (randAng == 3) {
+		gamePiece.rotateCCW();
+	}
+	return gamePiece;
 }
 
 class PreviewCanvas {
@@ -237,20 +245,24 @@ class Tetris {
 		});
 	}
 
+	iterateOverPiece(callback) {
+		for (let y = 0; y <= this.curGamePiece.heightMax; ++y) {
+			for (let x = 0; x <= this.curGamePiece.widthMax; ++x) {
+				if (this.curGamePiece.collisionMap[y][x]) {
+					callback(x, y);
+				}
+			}
+		}
+	}
+
 	drawGamePiece() {
 		this.ctx.fillStyle = this.curGamePiece.color;
-		for (let c_i = 0, i = 0; c_i <= this.curGamePiece.heightMax; ++c_i) {
-			for (let c_j = 0, j = 0; c_j <= this.curGamePiece.widthMax; ++c_j) {
-				if (this.curGamePiece.collisionMap[c_i][c_j]) {
-					this.ctx.fillRect(
-						Math.round((j + this.pos.x) * this.gridTileDim.x), Math.round((i + this.pos.y) * this.gridTileDim.y),
-						Math.round(this.gridTileDim.x), Math.round(this.gridTileDim.y)
-					);
-				}
-				++j;
-			}
-			++i;
-		}
+		this.iterateOverPiece((x, y) => {
+			this.ctx.fillRect(
+				Math.round((x + this.pos.x) * this.gridTileDim.x), Math.round((y + this.pos.y) * this.gridTileDim.y),
+				Math.round(this.gridTileDim.x), Math.round(this.gridTileDim.y)
+			);
+		});
 	}
 
 	draw() {
@@ -280,30 +292,48 @@ class Tetris {
 	}
 
 	placeGamePiece() {
-		for (let c_i = 0; c_i <= this.curGamePiece.heightMax; ++c_i) {
-			for (let c_j = 0; c_j <= this.curGamePiece.widthMax; ++c_j) {
-				if (this.curGamePiece.collisionMap[c_i][c_j]) {
-					this.grid[this.pos.y + c_i][this.pos.x + c_j] = this.curGamePiece.color;
-				}
-			}
-		}
+		this.iterateOverPiece((x, y) => {
+			this.grid[this.pos.y + y][this.pos.x + x] = this.curGamePiece.color;
+		});
 		this.resetGamePiece();
+	}
+
+	move(dx, dy) {
+		// Check if the piece is at a boundary
+		const newPos = { x: this.pos.x + dx, y: this.pos.y + dy };
+		if (newPos.x > this.gridDim.x - this.curGamePiece.widthMax - 1) return false;
+		if (newPos.x < -this.curGamePiece.widthMin) return false;
+		if (newPos.y > this.gridDim.y - this.curGamePiece.heightMax - 1) return false;
+		if (newPos.y < -this.curGamePiece.heightMin - this.curGamePiece.height) return false;
+
+		// Check if there are pieces in the way
+		let canMove = true;
+		this.iterateOverPiece((x, y) => {
+			if (this.grid[this.pos.y + y + dy] && this.grid[this.pos.y + y + dy][this.pos.x + x + dx]) canMove = false;
+		});
+
+		if (canMove) {
+			this.pos.x += dx;
+			this.pos.y += dy;
+		}
+
+		return canMove;
 	}
 
 	handleKeyDown(event) {
 		if (event.defaultPrevented) return;
 		switch (event.key) {
 			case "ArrowDown":
-				this.pos.y += 1;
+				this.move(0, +1);
 				break;
 			case "ArrowUp":
-				this.pos.y -= 1;
+				this.move(0, -1);
 				break;
 			case "ArrowLeft":
-				this.pos.x -= 1;
+				this.move(-1, 0);
 				break;
 			case "ArrowRight":
-				this.pos.x += 1;
+				this.move(+1, 0);
 				break;
 			case "a":
 				this.curGamePiece.rotateCCW();
@@ -316,6 +346,11 @@ class Tetris {
 				return;
 			case "w":
 				this.swapGamePiece();
+				return;
+			case " ":
+				while (this.move(0, +1));
+				console.log("okay");
+				this.placeGamePiece();
 				return;
 			default: return;
 		}
