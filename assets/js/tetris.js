@@ -187,8 +187,41 @@ class Tetris {
 		this.nextCanvas.onResize();
 	}
 
+	iterateOverPiece(callback) {
+		for (let y = 0; y <= this.curGamePiece.heightMax; ++y) {
+			for (let x = 0; x <= this.curGamePiece.widthMax; ++x) {
+				if (this.curGamePiece.collisionMap[y][x]) {
+					callback(x, y);
+				}
+			}
+		}
+	}
+
+	collides() {
+		let pieceCollides = false;
+		this.iterateOverPiece((x, y) => {
+			if (this.grid[this.pos.y + y] && this.grid[this.pos.y + y][this.pos.x + x]) pieceCollides = true;
+		});
+		return pieceCollides;
+	}
+
+	onMove() {
+		// Ensure piece is within horizontal bounds
+		this.pos.x = Math.max(
+			Math.min(this.pos.x, this.gridDim.x - this.curGamePiece.widthMax  - 1),
+			-this.curGamePiece.widthMin
+		);
+
+		// Move piece up if it collides
+		this.pos.y = Math.min(this.pos.y, this.gridDim.y - this.curGamePiece.heightMax - 1)
+		while (this.collides()) {
+			--this.pos.y;
+		}
+	}
+
 	resetPosition() {
 		this.pos = { x: Math.floor(this.gridDim.x / 2 - this.curGamePiece.width / 2), y: -this.curGamePiece.heightMin }; // Position of upper left corner of current game piece
+		this.onMove();
 	}
 
 	resetGamePiece() {
@@ -245,16 +278,6 @@ class Tetris {
 		});
 	}
 
-	iterateOverPiece(callback) {
-		for (let y = 0; y <= this.curGamePiece.heightMax; ++y) {
-			for (let x = 0; x <= this.curGamePiece.widthMax; ++x) {
-				if (this.curGamePiece.collisionMap[y][x]) {
-					callback(x, y);
-				}
-			}
-		}
-	}
-
 	drawGamePiece() {
 		this.ctx.fillStyle = this.curGamePiece.color;
 		this.iterateOverPiece((x, y) => {
@@ -280,25 +303,29 @@ class Tetris {
 		this.nextCanvas.draw(this.nextGamePiece);
 	}
 
-	collides() {
-		let pieceCollides = false;
-		this.iterateOverPiece((x, y) => {
-			if (this.grid[this.pos.y + y][this.pos.x + x]) pieceCollides = true;
-		});
-		return pieceCollides;
-	}
+	clearFullLines() {
+		// Clear full lines
+		let clearedLine = false;
+		for (let y = this.curGamePiece.heightMin; y <= this.curGamePiece.heightMax; ++y) {
+			let lineIsFull = true;
+			for (let x = 0; x < this.gridDim.x; ++x) {
+				if (!this.grid[this.pos.y + y][x]) {
+					lineIsFull = false;
+					break;
+				}
+			}
 
-	onMove() {
-		// Ensure piece is within horizontal bounds
-		this.pos.x = Math.max(
-			Math.min(this.pos.x, this.gridDim.x - this.curGamePiece.widthMax  - 1),
-			-this.curGamePiece.widthMin
-		);
+			if (lineIsFull) {
+				for (let x = 0; x < this.gridDim.x; ++x) {
+					this.grid[this.pos.y + y][x] = undefined;
+				}
+				clearedLine = true;
+			}
+		}
 
-		// Move piece up if it collides
-		this.pos.y = Math.min(this.pos.y, this.gridDim.y - this.curGamePiece.heightMax - 1)
-		while (this.collides()) {
-			--this.pos.y;
+		// Shift lines down
+		if (clearedLine) {
+
 		}
 	}
 
@@ -306,6 +333,7 @@ class Tetris {
 		this.iterateOverPiece((x, y) => {
 			this.grid[this.pos.y + y][this.pos.x + x] = this.curGamePiece.color;
 		});
+		this.clearFullLines();
 		this.resetGamePiece();
 	}
 
