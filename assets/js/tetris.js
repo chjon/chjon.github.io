@@ -280,15 +280,26 @@ class Tetris {
 		this.nextCanvas.draw(this.nextGamePiece);
 	}
 
+	collides() {
+		let pieceCollides = false;
+		this.iterateOverPiece((x, y) => {
+			if (this.grid[this.pos.y + y][this.pos.x + x]) pieceCollides = true;
+		});
+		return pieceCollides;
+	}
+
 	onMove() {
+		// Ensure piece is within horizontal bounds
 		this.pos.x = Math.max(
 			Math.min(this.pos.x, this.gridDim.x - this.curGamePiece.widthMax  - 1),
 			-this.curGamePiece.widthMin
 		);
-		this.pos.y = Math.max(
-			Math.min(this.pos.y, this.gridDim.y - this.curGamePiece.heightMax - 1),
-			-this.curGamePiece.heightMin - this.curGamePiece.height
-		);
+
+		// Move piece up if it collides
+		this.pos.y = Math.min(this.pos.y, this.gridDim.y - this.curGamePiece.heightMax - 1)
+		while (this.collides()) {
+			--this.pos.y;
+		}
 	}
 
 	placeGamePiece() {
@@ -341,15 +352,11 @@ class Tetris {
 			case "d":
 				this.curGamePiece.rotateCW();
 				break;
-			case "s":
-				this.placeGamePiece();
-				return;
 			case "w":
 				this.swapGamePiece();
 				return;
 			case " ":
 				while (this.move(0, +1));
-				console.log("okay");
 				this.placeGamePiece();
 				return;
 			default: return;
