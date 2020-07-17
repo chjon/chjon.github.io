@@ -305,7 +305,7 @@ class Tetris {
 
 	clearFullLines() {
 		// Clear full lines
-		let clearedLine = false;
+		let clearedLines = [];
 		for (let y = this.curGamePiece.heightMin; y <= this.curGamePiece.heightMax; ++y) {
 			let lineIsFull = true;
 			for (let x = 0; x < this.gridDim.x; ++x) {
@@ -319,13 +319,28 @@ class Tetris {
 				for (let x = 0; x < this.gridDim.x; ++x) {
 					this.grid[this.pos.y + y][x] = undefined;
 				}
-				clearedLine = true;
+				clearedLines.push(this.pos.y + y);
 			}
 		}
 
 		// Shift lines down
-		if (clearedLine) {
-
+		if (clearedLines.length) {
+			let shiftIndex = 0;
+			for (let y = this.pos.y + this.curGamePiece.heightMax; y >= this.pos.y + this.curGamePiece.heightMin; --y) {
+				if (y == clearedLines[clearedLines.length - 1]) {
+					++shiftIndex;
+					clearedLines.pop();
+				} else {
+					const tmp = this.grid[y + shiftIndex];
+					this.grid[y + shiftIndex] = this.grid[y];
+					this.grid[y] = tmp;
+				}
+			}
+			for (let y = this.pos.y + this.curGamePiece.heightMin - 1; y > 0; --y) {
+				const tmp = this.grid[y + shiftIndex];
+				this.grid[y + shiftIndex] = this.grid[y];
+				this.grid[y] = tmp;
+			}
 		}
 	}
 
