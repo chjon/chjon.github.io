@@ -223,6 +223,7 @@ class Tetris {
 	resetPosition() {
 		this.pos = { x: Math.floor(this.gridDim.x / 2 - this.curGamePiece.width / 2), y: -this.curGamePiece.heightMin }; // Position of upper left corner of current game piece
 		this.onMove();
+		this.tickCount = 0;
 	}
 
 	resetGamePiece() {
@@ -249,6 +250,9 @@ class Tetris {
 		this.resetGamePiece();
 		this.numLinesCleared = 0;
 		this.numPoints = 0;
+		this.tickRate = 2 * 1000 / FPS;
+		this.tickCount = 0;
+		this.gameOver = false;
 	}
 
 	drawGameGrid() {
@@ -289,21 +293,6 @@ class Tetris {
 				Math.round(this.gridTileDim.x), Math.round(this.gridTileDim.y)
 			);
 		});
-	}
-
-	draw() {
-		// Draw placed pieces
-		this.drawPlacedPieces();
-
-		// Draw current piece
-		this.drawGamePiece();
-
-		// Draw game grid
-		this.drawGameGrid();
-
-		// Draw previews
-		this.holdCanvas.draw(this.holdGamePiece);
-		this.nextCanvas.draw(this.nextGamePiece);
 	}
 
 	clearFullLines() {
@@ -354,6 +343,10 @@ class Tetris {
 	}
 
 	placeGamePiece() {
+		if (this.pos.y + this.curGamePiece.heightMin < 0) {
+			this.gameOver = true;
+			return false;
+		}
 		this.iterateOverPiece((x, y) => {
 			this.grid[this.pos.y + y][this.pos.x + x] = this.curGamePiece.color;
 		});
@@ -378,20 +371,18 @@ class Tetris {
 		if (canMove) {
 			this.pos.x += dx;
 			this.pos.y += dy;
+			this.placementCooldown = 0;
 		}
 
 		return canMove;
 	}
 
 	handleKeyDown(event) {
-		if (event.defaultPrevented) return;
+		if (event.defaultPrevented || this.gameOver) return;
 		switch (event.key) {
 			case "ArrowDown":
 				this.move(0, +1);
-				break;
-			case "ArrowUp":
-				this.move(0, -1);
-				break;
+				return;
 			case "ArrowLeft":
 				this.move(-1, 0);
 				break;
@@ -415,6 +406,45 @@ class Tetris {
 		}
 
 		this.onMove();
+	}
+
+	drawGameOver() {
+		this.ctx.fillStyle = "#FFFFFF";
+		this.ctx.font = `${0.1 * this.gridPixelDim.x}px Arial`;
+		this.ctx.textAlign = "center";
+		this.ctx.textBaseline = "middle";
+		this.ctx.fillText("GAME OVER", Math.floor(this.gridPixelDim.x / 2), Math.floor(this.gridPixelDim.y / 2));
+	}
+
+	draw() {
+		if (!this.gameOver) {
+			++this.tickCount;
+			++this.placementCooldown;
+			if (this.tickCount > this.tickRate) {
+				if (!this.move(0, +1) && this.placementCooldown > this.tickRate) {
+					this.placeGamePiece();
+				}
+				this.tickCount = 0;
+			}
+		}
+
+		// Draw placed pieces
+		this.drawPlacedPieces();
+
+		// Draw current piece
+		this.drawGamePiece();
+
+		// Draw game grid
+		this.drawGameGrid();
+
+		// Draw previews
+		this.holdCanvas.draw(this.holdGamePiece);
+		this.nextCanvas.draw(this.nextGamePiece);
+
+		// Draw text overlay
+		if (this.gameOver) {
+			this.drawGameOver();
+		}
 	}
 }
 
