@@ -254,7 +254,10 @@ class Tetris {
 	}
 
 	resetPosition() {
-		this.pos = { x: Math.floor(this.gridDim.x / 2 - this.curGamePiece.width / 2), y: -this.curGamePiece.heightMin }; // Position of upper left corner of current game piece
+		this.pos = {
+			x: Math.floor(this.gridDim.x / 2 - this.curGamePiece.width / 2 - this.curGamePiece.widthMin),
+			y: -this.curGamePiece.heightMin
+		}; // Position of upper left corner of current game piece
 		this.onMove();
 		this.tickCount = 0;
 	}
