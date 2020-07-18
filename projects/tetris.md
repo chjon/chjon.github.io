@@ -20,11 +20,11 @@ script: /assets/js/tetris.js
 		</div>
 		<div class="score-display">
 			<h3>Lines:</h3>
-			<p>0</p>
+			<p id="score-lines">0</p>
 		</div>
 		<div class="score-display">
 			<h3>Score:</h3>
-			<p>0</p>
+			<p id="score-points">0</p>
 		</div>
 	</div>
 	<div class="tetris-grid">

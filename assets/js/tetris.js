@@ -1,4 +1,5 @@
 import { newNDArray, forEach } from './array-utils.js';
+import * as dom from './dom-utils.js';
 
 const FPS = 60;
 let canvases;
@@ -246,10 +247,12 @@ class Tetris {
 		this.onResize();
 		this.nextGamePiece = getRandomGamePiece();
 		this.resetGamePiece();
+		this.numLinesCleared = 0;
+		this.numPoints = 0;
 	}
 
 	drawGameGrid() {
-		this.ctx.strokeStyle = "#FFFFFF";
+		this.ctx.strokeStyle = "#333333";
 		// Draw vertical lines
 		for (let x = 0; x <= this.gridDim.x; ++x) {
 			line(this.ctx,
@@ -320,6 +323,7 @@ class Tetris {
 					this.grid[this.pos.y + y][x] = undefined;
 				}
 				clearedLines.push(this.pos.y + y);
+				++this.numLinesCleared;
 			}
 		}
 
@@ -329,6 +333,7 @@ class Tetris {
 			for (let y = this.pos.y + this.curGamePiece.heightMax; y >= this.pos.y + this.curGamePiece.heightMin; --y) {
 				if (y == clearedLines[clearedLines.length - 1]) {
 					++shiftIndex;
+					this.numPoints += shiftIndex * 100;
 					clearedLines.pop();
 				} else {
 					const tmp = this.grid[y + shiftIndex];
@@ -341,6 +346,10 @@ class Tetris {
 				this.grid[y + shiftIndex] = this.grid[y];
 				this.grid[y] = tmp;
 			}
+
+			// Update displayed points
+			dom.setPropertiesById("score-lines",  { innerHTML: this.numLinesCleared });
+			dom.setPropertiesById("score-points", { innerHTML: this.numPoints });
 		}
 	}
 
