@@ -103,17 +103,49 @@ class GamePiece {
 	}
 }
 
-function getRandomGamePiece() {
-	const randIdx = Math.floor(Math.random() * gamePieces.length);
-	const randAng = Math.floor(Math.random() * 4);
-	let gamePiece = new GamePiece(gamePieces[randIdx].collisionMap, gamePieces[randIdx].color);
-	if (randAng > 0) {
-		gamePiece.rotateCW();
-		if (randAng == 1) gamePiece.rotateCW();
-	} else if (randAng == 3) {
-		gamePiece.rotateCCW();
+class GamePieceRandomizer {
+	constructor() {
+		this.bag = [];
+		for (let i = 0; i < gamePieces.length; ++i) {
+			this.bag.push(i);
+		}
+		this.index = 0;
 	}
-	return gamePiece;
+
+	shuffle() {
+		for (let i = 0; i < this.bag.length; ++i) {
+			const randIdx = Math.floor(Math.random() * (gamePieces.length - i)) + i;
+			const tmp = this.bag[i];
+			this.bag[i] = this.bag[randIdx];
+			this.bag[randIdx] = tmp;
+		}
+	}
+
+	init() {
+		this.shuffle();
+		this.index = 0;
+	}
+
+	getRandomGamePiece() {
+		let gamePiece = new GamePiece(gamePieces[this.bag[this.index]].collisionMap, gamePieces[this.bag[this.index]].color);
+
+		// Reshuffle after getting all pieces in the bag
+		++this.index;
+		if (this.index == gamePieces.length) {
+			this.shuffle();
+			this.index = 0;
+		}
+
+		// Rotate piece randomly
+		const randAng = Math.floor(Math.random() * 4);
+		if (randAng > 0) {
+			gamePiece.rotateCW();
+			if (randAng == 1) gamePiece.rotateCW();
+		} else if (randAng == 3) {
+			gamePiece.rotateCCW();
+		}
+		return gamePiece;
+	}
 }
 
 class PreviewCanvas {
@@ -177,6 +209,7 @@ class Tetris {
 		this.ctx = canvases.game;
 		this.gridDim = { x: 10, y: 20 };
 		this.grid = newNDArray([this.gridDim.y, this.gridDim.x], undefined);
+		this.randomizer = new GamePieceRandomizer();
 	}
 
 	onResize() {
@@ -228,7 +261,7 @@ class Tetris {
 
 	resetGamePiece() {
 		this.curGamePiece = this.nextGamePiece;
-		this.nextGamePiece = getRandomGamePiece();
+		this.nextGamePiece = this.randomizer.getRandomGamePiece();
 		this.resetPosition();
 	}
 
@@ -245,8 +278,9 @@ class Tetris {
 	}
 
 	init() {
+		this.randomizer.init();
 		this.onResize();
-		this.nextGamePiece = getRandomGamePiece();
+		this.nextGamePiece = this.randomizer.getRandomGamePiece();
 		this.resetGamePiece();
 		this.numLinesCleared = 0;
 		this.numPoints = 0;
