@@ -323,13 +323,32 @@ class Tetris {
 	}
 
 	drawGamePiece() {
+		let piecePreviewHeightMap = new Map();
 		this.ctx.fillStyle = this.curGamePiece.color;
 		this.iterateOverPiece((x, y) => {
+			if (piecePreviewHeightMap.has(x)) {
+				piecePreviewHeightMap.set(x, Math.max(y + 1, piecePreviewHeightMap.get(x)));
+			} else {
+				piecePreviewHeightMap.set(x, y + 1);
+			}
 			this.ctx.fillRect(
 				Math.round((x + this.pos.x) * this.gridTileDim.x), Math.round((y + this.pos.y) * this.gridTileDim.y),
 				Math.round(this.gridTileDim.x), Math.round(this.gridTileDim.y)
 			);
 		});
+
+		// Draw piece drop preview
+		this.ctx.fillStyle = "#222222";
+		let entryItr = piecePreviewHeightMap.entries();
+		for (let entry = entryItr.next(); !entry.done; entry = entryItr.next()) {
+			for (let [ x, y ] = entry.value; y < this.gridDim.y; ++y) {
+				if (this.grid[y + this.pos.y] && this.grid[y + this.pos.y][x + this.pos.x]) break;
+				this.ctx.fillRect(
+					Math.round((x + this.pos.x) * this.gridTileDim.x), Math.round((y + this.pos.y) * this.gridTileDim.y),
+					Math.round(this.gridTileDim.x), Math.round(this.gridTileDim.y)
+				);
+			}
+		}
 	}
 
 	clearFullLines() {
@@ -465,11 +484,11 @@ class Tetris {
 			}
 		}
 
-		// Draw placed pieces
-		this.drawPlacedPieces();
-
 		// Draw current piece
 		this.drawGamePiece();
+
+		// Draw placed pieces
+		this.drawPlacedPieces();
 
 		// Draw game grid
 		this.drawGameGrid();
