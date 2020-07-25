@@ -292,6 +292,10 @@ class Tetris {
 		this.gameOver = false;
 	}
 
+	speedUp() {
+		this.tickRate = Math.max(1, this.tickRate - 1);
+	}
+
 	drawGameGrid() {
 		this.ctx.strokeStyle = "#333333";
 		// Draw vertical lines
@@ -374,6 +378,7 @@ class Tetris {
 
 		// Shift lines down
 		if (clearedLines.length) {
+			this.speedUp();
 			let shiftIndex = 0;
 			for (let y = this.pos.y + this.curGamePiece.heightMax; y >= this.pos.y + this.curGamePiece.heightMin; --y) {
 				if (y == clearedLines[clearedLines.length - 1]) {
@@ -447,9 +452,11 @@ class Tetris {
 				break;
 			case "a":
 				this.curGamePiece.rotateCCW();
+				this.placementCooldown = 0;
 				break;
 			case "d":
 				this.curGamePiece.rotateCW();
+				this.placementCooldown = 0;
 				break;
 			case "w":
 				this.swapGamePiece();
