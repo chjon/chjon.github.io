@@ -338,10 +338,10 @@ class Tetris {
 		});
 
 		// Draw piece drop preview
-		this.ctx.fillStyle = "#222222";
+		this.ctx.fillStyle = "#FFFFFF1F";
 		let entryItr = piecePreviewHeightMap.entries();
 		for (let entry = entryItr.next(); !entry.done; entry = entryItr.next()) {
-			for (let [ x, y ] = entry.value; y < this.gridDim.y; ++y) {
+			for (let [ x, y ] = entry.value; y + this.pos.y < this.gridDim.y; ++y) {
 				if (this.grid[y + this.pos.y] && this.grid[y + this.pos.y][x + this.pos.x]) break;
 				this.ctx.fillRect(
 					Math.round((x + this.pos.x) * this.gridTileDim.x), Math.round((y + this.pos.y) * this.gridTileDim.y),
