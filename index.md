@@ -8,13 +8,15 @@ seo: true
 {% capture about-content %}
 # Hello!
 
-I'm Jonathan, a third-year Computer Engineering student and aspiring software engineer at the University of Waterloo.
+I'm Jonathan, a fourth-year Computer Engineering student, Undergraduate Research Assistant, and aspiring software engineer at the University of Waterloo.
 
-I love learning and enjoy working in many different fields. The projects I've worked on include games, simulations, and API development. I'm especially interested in computer graphics and [emergent behaviour](https://en.wikipedia.org/wiki/Emergence). Examples of my work can be found on my [projects](/projects) page.
+I love learning and enjoy working on interesting challenges in many different fields. The projects I've worked on include games, simulations, and API development. I'm especially interested in computer graphics and [emergent behaviour](https://en.wikipedia.org/wiki/Emergence). Examples of my work can be found on my [projects](/projects) page.
 
-I'm currently working as an undergraduate research assistant with [Dr. Vijay Ganesh](https://ece.uwaterloo.ca/~vganesh/), studying the application of machine learning to SAT solvers.
+I'm currently working as an undergraduate research assistant with [Dr. Vijay Ganesh](https://ece.uwaterloo.ca/~vganesh/), studying the application of machine learning to SAT solvers. I am a first co-author on a recent paper in this field: [**On the Hierarchical Community Structure of Practical SAT Formulas**](https://satcomplexity.github.io/hcs/).
 
 In the past, I've worked at:
+
+- [NVIDIA](https://www.nvidia.com/en-us/), developing and improving software tools for measuring and analyzing hardware performance. I identified performance bottlenecks and optimization opportunities, and parallelized computation and file I/O to reduce program execution time.
 
 - [DarkVision Technologies Inc.](https://darkvisiontech.com/), working on features for their 3D ultrasound imaging tool and developing data visualization tools to expediate data analysis. I built custom graphing software for correlating datasets and worked on migrating existing tools to DirectX 12.
 
