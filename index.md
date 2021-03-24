@@ -1,7 +1,7 @@
 ---
 layout: home
 stylesheet: /assets/css/home.css
-script: /assets/js/gol.js
+script: /assets/js/home.js
 seo: true
 ---
 
@@ -17,7 +17,7 @@ I am a first co-author on a recent paper in this field: [On the Hierarchical Com
 {% capture work-content %}
 # What I do:
 
-I love learning and enjoy working on interesting challenges in many different fields. The projects I've worked on include games, simulations, and API development. I'm especially interested in computer graphics and [emergent behaviour](https://en.wikipedia.org/wiki/Emergence). Examples of my work can be found on my [projects](/projects) page.
+I love learning and enjoy working on interesting challenges in many different fields. The projects I've worked on include games, simulations, and API development. I'm especially interested in computer graphics and [emergent behaviour](https://en.wikipedia.org/wiki/Emergence).
 
 In the past, I've worked at:
 

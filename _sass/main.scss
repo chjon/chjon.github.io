@@ -1,7 +1,10 @@
 :root {
-  --txt-colour: #FFFFFF;
-  --accent-color: #00FF00;
-  --background-color: #000000;
+  --theme-light-txt-colour: #000000;
+  --theme-dark-txt-colour: #FFFFFF;
+  --theme-light-accent-color: #0099FF;
+  --theme-dark-accent-color: #00FF00;
+  --theme-light-background-color: #FFFFFF;
+  --theme-dark-background-color: #000000;
 }
 
 // Layout
@@ -10,12 +13,26 @@
   box-sizing: border-box;
 }
 
+// Background color
+body.theme-dark { background: var(--theme-dark-background-color); }
+body.theme-light { background: var(--theme-light-background-color); }
+
+.theme-dark {
+	color: var(--theme-dark-txt-colour);
+	a, p, ul, li { text-decoration-color: var(--theme-dark-accent-color); }
+	p a:hover, li a:hover { color: var(--theme-dark-accent-color); }
+	hr { background-color: var(--theme-dark-accent-color); }
+}
+.theme-light {
+	color: var(--theme-light-txt-colour);
+	a, p, ul, li { text-decoration-color: var(--theme-light-accent-color); }
+	p a:hover, li a:hover { color: var(--theme-light-accent-color); }
+	hr { background-color: var(--theme-light-accent-color); }
+}
+
 body {
   padding: 0;
   margin: 0;
-
-	// Background color
-	background: var(--background-color);
 }
 
 // Font styles
@@ -56,14 +73,5 @@ a, p, ul, li {
   font-family: 'Open Sans', 'sans serif';
   font-size: 1rem;
   line-height: 200%;
-  text-decoration-color: var(--accent-color);
   margin-top: 0;
-}
-
-p a:hover, li a:hover {
-  color: var(--accent-color);
-}
-
-hr {
-  background-color: var(--accent-color);
 }

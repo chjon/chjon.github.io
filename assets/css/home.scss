@@ -2,9 +2,30 @@
 ---
 :root {
   --home-nav-button-hover-color: rgba(100, 100, 100, 0.5);
-  --card-color: rgba(40, 40, 40, 0.9);
+  --theme-dark-card-color: rgba(40, 40, 40, 0.9);
+  --theme-light-card-color: rgba(240, 240, 240, 0.9);
   --card-max-width: 50rem;
 }
+
+// Theme toggle
+.theme-toggle {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 1.5em;
+	cursor: pointer;
+}
+
+.theme-toggle-icon {
+	position: relative;
+	align-items: center;
+	align-content: center;
+	width: 1.5rem;
+	filter: saturate(1) invert(1);
+}
+
+#dark-mode-icon { display: none; }
+#light-mode-icon { display: block; }
 
 // Layout
 
@@ -67,10 +88,14 @@
 }
 
 // Cards
-
-.home-card {
-  max-width: var(--card-max-width);
-  background: var(--card-color);
+.home-card { max-width: var(--card-max-width); }
+.theme-dark {
+	.home-card { background: var(--theme-dark-card-color); }
+	.footer-button { filter:invert(0); }
+}
+.theme-light {
+	.home-card { background: var(--theme-light-card-color); }
+	.footer-button { filter:invert(1); }
 }
 
 // Footer button bar
