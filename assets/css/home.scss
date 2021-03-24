@@ -3,7 +3,7 @@
 :root {
   --home-nav-button-hover-color: rgba(100, 100, 100, 0.5);
   --theme-dark-card-color: rgba(40, 40, 40, 0.9);
-  --theme-light-card-color: rgba(240, 240, 240, 0.9);
+  --theme-light-card-color: rgba(240, 240, 240, 0.5);
   --card-max-width: 50rem;
 }
 
@@ -16,6 +16,10 @@
 	cursor: pointer;
 }
 
+.theme-toggle:hover {
+	filter: opacity(0.5)
+}
+
 .theme-toggle-icon {
 	position: relative;
 	align-items: center;
@@ -26,6 +30,37 @@
 
 #dark-mode-icon { display: none; }
 #light-mode-icon { display: block; }
+
+// GOL restart
+.gol-control {
+	position: fixed;
+	top: 0;
+	right: 0;
+	padding-top: 1.3em;
+	padding-right: 1.3em;
+}
+
+.gol-state, .gol-restart {
+	position: relative;
+	padding: 0.8em;
+	cursor: pointer;
+	display: inline;
+}
+
+.gol-state:hover, .gol-restart:hover {
+	filter: opacity(0.5)
+};
+
+.gol-control-icon {
+	position: relative;
+	align-items: center;
+	align-content: center;
+	width: 1.7rem;
+	filter: grayscale(1) saturate(1);
+}
+
+#gol-play-icon { display: none; }
+#gol-pause-icon { display: inline; }
 
 // Layout
 
@@ -92,10 +127,12 @@
 .theme-dark {
 	.home-card { background: var(--theme-dark-card-color); }
 	.footer-button { filter:invert(0); }
+	.gol-control { filter: invert(1); }
 }
 .theme-light {
 	.home-card { background: var(--theme-light-card-color); }
 	.footer-button { filter:invert(1); }
+	.gol-control { filter: invert(0); }
 }
 
 // Footer button bar
