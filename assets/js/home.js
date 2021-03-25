@@ -28,14 +28,14 @@ class GOL {
 		return current_theme ? `rgb(0, 30, 0)` : `rgb(240, 250, 255)`;
 	}
 
-  constructor({ width, height }, ctx, { numCols, numRows }, initialProbability = 0.2) {
+  constructor({ width, height }, ctx, { numCols, numRows }, initialProbability = 0.5) {
     this.ctx = ctx;
     this.width = width;
     this.height = height;
     this.numCols = numCols;
     this.numRows = numRows;
     this.initialProbability = initialProbability;
-	this.state = 1
+	this.state = 0
 
     this.maxDist = (numCols * numCols + numRows * numRows) / 4;
     this.cellWidth = width / numCols;
