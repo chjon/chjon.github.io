@@ -1,7 +1,6 @@
 ---
 ---
 :root {
-  --home-nav-button-hover-color: rgba(100, 100, 100, 0.5);
   --theme-dark-card-color: rgba(40, 40, 40, 0.9);
   --theme-light-card-color: rgba(240, 240, 240, 0.5);
   --card-max-width: 50rem;
@@ -108,10 +107,6 @@
   font-size: 1.5rem;
 }
 
-.home-nav-button:hover {
-  background: var(--home-nav-button-hover-color);
-}
-
 @media (max-device-width: 800px), (max-width: 850px) {
   .home-title {
     font-size: 3rem;
@@ -126,11 +121,13 @@
 .home-card { max-width: var(--card-max-width); }
 .theme-dark {
 	.home-card { background: var(--theme-dark-card-color); }
+	.home-nav-button:hover { background: var(--theme-dark-card-color); }
 	.footer-button { filter:invert(0); }
 	.gol-control { filter: invert(1); }
 }
 .theme-light {
 	.home-card { background: var(--theme-light-card-color); }
+	.home-nav-button:hover { background: var(--theme-light-card-color); }
 	.footer-button { filter:invert(1); }
 	.gol-control { filter: invert(0); }
 }
