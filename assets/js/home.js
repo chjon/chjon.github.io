@@ -2,6 +2,7 @@ const theme_classes = ["theme-light", "theme-dark"]
 let current_theme = 0
 
 function theme_toggle_init(gol) {
+	const rootNode = document.getElementById("root")
 	const theme_button = document.getElementById("theme-toggle-button");
 	const dark_mode_icon = document.getElementById("dark-mode-icon");
 	const light_mode_icon = document.getElementById("light-mode-icon");
@@ -16,6 +17,8 @@ function theme_toggle_init(gol) {
 			}
 		
 			current_theme ^= 1;
+			rootNode.style.display = "none"
+			rootNode.style.display = "block"
 		});
 	}
 }
