@@ -20,7 +20,7 @@ function theme_toggle_init(gol) {
 	}
 }
 
-const FRAME_DELAY = 100;
+const FRAME_DELAY = 150;
 const MAX_DIMENSIONS = { width: 50, height: 50 };
 
 class GOL {
