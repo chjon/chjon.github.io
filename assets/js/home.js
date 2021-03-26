@@ -2,7 +2,6 @@ const theme_classes = ["theme-light", "theme-dark"]
 let current_theme = 0
 
 function theme_toggle_init(gol) {
-	const rootNode = document.getElementById("root")
 	const theme_button = document.getElementById("theme-toggle-button");
 	const dark_mode_icon = document.getElementById("dark-mode-icon");
 	const light_mode_icon = document.getElementById("light-mode-icon");
@@ -17,8 +16,6 @@ function theme_toggle_init(gol) {
 			}
 		
 			current_theme ^= 1;
-			rootNode.style.display = "none"
-			rootNode.style.display = "block"
 		});
 	}
 }
@@ -113,15 +110,12 @@ class GOL {
 
     this.iterate((i, j) => {
       if (this.cells[i][j]) {
-        const distX = Math.abs(this.numCols - 2 * (i + 1));
-        const distY = Math.abs(this.numRows - 2 * (j + 1));
-        
         this.ctx.fillStyle = this.getColor();
         this.ctx.fillRect(
-          this.cellWidth * i,
-          this.cellHeight * j,
-          this.cellWidth,
-          this.cellHeight
+		  Math.floor(this.cellWidth * i),
+		  Math.floor(this.cellHeight * j),
+          Math.ceil(this.cellWidth),
+          Math.ceil(this.cellHeight)
         );
       }
     });
