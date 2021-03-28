@@ -6,6 +6,7 @@ function theme_toggle_init(gol) {
 	const dark_mode_icon = document.getElementById("dark-mode-icon");
 	const light_mode_icon = document.getElementById("light-mode-icon");
 	const themed_items = Array.prototype.slice.call(document.getElementsByClassName(theme_classes[current_theme]));
+    const canvasEl = document.getElementById("background-canvas");
 	theme_button.onclick = () => {
 		gol.queue(() => {
 			light_mode_icon.style.display = (current_theme) ? "block" : "none";
@@ -16,6 +17,10 @@ function theme_toggle_init(gol) {
 			}
 		
 			current_theme ^= 1;
+            canvasEl.style.position = "sticky";
+            setTimeout(() => {
+                canvasEl.style.position = "fixed";
+            }, 0);
 		});
 	}
 }
