@@ -10,14 +10,14 @@ seo: true
 
 I'm Jonathan, a fourth-year Computer Engineering student, undergraduate research assistant, and aspiring software engineer at the [University of Waterloo](https://uwaterloo.ca/).
 I'm currently working with [Dr. Vijay Ganesh](https://ece.uwaterloo.ca/~vganesh/), studying the application of machine learning to SAT solvers.
-I am a first co-author on a recent paper in this field: [On the Hierarchical Community Structure of Practical SAT Formulas](https://satcomplexity.github.io/hcs/).
+I am a first co-author on a recent paper in this field: [On the Hierarchical Community Structure of Practical SAT Formulas](https://link.springer.com/chapter/10.1007/978-3-030-80223-3_25).
 
 {% endcapture %}
 
 {% capture work-content %}
 # What I do:
 
-I love learning and enjoy working on interesting challenges in many different fields. The projects I've worked on include games, simulations, and API development. I'm especially interested in computer graphics and [emergent behaviour](https://en.wikipedia.org/wiki/Emergence).
+I love learning and enjoy working on interesting challenges in many different fields. The projects I've worked on include games, simulations, and API development. I'm especially interested in the fields of computer graphics and automated reasoning.
 
 In the past, I've worked at:
 
