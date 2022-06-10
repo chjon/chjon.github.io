@@ -8,9 +8,8 @@ seo: true
 {% capture intro-content %}
 # Hello!
 
-I'm Jonathan, a fourth-year Computer Engineering student, undergraduate research assistant, and aspiring software engineer at the [University of Waterloo](https://uwaterloo.ca/).
-I'm currently working with [Dr. Vijay Ganesh](https://ece.uwaterloo.ca/~vganesh/), studying the application of machine learning to SAT solvers.
-I am a first co-author on a recent paper in this field: [On the Hierarchical Community Structure of Practical SAT Formulas](https://link.springer.com/chapter/10.1007/978-3-030-80223-3_25).
+I'm Jonathan, a recent Computer Engineering BASc graduate from the [University of Waterloo](https://uwaterloo.ca/).
+I will be starting work on a MASc in September, working with [Dr. Vijay Ganesh](https://ece.uwaterloo.ca/~vganesh/), studying the application of machine learning to SAT solvers.
 
 {% endcapture %}
 
@@ -20,6 +19,8 @@ I am a first co-author on a recent paper in this field: [On the Hierarchical Com
 I love learning and enjoy working on interesting challenges in many different fields. The projects I've worked on include games, simulations, and API development. I'm especially interested in the fields of computer graphics and automated reasoning.
 
 In the past, I've worked at:
+
+- [University of Waterloo](https://uwaterloo.ca/), researching the integration of the extended resolution proof system into CDCL SAT solvers and studying the structure of SAT instances. I co-authored a paper in this field: [On the Hierarchical Community Structure of Practical SAT Formulas](https://link.springer.com/chapter/10.1007/978-3-030-80223-3_25).
 
 - [NVIDIA](https://www.nvidia.com/en-us/), developing and improving software tools for measuring and analyzing hardware performance. I identified performance bottlenecks and optimization opportunities, and parallelized computation and file I/O to reduce program execution time.
 
@@ -31,7 +32,7 @@ In the past, I've worked at:
 
 - [New York Theological Education Center](https://nytec.org/Eng/html/about_us.html), where I built and deployed a library system management application using MySQL and VBA.
 
-In my free time, I also enjoy playing intramural Ultimate Frisbee, bouldering, and playing video games.
+In my free time, I also enjoy longboarding, bouldering, and playing video games.
 {% endcapture %}
 
 <section id="about">
