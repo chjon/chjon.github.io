@@ -1,0 +1,135 @@
+- title: The Innocence Test
+  description: >
+    fun fact (actually really, really sad fact), the Rice Purity Test was made in the 80s. that means that it includes none of the quintessential 21st century rebellious activities (think sexting, fake IDs and tinder). welcome to a two best friends' re-imagining of the classic purity test, we hope you have as much fun as we did. NOTE: The Innocence Test is not a bucket list, nor do we endorse the behaviors listed below.
+  questions:
+  - q: been on a date 💕
+  - q: been in a relationship 🥰
+  - q: kissed a mps (member of the preferred sex) 😘
+  - q: made out in public 😐
+  - q: played a game involved stripping 🩲
+  - q: masturbated 😈
+  - q: sent or received underwear pics 👙
+  - q: sent nudes 🚫
+  - q: received nudes ❌
+  - q: sexted 📲
+  - q: facetime sex 🤳
+  - q: kissed 3 or more people in one night. 👨‍👩‍👦
+  - q: FwB 👩🏼‍🤝‍👨🏽
+  - q: been in love 💖
+  - q: had a dating app 🔥
+  - q: paid for a premium version of a dating app 💸
+  - q: long distance relationship 🛫
+  - q: asked for a stranger’s contact info #️⃣
+  - q: been asked for your contact info by a stranger 👻
+  - q: gotten back with/hooked up with an ex ❎
+  - q: slid into someone’s DMs 📳
+  - q: watched porn 🟧⬛️
+  - q: paid for any porn 🤑
+  - q: watched porn with mps 🍿
+  - q: talked to 5 or more people at once 5️⃣
+  - q: posted a thirst trap 😜
+  - q: said “i love you” 😍
+  - q: been to a party 🎉
+  - q: thrown a party 🥳
+  - q: drank 🥂
+  - q: been drunk 😵
+  - q: blacked or yakked 🥴
+  - q: played a drinking game 🥤
+  - q: faked sobriety 🤥
+  - q: flirted with a stranger to get a free drink 🍻
+  - q: taken alcohol from your parents 🥃
+  - q: smoked weed 🍃
+  - q: done edibles 🍪
+  - q: hit a bong ⚗️
+  - q: nicotine (vaped) 💨
+  - q: smoked a cigarette 🚬
+  - q: cocaine or a drug stronger 💉
+  - q: had a fake 🆔
+  - q: had a fake ID confiscated 👮‍♂️
+  - q: used a fake to buy alcohol/drugs 💰
+  - q: used a fake to get into a bar/club 🕺
+  - q: had the police called on you 🚔
+  - q: gotten in trouble with school or law 🙁
+  - q: showered with mps 🚿
+  - q: given/received a hickey 💋
+  - q: had/given blue balls 🔵
+  - q: someone else made you orgasm 🤯
+  - q: cheated/been cheated on/been cheated with 🤮
+  - q: bought plan b 👼🏼
+  - q: bought birth control 💊
+  - q: given head 🧠
+  - q: received head 👄
+  - q: used a sex toy 🧸
+  - q: spent the night with mps 💤
+  - q: been walked in on while engaging in a sexual act 😳
+  - q: sexiled a roommate 👋🏼
+  - q: had sex 🍆
+  - q: had sex 3 or more times in one night. 🏘
+  - q: STI/STD test 🦠
+  - q: had car sex 🚘
+  - q: had sex in public 📢
+  - q: used blindfold/handcuffs in bed 🤭
+  - q: joined the mile high club 🛫
+  - q: ❓
+  - q: 3some 3️⃣
+  - q: orgy! 🔢
+  - q: body count > 5 📈
+  - q: sex tape. 🎥
+  - q: anal 🍑
+  - q: period sex 🩸
+  - q: bought a pregnancy test 📄
+  - q: been preggo/ gotten someone preggo 🤰
+  - q: streaked 👀
+  - q: skinny dipped 🌊
+  - q: seen a stripper 👅
+  - q: run from the police 👮
+  - q: been questioned by/handcuffed by police 🚨
+  - q: committed vandalism 🎨
+  - q: driven under the influence 🚙
+  - q: texted while driving 💬
+  - q: gotten a tattoo 🖋️
+  - q: pierced something other than your ears 👃
+  - q: stolen something 💲
+  - q: crashed a car 🏎
+  - q: blocked someone on social media 👎🏽
+  - q: gotten kicked out of a party 😡
+  - q: been at a party that got raided 🚒
+  - q: snuck out 😰
+  - q: had corona! 😷
+  - q: had a crush on a teacher 👩‍🏫
+  - q: stalked someone’s snapchat location 📍
+  - q: gotten with 2+ people in the same friend group 👏🏼
+  - q: whole snap best friends list has been love interests 😎
+  - q: gotten with someone 3+ years older than you 👵
+  - q: gotten with someone 3+ years younger than you 👶
+  score:
+  - name: Devil Child
+    threshold: 81
+    description: idk what you're doing on the weekends, but all the more power to you. Lucifer would be proud.
+  - name: Heathen
+    threshold: 66
+    description: you like to have a good time, but know when to reign yourself in. good for you. just don't make too many bad choices.
+  - name: Corrupted
+    threshold: 56
+    description: you're probably either in your 20s or a really rebellious teenager. whichever way, you seem like a good time. come to our rager this weekend?
+  - name: Baddie
+    threshold: 46
+    description: you're the most fun, but my mom would for sure let me hang out with you still. you've managed to find that sweet spot we all look for — teach us your ways.
+  - name: Wild Child
+    threshold: 34
+    description: you are the happy medium - you checked both yes and no on this list, but you definitely know how to have fun. we can't wait to see where you'll be in a few years ;)
+  - name: Rebel
+    threshold: 26
+    description: you're getting there, but you're definitely just beginning to experiment with your wild half. welcome to the dark side, love, it's a fun place to be.
+  - name: Sweetheart
+    threshold: 16
+    description: you're the mom friend, which is great because everyone needs one. speaking of, can you come over this weekend? in all seriousness, though, don't be afraid to have your own fun sometimes, too.
+  - name: Dream Kid
+    threshold: 11
+    description: you know when to bend the rules, but I'd be shocked if you'd ever actually broken any. good for you, your record is probably cleaner than ours.
+  - name: Innocent
+    threshold: 6
+    description: you definitely experiment, but your heart is overall Pure(TM). your mom is SO proud of you right now!
+  - name: Angel
+    threshold: 0
+    description: you're the friend that my parents would always let me hang out with and never ask any questions about it. fix your halo, honey, and keep up the good work.
