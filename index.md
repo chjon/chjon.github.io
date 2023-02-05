@@ -8,15 +8,17 @@ seo: true
 {% capture intro-content %}
 # Hello!
 
-I'm Jonathan, a recent Computer Engineering BASc graduate from the [University of Waterloo](https://uwaterloo.ca/).
-I will be starting work on a MASc in September, working with [Dr. Vijay Ganesh](https://ece.uwaterloo.ca/~vganesh/), studying the application of machine learning to SAT solvers.
+I'm Jonathan, a MASc student at the [University of Waterloo](https://uwaterloo.ca/), studying Electrical and Computer Engineering with a specialization in Computer Software. I am also a recent BASc graduate from UW's Computer Engineering program.
+I am currently working with [Dr. Vijay Ganesh](https://ece.uwaterloo.ca/~vganesh/), studying the application of machine learning to SAT solvers.
 
 {% endcapture %}
 
 {% capture work-content %}
 # What I do:
 
-I love learning and enjoy working on interesting challenges in many different fields. The projects I've worked on include games, simulations, and API development. I'm especially interested in the fields of computer graphics and automated reasoning.
+I love learning and enjoy working on interesting challenges in many different fields.
+The projects I've worked on include games, simulations, and API development. 
+I'm currently interested in applications of technology in environment and climate change, and in the fields of computer graphics and automated reasoning.
 
 In the past, I've worked at:
 
