@@ -1,0 +1,103 @@
+infobox:
+  github:
+    name: github.com/chjon
+    link: https://github.com/chjon
+    icon: /assets/octocat.svg
+    icon-size: "16pt"
+  email:
+    name: jonathanchung0115@gmail.com
+    link: mailto:jonathanchung0115@gmail.com
+    icon: /assets/mail.svg
+    icon-size: "16pt"
+  website:
+    name: jonathanchung.xyz
+    link: https://jonathanchung.xyz/
+    icon: /assets/web.svg
+    icon-size: "16pt"
+  phone:
+    name: (647) 786 - 9368
+    icon: /assets/phone.svg
+    icon-size: "16pt"
+experience:
+  - name: Software Developer
+    details: Lorica Cybersecurity
+    location: Toronto, ON
+    date: Sep 2023 &#x2011;&nbsp;Present
+    content: Developing features for applications of Fully Homomorphic Encryption and Confidential Computing
+  - name: Research Assistant
+    details: University of Waterloo
+    location: Waterloo, ON
+    date: Sep 2019 &#x2011;&nbsp;Apr&nbsp;2023
+    content: Empirical CS research in automating the Boolean Satisfiability Problem, advised by Dr. Vijay Ganesh
+    content-list:
+      - Developed hypotheses and experiments to correlate solver performance with problem parameters
+      - Led the design and implementation of an advanced class of SAT solvers using Extended Resolution
+      - Advised undergraduate students on the design and implementation of parallelization and machine learning techniques for Satisfaction-Driven Clause Learning SAT solvers
+  - name: CAD Software Architecture Intern
+    details: NVIDIA Corp.
+    location: Santa Clara, CA
+    date: May 2020 &#x2011;&nbsp;Aug&nbsp;2020
+    content: Developed features and implemented optimizations in C++ for GPU performance analysis tools
+    content-list:
+      - Profiled application using tools such as perf and cachegrind to identify performance bottlenecks and optimization opportunities
+      - Parallelized computation and file I/O operations to speed up overall execution time by 2.5x
+  - name: Software Development Intern
+    details: Darkvision Technologies Inc.
+    location: Vancouver, BC
+    date: Sep 2019 &#x2011;&nbsp;Dec&nbsp;2019
+    content: Developed data visualization tools and features in C++ for an ultrasound-based 3D imaging device
+    content-list:
+      - Implemented a tiled HEVC video codec to speed up GPU encoding, increasing throughput by 4x
+      - Migrated CPU-based visualization tool to DirectX 12, improving performance and maintainability
+      - Created an interactive graphing tool to correlate field data with design specifications
+  - name: Game Programmer Intern
+    details: Behaviour Interactive
+    location: Montreal, QC
+    tagline: Implemented backend features for multiple video games using TypeScript with Node.js
+    date: Jan 2019 &#x2011;&nbsp;Apr&nbsp;2019
+    content: Implemented backend features for multiple video games using TypeScript with Node.js
+    content-list:
+      - Designed a rich presence system to broadcast and log player activity with Redis and DynamoDB
+      - Implemented first-party microtransactions for purchasing game items using Nintendo's REST API
+  - name: Software Developer Intern
+    details: Universe Projects Inc.
+    location: Toronto, ON
+    date: May 2018 &#x2011;&nbsp;Aug&nbsp;2018
+    content: Added features and improved infrastructure for a cross-platform Java video game
+    content-list:
+      - Developed a configurable particle effects system and game item collection infrastructure
+      - Implemented a system for synchronizing game objectives using Google Cloud Datastore
+education:
+  - name: Master of Applied Science
+    details: Electrical and Computer Engineering
+    location: University of Waterloo
+    content-list:
+      - "CGPA: 95.5%"
+      - "NSERC Canada Graduate Scholarship - Master's"
+      - "Engineering Excellence Fellowship"
+      - "President's Graduate Scholarship"
+      - "Dean's Entrance Award"
+      - "TA for ECE459: Performance Programming"
+    date: 2022 &#x2011;&nbsp;2023
+  - name: Bachelor of Applied Science
+    details: Honours Computer Engineering
+    location: University of Waterloo
+    content-list:
+      - "CGPA: 91.9%"
+      - "1st in Class Scholarship"
+      - "Dean's Honour's List"
+      - "NSERC Undergrad Studies Research Award"
+    date: 2017 &#x2011;&nbsp;2022
+publications:
+  - name: Prioritized Unit Propagation and Extended Resolution Techniques for SAT Solvers
+    details: https://uwspace.uwaterloo.ca/items/b9fd3615-1cc7-4120-bb9d-883c85fd3c7a
+    location: "*Thesis,*"
+    date: 2023
+  - name: Learning Shorter Redundant Clauses in SDCL Using MaxSAT
+    details: "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SAT.2023.18"
+    location: SAT
+    date: 2023
+  - name: On the Hierarchical Structure of Practical Boolean Formulas
+    details: https://link.springer.com/chapter/10.1007/978-3-030-80223-3_25
+    location: SAT
+    date: 2021
