@@ -12,7 +12,7 @@ permalink: /resume/
     </div>
     <div class="infobox">
         {% include resume-infobox-entry.html data=site.data.resume.infobox.email %}
-        <!-- {% include resume-infobox-entry.html data=site.data.resume.infobox.phone %} -->
+        {% include resume-infobox-entry.html data=site.data.resume.infobox.phone %}
     </div>
 </div>
 
@@ -22,10 +22,12 @@ permalink: /resume/
     <h2>Experience</h2>
     {% for item in site.data.resume.experience %}
         {%- capture experience-header-left -%}
-            **{{ item.name }}**, *{{ item.details }}*
+            **{{ item.details }}**, *{{ item.name }}*, {{ item.location }}
         {%- endcapture -%}
         {%- capture experience-header-right -%}
-            {{ item.location }}
+            {%- for subitem in item.stack -%}
+            `{{- subitem -}}`
+            {%- endfor -%}
         {%- endcapture -%}
         {%- capture experience-content -%}
             {{ item.content | markdownify }}

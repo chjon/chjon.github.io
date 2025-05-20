@@ -1,4 +1,8 @@
 <div class="infobox-entry">
     <image class="infobox-entry-icon" width="{{ include.data.icon-size }}" height="{{ include.data.icon-size }}" src="{{ include.data.icon }}"/>
-    <a href="{{ include.data.link }}">{{ include.data.name }}</a>
+    {% if include.data.link %}
+        <a href="{{ include.data.link }}">{{ include.data.name }}</a>
+    {% else %}
+        <p>{{ include.data.name }}</p>
+    {% endif %}
 </div>
