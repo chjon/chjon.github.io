@@ -18,15 +18,27 @@ body {
     background-color: var(--bg-color);
     display: flex;
 }
-.page {
+.content-container {
     top: 0;
     left: 0;
+    position: absolute;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+    justify-items: baseline;
+}
+@media screen {
+    .content-container {
+        row-gap: 10pt;
+        column-gap: 60pt;
+    }
+}
+.page {
     width: 8.5in;
     height: 11in;
     background-color: var(--fg-color);
-    position: absolute;
-    margin-top: max(0pt, calc(50vh - 11in / 2));
-    margin-left: max(0pt, calc(50vw - 8.5in / 2));
 }
 .page-content {
     padding: calc(0.8 * var(--page-margin-size)) var(--page-margin-size) var(--page-margin-size) calc(0.8 * var(--page-margin-size));
@@ -111,6 +123,7 @@ section {
     margin-top: 3pt;
     text-align: right;
     * {
+        width: 100%;
         font-size: 9.5pt;
     }
 }

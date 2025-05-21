@@ -24,36 +24,50 @@ experience:
     location: Toronto, ON
     date: 2023-09 &#x2011;&nbsp;2025-05
     stack:
-      - c++
+      - c++17
       - typescript
       - python
       - rust
     content: R&D for applications of Fully Homomorphic Encryption (FHE) and Confidential Computing
     content-list:
       - Designed a new algorithm for performing regex search with FHE, a key feature for the product
-      - Led refactoring of TypeScript/WebAssembly FHE libraries and development of corresponding APIs
+      - Led refactoring of TypeScript/WebAssembly FHE libraries and development of APIs and SDK
       - Developed a minification tool for the Rego policy language to reduce file sizes by over 90%
       - Designed a data format and implemented parallel AWS S3 object read/write for encrypted data
       # - Selected and interviewed candidates for the Software Developer role
   - name: Research Assistant
     details: University of Waterloo
     location: Waterloo, ON
-    date: 2019-09 &#x2011;&nbsp;2023-04
+    date: 2019-09 &#x2011;&nbsp;2023-08
     stack:
-      - c++
+      - c++17
       - c
       - python
+      - bash
     content: Empirical CS research in automating the Boolean Satisfiability Problem, advised by Dr. Vijay Ganesh
     content-list:
       - Developed hypotheses and experiments to correlate solver performance with problem parameters
       - Led the design and implementation of an advanced class of SAT solvers using Extended Resolution
       - Advised undergraduate students on the design and implementation of parallelization and machine learning techniques for Satisfaction-Driven Clause Learning SAT solvers
+  - name: Teaching Assistant
+    details: University of Waterloo
+    location: Waterloo, ON
+    date: 2023-01 &#x2011;&nbsp;2023-08
+    stack:
+      - rust
+      - cuda
+      - python
+    content: Teaching and grading for ECE459 (Programming for Performance) and ECE208 (Discrete Math II)
+    content-list:
+      - Assisted in teaching Rust and CUDA basics and created automated grading scripts for ECE459
+      - Graded assignments and prepared and taught tutorial sessions for 150+ students in ECE208
   - name: CAD Software Architecture Intern
     details: NVIDIA Corp.
     location: Santa Clara, CA
     date: 2020-05 &#x2011;&nbsp;2020-08
     stack:
-      - c++
+      - c++14
+      - python
       - perl
     content: Developed features and implemented optimizations in C++ for GPU performance analysis tools
     content-list:
@@ -65,7 +79,7 @@ experience:
     location: Vancouver, BC
     date: 2019-09 &#x2011;&nbsp;2019-12
     stack:
-      - c++
+      - c++14
       - directx12
     content: Developed data visualization tools and features in C++ for an ultrasound-based 3D imaging device
     content-list:
@@ -117,7 +131,26 @@ education:
       - "Dean's Honour's List"
       - "NSERC Undergraduate Student Research Award"
     date: 2017 &#x2011;&nbsp;2022
+volunteering:
+- name: Backend Developer
+  details: Wilderness Union
+  location: Toronto, ON
+  date: 2025-04 &#x2011;&nbsp;Present
+  stack:
+    - typescript
+    - postgresql
+  content: Developing an HTTP service and Discord bot to facilitate trip administration and coordination
 publications:
+  - name: Improving and Understanding the Power of Satisfaction-Driven Clause Learning
+    location: Under review
+  - name: Extended Resolution Clause Learning via Dual Implication Points
+    details: https://arxiv.org/abs/2406.14190
+    location: arXiv
+    date: 2024
+  - name: A Reinforcement Learning based Reset Policy for CDCL SAT Solvers
+    details: https://arxiv.org/abs/2404.03753
+    location: arXiv
+    date: 2024
   - name: Prioritized Unit Propagation and Extended Resolution Techniques for SAT Solvers
     details: https://uwspace.uwaterloo.ca/items/b9fd3615-1cc7-4120-bb9d-883c85fd3c7a
     location: "*Thesis,*"
@@ -130,3 +163,26 @@ publications:
     details: https://link.springer.com/chapter/10.1007/978-3-030-80223-3_25
     location: SAT
     date: 2021
+projects:
+  - name: photonic-polycast
+    details: GPU accelerated raytracing
+    date: 2023
+    stack:
+      - cuda
+      - c++17
+  - name: xMaple\*
+    details: A framework for developing Extended Resolution SAT solvers
+    date: 2023
+    stack:
+      - c++17
+  - name: UnitConvertor
+    details: Scientific expression evaluator with automatic unit conversion
+    date: 2021
+    stack:
+      - python
+  - name: InfiniteChess
+    details: Data-driven fairy chess on an infinite board
+    date: 2019
+    stack:
+      - c++14
+      - opengl
