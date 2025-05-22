@@ -143,4 +143,35 @@ permalink: /resume/
         -%}
     {% endfor %}
 </section>
+
+<section id="skills">
+    <div class="vertical-separator-circle"></div>
+    <div class="vertical-separator"></div>
+    <h2>Skills</h2>
+    {% for item in site.data.resume.skills %}
+        {%- capture experience-header-left -%}
+            **{{ item.name }}:**
+        {%- endcapture -%}
+        {%- capture experience-header-right -%}
+            {%- for subitem in item.stack -%}
+            `{{- subitem -}}`
+            {%- endfor -%}
+        {%- endcapture -%}
+        {%- include resume-entry.html
+            entry-header-left=experience-header-left
+            entry-header-right=experience-header-right
+        -%}
+    {% endfor %}
+</section>
+
+<div id="footer">
+    {% assign resume-stack = "html, css, markdown, yaml, liquid, jekyll" | split: ", " %}
+    {%- capture footer-content -%}
+        This resume was built with
+        {%- for subitem in resume-stack -%}
+            `{{- subitem -}}`
+        {%- endfor -%}
+    {%- endcapture -%}
+    {{ footer-content | markdownify }}
+</div>
 </div></div>

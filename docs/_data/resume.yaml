@@ -43,12 +43,14 @@ experience:
       - c++17
       - c
       - python
-      - bash
+      # - html
+      # - css
     content: Empirical CS research in automating the Boolean Satisfiability Problem, advised by Dr. Vijay Ganesh
     content-list:
       - Developed hypotheses and experiments to correlate solver performance with problem parameters
       - Led the design and implementation of an advanced class of SAT solvers using Extended Resolution
       - Advised undergraduate students on the design and implementation of parallelization and machine learning techniques for Satisfaction-Driven Clause Learning SAT solvers
+      # - Designed and maintained websites for the research group
   - name: Teaching Assistant
     details: University of Waterloo
     location: Waterloo, ON
@@ -138,6 +140,7 @@ volunteering:
   date: 2025-04 &#x2011;&nbsp;Present
   stack:
     - typescript
+    - javascript
     - postgresql
   content: Developing an HTTP service and Discord bot to facilitate trip administration and coordination
 publications:
@@ -186,3 +189,36 @@ projects:
     stack:
       - c++14
       - opengl
+skills:
+  - name: Languages
+    stack:
+      - c++
+      - c
+      - python
+      - typescript
+      - rust
+      - cuda
+      - java
+  - name: Web
+    stack:
+      - html
+      - css
+      - javascript
+      - rest
+  - name: Tools
+    stack:
+      - git
+      - linux
+      - bash
+      - perf
+      - valgrind
+      - gcc
+      - clang
+  - name: Technologies
+    stack:
+      - s3
+      - dynamodb
+      - postgresql
+      - grpc
+      - google-test
+      - imgui
