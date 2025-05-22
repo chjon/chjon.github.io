@@ -171,9 +171,7 @@ permalink: /resume/
                 **{{ item.name }}:**
             {%- endcapture -%}
             {%- capture experience-header-right -%}
-                {%- for subitem in item.stack -%}
-                `{{- subitem -}}`
-                {%- endfor -%}
+                {{ item.stack | join: ", " }}
             {%- endcapture -%}
             {%- include resume-entry.html
                 entry-header-left=experience-header-left

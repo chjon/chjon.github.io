@@ -209,23 +209,22 @@ projects:
 skills:
   - name: Languages
     stack:
-      - c++
-      - c
-      - python
-      - typescript
-      - rust
-      - cuda
-      - java
+      - C/C++
+      - Python
+      - TypeScript
+      - Rust
+      - CUDA
+      - Java
   - name: Web
     stack:
-      - html
-      - css
-      - javascript
-      - rest
+      - HTML
+      - CSS
+      - JavaScript
+      - REST
   - name: Tools
     stack:
       - git
-      - linux
+      - Linux
       - bash
       - perf
       - valgrind
@@ -233,9 +232,11 @@ skills:
       - clang
   - name: Technologies
     stack:
-      - s3
-      - dynamodb
-      - postgresql
-      - grpc
-      - google-test
-      - imgui
+      - Docker
+      - Kubernetes
+      - S3
+      - DynamoDB
+      - PostgreSQL
+      - gRPC
+      - GoogleTest
+      - ImGui
