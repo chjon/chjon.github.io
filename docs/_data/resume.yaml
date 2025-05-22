@@ -144,46 +144,63 @@ volunteering:
     - postgresql
   content: Developing an HTTP service and Discord bot to facilitate trip administration and coordination
 publications:
-  - name: Improving and Understanding the Power of Satisfaction-Driven Clause Learning
-    location: Under review
+  # - name: Improving and Understanding the Power of Satisfaction-Driven Clause Learning
+  #   location: Under review
+  #   date: 2025
   - name: Extended Resolution Clause Learning via Dual Implication Points
     details: https://arxiv.org/abs/2406.14190
-    location: arXiv
+    location: arXiv 2024
     date: 2024
   - name: A Reinforcement Learning based Reset Policy for CDCL SAT Solvers
     details: https://arxiv.org/abs/2404.03753
-    location: arXiv
+    location: arXiv 2024
     date: 2024
   - name: Prioritized Unit Propagation and Extended Resolution Techniques for SAT Solvers
     details: https://uwspace.uwaterloo.ca/items/b9fd3615-1cc7-4120-bb9d-883c85fd3c7a
-    location: "*Thesis,*"
+    location: "*Master's Thesis*"
     date: 2023
   - name: Learning Shorter Redundant Clauses in SDCL Using MaxSAT
     details: "https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.SAT.2023.18"
-    location: SAT
+    location: SAT 2023
     date: 2023
   - name: On the Hierarchical Structure of Practical Boolean Formulas
     details: https://link.springer.com/chapter/10.1007/978-3-030-80223-3_25
-    location: SAT
+    location: SAT 2021
     date: 2021
 projects:
   - name: photonic-polycast
+    link: https://github.com/chjon/photonic-polycast
+    icon:
+      loc: /assets/octocat.svg
+      size: "16pt"
     details: GPU accelerated raytracing
     date: 2023
     stack:
       - cuda
       - c++17
   - name: xMaple\*
+    link: https://github.com/chjon/xMapleSAT
+    icon:
+      loc: /assets/octocat.svg
+      size: "16pt"
     details: A framework for developing Extended Resolution SAT solvers
     date: 2023
     stack:
       - c++17
   - name: UnitConvertor
+    link: https://github.com/chjon/UnitConvertor
+    icon:
+      loc: /assets/octocat.svg
+      size: "16pt"
     details: Scientific expression evaluator with automatic unit conversion
-    date: 2021
+    date: 2020
     stack:
       - python
   - name: InfiniteChess
+    link: https://github.com/chjon/InfiniteChess
+    icon:
+      loc: /assets/octocat.svg
+      size: "16pt"
     details: Data-driven fairy chess on an infinite board
     date: 2019
     stack:

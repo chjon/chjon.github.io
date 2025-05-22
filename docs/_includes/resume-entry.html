@@ -1,7 +1,12 @@
 <div class="resume-entry">
     <div class="resume-entry-float">{{ include.entry-float | markdownify }}</div>
     <div class="resume-entry-header">
-        <div class="resume-entry-header-left">{{ include.entry-header-left | markdownify }}</div>
+        <div class="resume-entry-header-left">
+            {% if include.icon %}
+                <image class="resume-entry-icon" width="{{ include.icon.size }}" height="{{ include.icon.size }}" src="{{ include.icon.loc }}"/>
+            {% endif %}
+            {{ include.entry-header-left | markdownify }}
+        </div>
         <div class="resume-entry-header-right">{{ include.entry-header-right | markdownify }}</div>
     </div>
     <div class="resume-entry-content">{{ include.entry-content }}</div>
