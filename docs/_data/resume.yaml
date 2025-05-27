@@ -4,20 +4,24 @@ infobox:
     link: https://github.com/chjon
     icon: /assets/octocat.svg
     icon-size: "16pt"
+    descriptor: "Github logo"
   email:
     name: jonathanchung0115@gmail.com
     link: mailto:jonathanchung0115@gmail.com
     icon: /assets/mail.svg
     icon-size: "16pt"
+    descriptor: "Email icon"
   website:
     name: jonathanchung.xyz
     link: https://jonathanchung.xyz/
     icon: /assets/web.svg
     icon-size: "16pt"
+    descriptor: "Website icon"
   phone:
     name: (647) 786 - 9368
     icon: /assets/phone.svg
     icon-size: "16pt"
+    descriptor: "Phone icon"
 experience:
   - name: Software Developer II
     details: Lorica Cybersecurity
@@ -173,6 +177,7 @@ projects:
     icon:
       loc: /assets/octocat.svg
       size: "16pt"
+      descriptor: "Github logo"
     details: GPU accelerated raytracing
     date: 2023
     stack:
@@ -183,6 +188,7 @@ projects:
     icon:
       loc: /assets/octocat.svg
       size: "16pt"
+      descriptor: "Github logo"
     details: A framework for developing Extended Resolution SAT solvers
     date: 2023
     stack:
@@ -192,6 +198,7 @@ projects:
     icon:
       loc: /assets/octocat.svg
       size: "16pt"
+      descriptor: "Github logo"
     details: Scientific expression evaluator with automatic unit conversion
     date: 2020
     stack:
@@ -201,6 +208,7 @@ projects:
     icon:
       loc: /assets/octocat.svg
       size: "16pt"
+      descriptor: "Github logo"
     details: Data-driven fairy chess on an infinite board
     date: 2019
     stack:

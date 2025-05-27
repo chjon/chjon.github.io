@@ -3,7 +3,7 @@
     <div class="resume-entry-header">
         <div class="resume-entry-header-left">
             {% if include.icon %}
-                <image class="resume-entry-icon" width="{{ include.icon.size }}" height="{{ include.icon.size }}" src="{{ include.icon.loc }}"/>
+                <image class="resume-entry-icon" width="{{ include.icon.size }}" height="{{ include.icon.size }}" src="{{ include.icon.loc }}" alt="{{ include.icon.descriptor }}"/>
             {% endif %}
             {{ include.entry-header-left | markdownify }}
         </div>
