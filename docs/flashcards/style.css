@@ -98,6 +98,10 @@ body {
     padding: 0 1rem 0 0rem;
   }
 }
+.file-selector {
+  width: calc(var(--card-width) - 2 * var(--card-border-radius));
+  text-overflow:clip;
+}
 
 /**************/
 /* Animations */

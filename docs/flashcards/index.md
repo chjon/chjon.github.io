@@ -25,7 +25,11 @@ layout: flashcards
     </tbody></table>
   {%- endcapture -%}
   {%- capture intro-card-body-a -%}
-    <a style="text-align: center;" href="/">https://jonathanchung.xyz</a>
+    <div>
+      <label for="select-csv">Select a CSV</label>
+      <input type="file" id="select-csv" name="select-csv" class="file-selector" accept="text/csv,.csv">
+    </div>
+    <a href="/" target="_blank">https://jonathanchung.xyz</a>
   {%- endcapture -%}
   {% include flashcard.html class="out-left" %}
   {% include flashcard.html
