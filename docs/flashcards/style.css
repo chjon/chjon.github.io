@@ -1,0 +1,142 @@
+:root {
+  --card-width: 40rem;
+  --card-height: 30rem;
+  --card-border-radius: 2rem;
+  --card-header-percent: 0.2;
+
+  --background-color: rgb(252, 242, 227);
+  --card-header-color: lightgreen;
+  --card-color: white;
+  --animation-duration: 0.3s;
+}  
+
+p { margin: 0; }
+
+.data {
+  display: none;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  background-color: var(--background-color);
+  overflow: hidden;
+}
+
+.carousel {
+  width: var(--card-width);
+  height: var(--card-height);
+  * { position: absolute };
+}
+
+/* Cards */
+.card-content {
+  position: absolute;
+  border-radius: var(--card-border-radius);
+  width: var(--card-width);
+  height: var(--card-height);
+  box-shadow: 2px 2px 5px black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  * {
+    position: relative;
+  }
+}
+.card-header {
+  padding: var(--card-border-radius);
+  width: calc(100% - 2 * var(--card-border-radius));
+  height: calc(var(--card-header-percent) * var(--card-height) - 2 * var(--card-border-radius));
+  border-top-left-radius: var(--card-border-radius);
+  border-top-right-radius: var(--card-border-radius);
+  background-color: var(--card-header-color);
+  display: flex;
+  align-items: center;
+  * {
+    text-align: center;
+    font-size: 2rem;
+  }
+}
+.card-body {
+  padding: var(--card-border-radius);
+  width: calc(100% - 2 * var(--card-border-radius));
+  height: calc((1 - var(--card-header-percent)) * var(--card-height));
+  background-color: var(--card-color);
+  border-bottom-left-radius: var(--card-border-radius);
+  border-bottom-right-radius: var(--card-border-radius);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 1rem;
+  * {
+    text-align: left;
+    font-size: 2rem;
+  }
+}
+
+/* Button bar */
+.button-bar {
+  display: flex;
+  justify-content: center;
+  column-gap: 2rem;
+
+  button {
+    width: calc(var(--card-width) / 2 - 1rem);
+    height: 4rem;
+    border-radius: 2rem;
+  }
+}
+
+/* Intro content */
+.intro-content {
+  th, td {
+    padding: 0 1rem 0 0rem;
+  }
+}
+
+/**************/
+/* Animations */
+/**************/
+
+/* Flip card */
+.card {
+  &:not(.flipped) .a-side, &.flipped .q-side {
+    transform: scaleX(0);
+    transition: calc(var(--animation-duration) / 2);
+  }
+  &:not(.flipped) .q-side, &.flipped .a-side {
+    transform: scaleX(1);
+    transition: calc(var(--animation-duration) / 2);
+    transition-delay: calc(var(--animation-duration) / 2);
+  }
+}
+.card.out-left, .card.out-right {
+  pointer-events: none;
+  &:not(.flipped) .a-side, &.flipped .q-side {
+    transition-delay: calc(var(--animation-duration) / 2);
+  }
+  &:not(.flipped) .q-side, &.flipped .a-side {
+    transition-delay: var(--animation-duration);
+  }
+}
+
+/* Next/prev card */
+.card.out-left {
+  opacity: 0%;
+  transform: translate(calc(-1.2 * var(--card-width)));
+  transition: var(--animation-duration);
+}
+.card.in-centre {
+  opacity: 100%;
+  transition: var(--animation-duration);
+}
+.card.out-right {
+  opacity: 0%;
+  transform: translate(calc(1.2 * var(--card-width)));
+  transition: var(--animation-duration);
+}
