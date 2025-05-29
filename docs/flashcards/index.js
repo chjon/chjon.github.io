@@ -2,6 +2,11 @@ let columnNames = [];
 let dataset = [];
 let stack = [];
 let stackIndex = -1;
+let menuMode = true;
+
+function deselectFile() {
+  document.getElementById('select-csv').value = null;
+}
 
 function importCsv() {
   // Check whether a file was selected
@@ -21,7 +26,8 @@ function importCsv() {
     dataset = this.result.split('\n').map(line => line.split(','));
     columnNames = dataset[0];
     dataset = dataset.splice(1);
-    nextCard();
+    document.getElementsByName("flashcard-selector")
+      .forEach(radioButton => radioButton.checked = false);
   };
   
   reader.readAsText(csv);
@@ -35,8 +41,8 @@ function setCardContent(cardContent, header, body) {
     } else if (childNode.classList.contains("card-body")) {
       if (childNode.childNodes.length != 1 || childNode.childNodes[0].nodeName != "P") {
         childNode.replaceChildren(document.createElement("p"));
-        childNode.childNodes[0].style.textAlign = 'center';
       }
+      childNode.childNodes[0].style.textAlign = 'center';
       childNode.childNodes[0].textContent = body;
     }
   }
@@ -61,7 +67,6 @@ function getPrevData() {
   if (stack.length == 0) return;
   if (stackIndex == 0) return dataset[stack[stackIndex]];
   stackIndex -= 1;
-  console.log(stackIndex);
   return dataset[stack[stackIndex]];
 }
 
@@ -80,14 +85,13 @@ function getNextData() {
     }
     stack.push(i);
   }
-  console.log(stackIndex);
   return dataset[i];
 }
 
 function flipCard(e) {
   // Don't flip card if the user clicked on a link or input
   if (!!e && [
-    'A', 'BUTTON', 'INPUT'
+    'A', 'BUTTON', 'INPUT', 'LABEL'
   ].includes(e.target.nodeName)) return;
 
   for (card of document.getElementsByClassName('card')) {
@@ -98,6 +102,7 @@ function flipCard(e) {
 }
 
 function prevCard() {
+  if (!menuMode && stackIndex <= 0) return;
   for (card of document.getElementsByClassName('card')) {
     if (card.classList.contains('out-left')) {
       populateCard(card, getPrevData());
@@ -137,12 +142,14 @@ addEventListener('DOMContentLoaded', () => {
   document.getElementById('button-next').onclick = nextCard;
 
   document.getElementById('select-csv').addEventListener('change', importCsv, false);
+  document.getElementsByName('flashcard-selector')
+    .forEach(e => e.onclick = deselectFile);
 });
 
 addEventListener('keypress', (event) => {
   switch(event.key) {
-    case ' ': flipCard(); break;
-    case 'b': prevCard(); break;
-    case 'n': nextCard(); break;
+    case 'a': prevCard(); break;
+    case 's': flipCard(); break;
+    case 'd': nextCard(); break;
   }
 });

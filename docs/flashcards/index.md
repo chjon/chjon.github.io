@@ -3,42 +3,67 @@ title: Virtual Flashcards
 layout: flashcards
 ---
 <div id="carousel" class="carousel">
-  {%- capture intro-card-body-q -%}
-    <p>Use the keyboard or the buttons to navigate. Click a card to flip it.</p>
+  {%- capture card-1-header-q -%}
+    {{ page.title }} by <a href="/" target="_blank">Jonathan</a>
+  {%- endcapture -%}
+
+  {%- capture card-1-body-q -%}
+    <p>Welcome to Virtual Flashcards! Use the buttons below to navigate. Click a card to flip it.</p>
+  {%- endcapture -%}
+  {%- capture card-1-body-a -%}
     <table class="intro-content"><tbody>
       <tr>
         <th>Key</th>
         <th>Action</th>
       </tr>
       <tr>
-        <td>Spacebar</td>
-        <td>Flip card</td>
-      </tr>
-      <tr>
-        <td>B</td>
+        <td>A</td>
         <td>Go to previous card</td>
       </tr>
       <tr>
-        <td>N</td>
+        <td>S</td>
+        <td>Flip card</td>
+      </tr>
+      <tr>
+        <td>D</td>
         <td>Go to next card</td>
       </tr>
     </tbody></table>
   {%- endcapture -%}
-  {%- capture intro-card-body-a -%}
+  {% include flashcard.html
+    class="in-centre"
+    q-side-header=card-1-header-q
+    q-side-body=card-1-body-q
+    a-side-header="Keyboard controls"
+    a-side-body=card-1-body-a
+  %}
+
+  {%- capture card-2-body-q -%}
+    <p>Proceed to the next card to begin studying the selected flashcards.</p>
+    <div>
+      <input type="radio" name="flashcard-selector" id="flashcard-selector-0" checked />
+      <label for="flashcard-selector-0">Botanical nomenclature</label>
+    </div>
+    <div>
+      <input type="radio" name="flashcard-selector" id="flashcard-selector-1" />
+      <label for="flashcard-selector-1">Botanical family names</label>
+    </div>
+  {%- endcapture -%}
+  {%- capture card-2-body-a -%}
     <div>
       <label for="select-csv">Select a CSV</label>
       <input type="file" id="select-csv" name="select-csv" class="file-selector" accept="text/csv,.csv">
     </div>
-    <a href="/" target="_blank">https://jonathanchung.xyz</a>
   {%- endcapture -%}
-  {% include flashcard.html class="out-left" %}
   {% include flashcard.html
-    class="in-centre"
-    q-side-header=page.title
-    q-side-body=intro-card-body-q
-    a-side-body=intro-card-body-a
+    class="out-right"
+    q-side-header="Select flashcards"
+    q-side-body=card-2-body-q
+    a-side-header="Import flashcards"
+    a-side-body=card-2-body-a
   %}
-  {% include flashcard.html class="out-right" %}
+
+  {% include flashcard.html class="out-left" %}
 </div>
 <div class="button-bar">
   <button id="button-back">Back</button>
