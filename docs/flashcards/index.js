@@ -3,6 +3,33 @@ let dataset = [];
 let stack = [];
 let stackIndex = -1;
 
+function toggleFlashcardInputs(card) {
+  function setInputDisabled(element, disabled) {
+    // Enable/disable element if it can be disabled
+    if (element.nodeName == 'INPUT') element.disabled = disabled;
+    if (element.nodeName == 'A') element.tabIndex = disabled ? -1 : undefined;
+    if (disabled && document.activeElement == element) document.activeElement.blur();
+
+    // Enable/disable child nodes
+    if (!element.childNodes) return;  
+    element.childNodes.forEach(childNode => {
+      setInputDisabled(childNode, disabled)
+    });
+  }
+
+  const cardFlipped = card.classList.contains('flipped');
+  const disabled = card.classList.contains('in-centre');
+  for (let childNode of card.childNodes) {
+    if (childNode.nodeName != "DIV") continue;
+    if (childNode.classList.contains("q-side")) {
+      setInputDisabled(childNode, disabled ^ !cardFlipped);
+    } else if (childNode.classList.contains("a-side")) {
+      setInputDisabled(childNode, disabled ^ cardFlipped);
+    }
+  }
+}
+
+
 class FlashcardManager {
   constructor(menuFlashcards, contentFlashcards) {
     this.menuFlashcards = menuFlashcards;
@@ -29,12 +56,14 @@ class FlashcardManager {
     }
     
     // Move the card in the centre to be on the right
-    this.moveCard(this.cardIndex, 'in-centre', 'out-right');
+    const oldCard = this.moveCard(this.cardIndex, 'in-centre', 'out-right');
+    toggleFlashcardInputs(oldCard);
 
     // Move the card on the left to be in the centre
     this.cardIndex--;
-    const card = this.moveCard(this.cardIndex, 'out-left', 'in-centre');
-    populateCard(card, getPrevData());
+    const newCard = this.moveCard(this.cardIndex, 'out-left', 'in-centre');
+    populateCard(newCard, getPrevData());
+    toggleFlashcardInputs(newCard);
   }
 
   nextCard() {
@@ -44,12 +73,31 @@ class FlashcardManager {
     }
 
     // Move the card in the centre to be on the left
-    this.moveCard(this.cardIndex, 'in-centre', 'out-left');
+    const oldCard = this.moveCard(this.cardIndex, 'in-centre', 'out-left');
+    toggleFlashcardInputs(oldCard);
 
     // Move the card on the right to be in the centre
     this.cardIndex++;
-    const card = this.moveCard(this.cardIndex, 'out-right', 'in-centre');
-    populateCard(card, getPrevData());
+    const newCard = this.moveCard(this.cardIndex, 'out-right', 'in-centre');
+    populateCard(newCard, getPrevData());
+    toggleFlashcardInputs(newCard);
+  }
+
+  flipCard(e) {
+    // Don't flip card if the user clicked on a link or input
+    if (!!e && [
+      'A', 'BUTTON', 'INPUT', 'LABEL'
+    ].includes(e.target.nodeName)) return;
+
+    // Flip current card
+    const contentFlashcardIndex = (this.cardIndex - this.menuFlashcards.length) % this.contentFlashcards.length;
+    const card = (this.cardIndex < this.menuFlashcards.length)
+      ? this.menuFlashcards[this.cardIndex]
+      : this.contentFlashcards[contentFlashcardIndex];
+    card.classList.toggle('flipped');
+
+    // Enable/disable inputs
+    toggleFlashcardInputs(card);
   }
 }
 
@@ -139,19 +187,6 @@ function getNextData() {
   return dataset[i];
 }
 
-function flipCard(e) {
-  // Don't flip card if the user clicked on a link or input
-  if (!!e && [
-    'A', 'BUTTON', 'INPUT', 'LABEL'
-  ].includes(e.target.nodeName)) return;
-
-  for (card of document.getElementsByClassName('card')) {
-    if (card.classList.contains('in-centre')) {
-      card.classList.toggle('flipped');
-    }
-  }
-}
-
 addEventListener('DOMContentLoaded', () => {
   flashcardManager = new FlashcardManager(
     Array.from(document.getElementsByClassName('menu-card')),
@@ -159,7 +194,7 @@ addEventListener('DOMContentLoaded', () => {
   );
 
   document.getElementById('button-back').onclick = () => { flashcardManager.prevCard() };
-  document.getElementById('carousel').onclick = flipCard;
+  document.getElementById('carousel').onclick = (e) => { flashcardManager.flipCard(e) };
   document.getElementById('button-next').onclick = () => { flashcardManager.nextCard() };
 
   document.getElementById('select-csv').addEventListener('change', importCsv, false);
@@ -170,7 +205,7 @@ addEventListener('DOMContentLoaded', () => {
 addEventListener('keypress', (event) => {
   switch(event.key) {
     case 'a': flashcardManager.prevCard(); break;
-    case 's': flipCard(); break;
+    case 's': flashcardManager.flipCard(); break;
     case 'd': flashcardManager.nextCard(); break;
   }
 });

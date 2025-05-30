@@ -41,18 +41,27 @@ layout: flashcards
   {%- capture card-2-body-q -%}
     <p>Proceed to the next card to begin studying the selected flashcards.</p>
     <div>
-      <input type="radio" name="flashcard-selector" id="flashcard-selector-0" checked />
+      <input
+        type="radio" name="flashcard-selector" id="flashcard-selector-0"
+        disabled checked
+      />
       <label for="flashcard-selector-0">Botanical nomenclature</label>
     </div>
     <div>
-      <input type="radio" name="flashcard-selector" id="flashcard-selector-1" />
+      <input
+        type="radio" name="flashcard-selector" id="flashcard-selector-1"
+        disabled
+      />
       <label for="flashcard-selector-1">Botanical family names</label>
     </div>
   {%- endcapture -%}
   {%- capture card-2-body-a -%}
     <div>
       <label for="select-csv">Select a CSV</label>
-      <input type="file" id="select-csv" name="select-csv" class="file-selector" accept="text/csv,.csv">
+      <input
+        type="file" id="select-csv" name="select-csv"
+        class="file-selector" accept="text/csv,.csv" disabled
+      />
     </div>
   {%- endcapture -%}
   {% include flashcard.html
