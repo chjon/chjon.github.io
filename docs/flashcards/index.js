@@ -2,7 +2,58 @@ let columnNames = [];
 let dataset = [];
 let stack = [];
 let stackIndex = -1;
-let menuMode = true;
+
+class FlashcardManager {
+  constructor(menuFlashcards, contentFlashcards) {
+    this.menuFlashcards = menuFlashcards;
+    this.contentFlashcards = contentFlashcards;
+    this.cardIndex = 0;
+  }
+
+  moveCard(cardIndex, fromClass, toClass) {
+    const contentFlashcardIndex = (cardIndex - this.menuFlashcards.length) % this.contentFlashcards.length;
+    const card = (cardIndex < this.menuFlashcards.length)
+      ? this.menuFlashcards[cardIndex]
+      : this.contentFlashcards[contentFlashcardIndex];
+    card.classList.remove(fromClass, 'flipped'); // Always unflip cards when moving
+    card.classList.add(toClass);
+    return card;
+  }
+
+  prevCard() {
+    if (this.cardIndex == 0) return;
+
+    // Wrap the card on the right to be on the left
+    if (this.cardIndex + 1 >= this.menuFlashcards.length + this.contentFlashcards.length) {
+      this.moveCard(this.cardIndex + 1, 'out-right', 'out-left');
+    }
+    
+    // Move the card in the centre to be on the right
+    this.moveCard(this.cardIndex, 'in-centre', 'out-right');
+
+    // Move the card on the left to be in the centre
+    this.cardIndex--;
+    const card = this.moveCard(this.cardIndex, 'out-left', 'in-centre');
+    populateCard(card, getPrevData());
+  }
+
+  nextCard() {
+    // Wrap the card on the left to be on the right
+    if (this.cardIndex - 1 >= this.menuFlashcards.length) {
+      this.moveCard(this.cardIndex - 1, 'out-left', 'out-right');
+    }
+
+    // Move the card in the centre to be on the left
+    this.moveCard(this.cardIndex, 'in-centre', 'out-left');
+
+    // Move the card on the right to be in the centre
+    this.cardIndex++;
+    const card = this.moveCard(this.cardIndex, 'out-right', 'in-centre');
+    populateCard(card, getPrevData());
+  }
+}
+
+let flashcardManager = null;
 
 function deselectFile() {
   document.getElementById('select-csv').value = null;
@@ -101,45 +152,15 @@ function flipCard(e) {
   }
 }
 
-function prevCard() {
-  if (!menuMode && stackIndex <= 0) return;
-  for (card of document.getElementsByClassName('card')) {
-    if (card.classList.contains('out-left')) {
-      populateCard(card, getPrevData());
-      card.classList.remove('out-left');
-      card.classList.add('in-centre');
-    } else if (card.classList.contains('in-centre')) {
-      card.classList.remove('in-centre');
-      card.classList.remove('flipped');
-      card.classList.add('out-right');
-    } else if (card.classList.contains('out-right')) {
-      card.classList.remove('out-right');
-      card.classList.add('out-left');
-    }
-  }
-}
-
-function nextCard() {
-  for (card of document.getElementsByClassName('card')) {
-    if (card.classList.contains('out-right')) {
-      populateCard(card, getNextData());
-      card.classList.remove('out-right');
-      card.classList.add('in-centre');
-    } else if (card.classList.contains('in-centre')) {
-      card.classList.remove('in-centre');
-      card.classList.remove('flipped');
-      card.classList.add('out-left');
-    } else if (card.classList.contains('out-left')) {
-      card.classList.remove('out-left');
-      card.classList.add('out-right');
-    }
-  }
-}
-
 addEventListener('DOMContentLoaded', () => {
-  document.getElementById('button-back').onclick = prevCard;
+  flashcardManager = new FlashcardManager(
+    Array.from(document.getElementsByClassName('menu-card')),
+    Array.from(document.getElementsByClassName('content-card'))
+  );
+
+  document.getElementById('button-back').onclick = () => { flashcardManager.prevCard() };
   document.getElementById('carousel').onclick = flipCard;
-  document.getElementById('button-next').onclick = nextCard;
+  document.getElementById('button-next').onclick = () => { flashcardManager.nextCard() };
 
   document.getElementById('select-csv').addEventListener('change', importCsv, false);
   document.getElementsByName('flashcard-selector')
@@ -148,8 +169,8 @@ addEventListener('DOMContentLoaded', () => {
 
 addEventListener('keypress', (event) => {
   switch(event.key) {
-    case 'a': prevCard(); break;
+    case 'a': flashcardManager.prevCard(); break;
     case 's': flipCard(); break;
-    case 'd': nextCard(); break;
+    case 'd': flashcardManager.nextCard(); break;
   }
 });

@@ -3,10 +3,10 @@ title: Virtual Flashcards
 layout: flashcards
 ---
 <div id="carousel" class="carousel">
+  <!-- Menu flashcards -->
   {%- capture card-1-header-q -%}
     {{ page.title }} by <a href="/" target="_blank">Jonathan</a>
   {%- endcapture -%}
-
   {%- capture card-1-body-q -%}
     <p>Welcome to Virtual Flashcards! Use the buttons below to navigate. Click a card to flip it.</p>
   {%- endcapture -%}
@@ -31,7 +31,7 @@ layout: flashcards
     </tbody></table>
   {%- endcapture -%}
   {% include flashcard.html
-    class="in-centre"
+    class="menu-card in-centre"
     q-side-header=card-1-header-q
     q-side-body=card-1-body-q
     a-side-header="Keyboard controls"
@@ -56,14 +56,17 @@ layout: flashcards
     </div>
   {%- endcapture -%}
   {% include flashcard.html
-    class="out-right"
+    class="menu-card out-right"
     q-side-header="Select flashcards"
     q-side-body=card-2-body-q
     a-side-header="Import flashcards"
     a-side-body=card-2-body-a
   %}
 
-  {% include flashcard.html class="out-left" %}
+  <!-- Content flashcards -->
+  {% include flashcard.html class="content-card out-right" %}
+  {% include flashcard.html class="content-card out-right" %}
+  {% include flashcard.html class="content-card out-right" %}
 </div>
 <div class="button-bar">
   <button id="button-back">Back</button>
