@@ -11,10 +11,25 @@
 
   --header-font-size: 24pt;
   --body-font-size: 20pt;
+  --code-font-size: 16pt;
+}
+@media screen and (max-width: 800px) {
+  :root {
+    --header-font-size: 18pt;
+    --body-font-size: 14pt;
+    --code-font-size: 12pt;
+  }
+}
+@media screen and (max-width: 600px) {
+  :root {
+    --header-font-size: 14pt;
+    --body-font-size: 10pt;
+    --code-font-size: 9pt;
+  }
 }
 
 body {
-  width: 100%;
+  width: 100vw;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -74,14 +89,14 @@ p, pre { margin: 0; }
   font-size: var(--header-font-size);
 }
 .menu-card pre {
-  padding-left: 16pt;
-  padding-right: 16pt;
-  font-size: 16pt;
+  padding-left: var(--code-font-size);
+  padding-right: var(--code-font-size);
+  font-size: var(--code-font-size);
 }
 .menu-card .card-body {
   text-align: left;
   font-size: var(--body-font-size);
-  row-gap: 16pt;
+  row-gap: var(--code-font-size);
 }
 .content-card .card-body p {
   display: contents;
@@ -97,7 +112,7 @@ kbd {
   border: 1px solid black;
   box-shadow: 0 2px 0 1px black;
   cursor: default;
-  font-size: 1.2rem;
+  font-size: var(--code-font-size);
   line-height: 1;
   display: block;
   text-align: center;
