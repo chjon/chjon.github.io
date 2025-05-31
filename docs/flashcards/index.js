@@ -7,12 +7,12 @@ class Dataset {
     this.rows = [];
   }
 
-  async importJson() {
+  importJson() {
     // Check whether a file was selected
     if (this.fileSelector.files.length == 0)
       throw Error("No file selected");
 
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       // Try reading file
       const reader = new FileReader();
       reader.onerror = function(progressEvent) {
@@ -38,7 +38,7 @@ class Dataset {
       const { columns, rows } = await result.json();
       [this.columns, this.rows] = [columns, rows];
     } else {
-      const { columns, rows } = this.importJson();
+      const { columns, rows } = await this.importJson();
       [this.columns, this.rows] = [columns, rows];
     }
   }
@@ -84,11 +84,17 @@ class FlashcardManager {
     const newCard = this.moveCard(this.cardIndex, 'out-left', 'in-centre');
     populateCard(newCard, this.getPrevData());
     toggleFlashcardInputs(newCard);
+
+    // Disable back button
+    if (this.cardIndex == 0)
+      document.getElementById('button-back').disabled = true;
   }
 
   async nextCard() {
-    if (this.cardIndex == this.menuFlashcards.length - 1)
+    if (this.cardIndex == this.menuFlashcards.length - 1) {
+      this.stack.length = 0;
       await dataset.loadData();
+    }
 
     // Wrap the card on the left to be on the right
     if (this.cardIndex - 1 >= this.menuFlashcards.length) {
@@ -104,6 +110,9 @@ class FlashcardManager {
     const newCard = this.moveCard(this.cardIndex, 'out-right', 'in-centre');
     populateCard(newCard, this.getNextData());
     toggleFlashcardInputs(newCard);
+
+    // Enable back button
+    document.getElementById('button-back').disabled = false;
   }
 
   flipCard(e) {
@@ -186,7 +195,6 @@ function populateCard(card, data) {
         if (childNode.childNodes.length != 1 || childNode.childNodes[0].nodeName != "P") {
           childNode.replaceChildren(document.createElement("p"));
         }
-        childNode.childNodes[0].style.textAlign = 'center';
         childNode.childNodes[0].textContent = body;
       }
     }
@@ -207,7 +215,7 @@ function populateCard(card, data) {
 
 addEventListener('DOMContentLoaded', () => {
   dataset = new Dataset(
-    document.getElementById('select-csv'),
+    document.getElementById('select-json-file'),
     document.getElementsByName('flashcard-selector')
   );
 
@@ -223,11 +231,11 @@ addEventListener('DOMContentLoaded', () => {
 
   // Ensure only one dataset is selected at a time
   const flashcardSelectorRadioButtons = document.getElementsByName("flashcard-selector");
-  document.getElementById('select-csv').addEventListener('change', () => {
+  document.getElementById('select-json-file').addEventListener('change', () => {
     flashcardSelectorRadioButtons.forEach(radioButton => radioButton.checked = false);
   }, false);
   flashcardSelectorRadioButtons.forEach(e => e.onclick = () => {
-    document.getElementById('select-csv').value = null });
+    document.getElementById('select-json-file').value = null });
 });
 
 // Keybindings

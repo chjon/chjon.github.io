@@ -8,7 +8,8 @@ layout: flashcards
     {{ page.title }} by <a href="/" target="_blank">Jonathan</a>
   {%- endcapture -%}
   {%- capture card-1-body-q -%}
-    <p>Welcome to Virtual Flashcards! Use the buttons below to navigate. Click a card to flip it.</p>
+    <p>Welcome to Virtual Flashcards! Use the buttons below to move between flashcards and click cards to reveal their opposite sides.</p>
+    <p><i>Hint: Try clicking this card!</i></p>
   {%- endcapture -%}
   {%- capture card-1-body-a -%}
     <table class="intro-content"><tbody>
@@ -17,15 +18,15 @@ layout: flashcards
         <th>Action</th>
       </tr>
       <tr>
-        <td>A</td>
+        <td><kbd>A</kbd></td>
         <td>Go to previous card</td>
       </tr>
       <tr>
-        <td>S</td>
+        <td><kbd>S</kbd></td>
         <td>Flip card</td>
       </tr>
       <tr>
-        <td>D</td>
+        <td><kbd>D</kbd></td>
         <td>Go to next card</td>
       </tr>
     </tbody></table>
@@ -39,29 +40,33 @@ layout: flashcards
   %}
 
   {%- capture card-2-body-q -%}
+    <p>Try flashcards for one of these topics! Note that the flashcards here are a work in progress.</p>
     <div>
       <input
-        type="radio" name="flashcard-selector" id="flashcard-selector-0"
+        type="radio" name="flashcard-selector" id="flashcard-selector-0" class="flashcard-selector"
         data-flashcard-path="/flashcards/data/botanical-nomenclature.json" disabled checked
       />
       <label for="flashcard-selector-0">Botanical nomenclature</label>
     </div>
     <div>
       <input
-        type="radio" name="flashcard-selector" id="flashcard-selector-1"
+        type="radio" name="flashcard-selector" id="flashcard-selector-1" class="flashcard-selector"
         data-flashcard-path="/flashcards/data/botanical-family-names.json" disabled
       />
       <label for="flashcard-selector-1">Botanical family names</label>
     </div>
+    <p>Go to the next card to proceed with your selection. Returning to this card will shuffle all the flashcards.</p>
   {%- endcapture -%}
   {%- capture card-2-body-a -%}
-    <div>
-      <label for="select-csv">Select a CSV</label>
-      <input
-        type="file" id="select-csv" name="select-csv"
-        class="file-selector" accept="text/json,.json" disabled
-      />
-    </div>
+    <p>To use a custom set of flashcards, select a JSON file with the following format:</p>
+    <pre><code>{
+  "columns":["English","German"],
+  "rows":[["one","eins"],["two","zwei"],...]
+}</code></pre>
+    <input
+      type="file" id="select-json-file" name="select-json-file"
+      class="file-selector" accept="text/json,.json" disabled
+    />
   {%- endcapture -%}
   {% include flashcard.html
     class="menu-card out-right"
@@ -77,6 +82,6 @@ layout: flashcards
   {% include flashcard.html class="content-card out-right" %}
 </div>
 <div class="button-bar">
-  <button id="button-back">Back</button>
+  <button id="button-back" disabled>Back</button>
   <button id="button-next">Next</button>
 </div>
