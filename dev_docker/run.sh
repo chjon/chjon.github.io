@@ -30,6 +30,10 @@ elif [[ ${COMMAND} == 'root' ]]; then
     if [[ -f ${CACHE_FILE} ]]; then
         docker exec -it $(cat "${CACHE_FILE}") bash
     fi
+elif [[ ${COMMAND} == 'serve' ]]; then
+    if [[ -f ${CACHE_FILE} ]]; then
+        docker exec -w "${REPO_DIR}/docs" -it $(cat "${CACHE_FILE}") bundle exec jekyll serve
+    fi
 elif [[ ${COMMAND} == 'delete' ]]; then
     if [[ -f ${CACHE_FILE} ]]; then
         docker rm -f $(cat "${CACHE_FILE}") && rm "${CACHE_FILE}"
