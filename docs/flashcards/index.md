@@ -39,18 +39,17 @@ layout: flashcards
   %}
 
   {%- capture card-2-body-q -%}
-    <p>Proceed to the next card to begin studying the selected flashcards.</p>
     <div>
       <input
         type="radio" name="flashcard-selector" id="flashcard-selector-0"
-        disabled checked
+        data-flashcard-path="/flashcards/data/botanical-nomenclature.json" disabled checked
       />
       <label for="flashcard-selector-0">Botanical nomenclature</label>
     </div>
     <div>
       <input
         type="radio" name="flashcard-selector" id="flashcard-selector-1"
-        disabled
+        data-flashcard-path="/flashcards/data/botanical-family-names.json" disabled
       />
       <label for="flashcard-selector-1">Botanical family names</label>
     </div>
@@ -60,7 +59,7 @@ layout: flashcards
       <label for="select-csv">Select a CSV</label>
       <input
         type="file" id="select-csv" name="select-csv"
-        class="file-selector" accept="text/csv,.csv" disabled
+        class="file-selector" accept="text/json,.json" disabled
       />
     </div>
   {%- endcapture -%}
