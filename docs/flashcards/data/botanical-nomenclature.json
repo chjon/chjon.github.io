@@ -5,6 +5,10 @@
     ],
     "rows": [
         [
+            "Actinomorphic",
+            "An adjective describing radially-symmetric flowers; i.e., flowers with more than one plane of symmetry"
+        ],
+        [
             "Alternate leaves",
             "A leaf arrangement in which leaves are arranged singly, one leaf per nod, alternating on either side of the stem"
         ],
@@ -15,6 +19,10 @@
         [
             "Appendages",
             "Appendages (e.g. leaves and bracts) are produced along axes, and grow to a fixed size and shape, in characteristic patterns of arrangement"
+        ],
+        [
+            "Appressed",
+            "An adjective describing a structure which lies flat (e.g hairs)"
         ],
         [
             "Axis",
@@ -33,12 +41,28 @@
             "TODO: requires images"
         ],
         [
+            "Bipinnate leaves",
+            "A compound leaf which is twice pinnate; i.e., leaflets are arranged along rachillae, which are themselves arranged along the rachis"
+        ],
+        [
+            "Bloom (noun)",
+            "A whitish powdery deposit or coating, as on the surface of certain fruits and leaves"
+        ],
+        [
             "Bract",
-            "A modified of specialized leaf associated with a reproductive structure such as a flower, inflorescence, or cone scale"
+            "A modified or specialized leaf associated with a reproductive structure such as a flower, inflorescence, or cone scale"
         ],
         [
             "Bracteate/bracteolate",
             "An adjective describing plants having bracts"
+        ],
+        [
+            "Bracteoles",
+            "Small bracts associated with individual flowers in a cluster"
+        ],
+        [
+            "Broadleaved",
+            "An adjective describing a plant with wide, flat leaves. There are two types of broad leaves: simple and compound"
         ],
         [
             "Bud",
@@ -55,6 +79,18 @@
         [
             "Bundle scars",
             "Smaller markings within a leaf scar left by vascular bundle connections between the leaf and the twig"
+        ],
+        [
+            "Catkin",
+            "A spike of unisexual flowers"
+        ],
+        [
+            "Compound leaves",
+            "A type of broad leaf divided into separate blades called leaflets"
+        ],
+        [
+            "Corymb",
+            "A type of flower cluster in which the lower stalks are proportionally longer so that the flowers form a flat or slightly convex head"
         ],
         [
             "Crown",
@@ -81,20 +117,56 @@
             "A fern-like growth of 2-ranked branchlets composed of pairs of overlapping scale leaves. When foliage is in flattened sprays, the scale leaves are arranged in overlapping pairs on 4 sides"
         ],
         [
+            "Glaucous",
+            "An adjective meaning to be covered with a greyish, bluish, or whitish waxy coating or bloom that is easily rubbed off"
+        ],
+        [
+            "Hairs",
+            "Small outgrowths of the epidermis, found on leaves, stems, and branches. Hairs are usually long and narrow, and can be straight, branched, or gland-tipped"
+        ],
+        [
+            "Inflorescence",
+            "A cluster that bears many individual flowers on, or branching from, one or more common stalks"
+        ],
+        [
             "Internode",
             "The region between two nodes"
+        ],
+        [
+            "Involucre",
+            "The structure formed by whorls of bracts beneath a flower cluster"
         ],
         [
             "Keeled",
             "An adjective describing leaves that have a distinct, sharp angled edge fold along the midrib or in the bottom, resembling the keel of a boat"
         ],
         [
+            "Lamina",
+            "The leaf blade tissue, excluding vascular tissue"
+        ],
+        [
             "Lateral pair",
             "The pairs of leaves at right angles on either side of the facial pair in a flattened foliage spray"
         ],
         [
+            "Lateral (secondary) veins",
+            "Leaf veins which branch from the midrib"
+        ],
+        [
+            "Leaf",
+            "A flattened structure which serves as the main organ of photosynthesis and transpiration. All leaves have an axillary bud"
+        ],
+        [
             "Leaf scar",
             "The mark on a twig left by the shedding of a leaf, indicating where the previous year's leaf stalk was attached"
+        ],
+        [
+            "Leaf shapes",
+            "TODO: requires images"
+        ],
+        [
+            "Leaflets",
+            "The smaller blades making up a compound leaf. There are no buds at the base of a leaflet."
         ],
         [
             "Lenticels",
@@ -103,6 +175,10 @@
         [
             "Long shoots",
             "Main shoots that elongate between the nodes, becoming branches and trunks that contribute to the woody framework of a tree"
+        ],
+        [
+            "Midrib / primary vein",
+            "The primary, middle vein in a leaf"
         ],
         [
             "Needle",
@@ -125,6 +201,34 @@
             "A leaf arrangement in which leaves are arranged in pairs, opposite to one another at the same node"
         ],
         [
+            "Palmate compound leaves",
+            "A type of compound leaf in which the leaflets all join in the same place at the leaf stalk"
+        ],
+        [
+            "Palmate venation",
+            "A type of leaf venation where the lateral veins all originate from the base of the leaf blade"
+        ],
+        [
+            "Panicle",
+            "A type of flower cluster in which branched groups of flowers are arranged along the primary axis; i.e., a branched raceme"
+        ],
+        [
+            "Petiole",
+            "The leaf stalk, containing vascular bundles that transport water and mineral nutrients"
+        ],
+        [
+            "Photosynthesis",
+            "The process of using sunlight to combine carbon dioxide and water to produce sugars and release oxygen"
+        ],
+        [
+            "Pinnate compound leaves",
+            "A type of compound leaf in which leaflets are arranged along a central stalk called the rachis"
+        ],
+        [
+            "Pinnate venation",
+            "A type of leaf venation where the lateral veins are arranged along the midvein"
+        ],
+        [
             "Pith",
             "A core of tissue inside the twig that is usually solid and continuous, but can be chambered, sectioned, or spongy"
         ],
@@ -141,8 +245,28 @@
             "Sharp outgrowths or projections from the epidermis of a plant structure"
         ],
         [
+            "Raceme",
+            "A type of flower cluster in which stalked flowers are arranged along the primary axis"
+        ],
+        [
+            "Rachilla (pl. rachillae)",
+            "The branches of the rachis in twice or more pinnate leaves"
+        ],
+        [
+            "Rachis",
+            "An extension of the petiole which serves as the central stalk of a pinnate compound leaf."
+        ],
+        [
             "Samara",
             "A winged nut or achene containing one seed"
+        ],
+        [
+            "Scales",
+            "Small outgrowths of the epidermis, found on leaves, stems, and branches. Scales are flattened and broad, often with a textured or flaky surface"
+        ],
+        [
+            "Scale leaf",
+            "Leaves with little or no expanded blade portion. Scales may have a gland or be keeled on the outer face"
         ],
         [
             "Seed cone",
@@ -153,12 +277,20 @@
             "Single or multiple structures axillary to a bract, protecting a seed"
         ],
         [
-            "Scale leaf",
-            "Leaves with little or no expanded blade portion. Scales may have a gland or be keeled on the outer face"
+            "Sessile",
+            "An adjective describing leaves or leaflets lacking stalks"
         ],
         [
             "Shoots",
             "Axes together with their appendages"
+        ],
+        [
+            "Simple leaves",
+            "A type of broad leaf having a single continuous blade that is not divided. It may be smooth-edged, toothed, or lobed"
+        ],
+        [
+            "Spike",
+            "A type of flower cluster in which stalkless flowers are arranged along the primary axis"
         ],
         [
             "Spiral leaves",
@@ -174,7 +306,7 @@
         ],
         [
             "Stipule",
-            "A small leaf-like appendage to a leaf, typically borne in pairs at the base of the leaf stalk"
+            "A small leaf-like appendage to a leaf, typically borne in pairs at the base of the leaf stalk. Stipules usually fall off before the rest of the leaf, often leaving distinct scars"
         ],
         [
             "Stipule scar",
@@ -209,8 +341,16 @@
             "TODO: requires images"
         ],
         [
+            "Umbel",
+            "A type of flower cluster in which stalked flowers all originate from the same location and form an umbrella-like top"
+        ],
+        [
             "Whorled leaves",
             "A leaf arrangement in which each node bears three or more leaves"
+        ],
+        [
+            "Zygomorphic",
+            "An adjective describing a bilaterally symmetrical flower; i.e., a flower with a single plane of symmetry"
         ]
     ]
 }
