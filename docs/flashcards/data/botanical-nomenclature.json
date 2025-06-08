@@ -5,8 +5,16 @@
     ],
     "rows": [
         [
+            "Achene",
+            "A small, seed-like, indehiscent dry fruit"
+        ],
+        [
             "Actinomorphic",
             "An adjective describing radially-symmetric flowers; i.e., flowers with more than one plane of symmetry"
+        ],
+        [
+            "Aggregate fruits",
+            "Clusters of several to many individual berries, follicles, or samaras derived from multiple separate pistils of a single flower"
         ],
         [
             "Alternate leaves",
@@ -17,12 +25,20 @@
             "The length of twig between two sets of bud scale scars, or between the terminal bud and a set of bud scale scars"
         ],
         [
+            "Anther",
+            "The pollen-producing part of the stamen"
+        ],
+        [
             "Appendages",
             "Appendages (e.g. leaves and bracts) are produced along axes, and grow to a fixed size and shape, in characteristic patterns of arrangement"
         ],
         [
             "Appressed",
             "An adjective describing a structure which lies flat (e.g hairs)"
+        ],
+        [
+            "Aril",
+            "A fleshy, usually colourful outgrowth of a seed stalk that (at least partially) surrounds the seed and contributes to attractiveness for animal dispersal"
         ],
         [
             "Axis",
@@ -41,8 +57,16 @@
             "TODO: requires images"
         ],
         [
+            "Berry",
+            "A fleshy, one- to many-seeded fruit derived from one or many carpels, with divisions that equal the number of carpels"
+        ],
+        [
             "Bipinnate leaves",
             "A compound leaf which is twice pinnate; i.e., leaflets are arranged along rachillae, which are themselves arranged along the rachis"
+        ],
+        [
+            "Bisexual flowers",
+            "Flowers containing both male and female reproductive organs. Bisexual plants are neither monoecious nor dioecious"
         ],
         [
             "Bloom (noun)",
@@ -81,12 +105,28 @@
             "Smaller markings within a leaf scar left by vascular bundle connections between the leaf and the twig"
         ],
         [
+            "Calyx (pl. calyces)",
+            "The collective name for the sepals, which may all be free from one another or form a tube"
+        ],
+        [
+            "Capsule",
+            "A dehiscent dry fruit derived from a compound ovary that opens along one or more sutures"
+        ],
+        [
+            "Carpel",
+            "A single, ovule-bearing unit, sometimes having individual ovaries and sometimes connecting to a shared basal ovary"
+        ],
+        [
             "Catkin",
             "A spike of unisexual flowers"
         ],
         [
             "Compound leaves",
             "A type of broad leaf divided into separate blades called leaflets"
+        ],
+        [
+            "Corolla",
+            "The collective name for the petals, which may all be free from one another or form a tube"
         ],
         [
             "Corymb",
@@ -101,20 +141,68 @@
             "TODO: requires images"
         ],
         [
+            "Dehiscent dry fruits",
+            "Fruits which split open to release their seeds"
+        ],
+        [
+            "Dioecy (adj. dioecious)",
+            "A sexual system in seed plants where distinct unisexual individuals produce either male or female gametes"
+        ],
+        [
+            "Drupe",
+            "A fleshy or leathery fruit in which the innermost layer of the ovary wall is hardened into a stone or stones"
+        ],
+        [
+            "Dry fruits",
+            "Fruits which have a hard, dry pericarp around their seeds, where the exocarp, mesocarp, and endocarp aren't clearly distinguishable"
+        ],
+        [
             "Ebracteate/ebracteolate",
             "An adjective describing plants lacking bracts"
         ],
         [
-            "Flower",
-            "A modified shoot often arising from axils, consisting of an axis that bears specialized appendages (e.g. sepals, petals, stamens, and pistils)"
+            "Endocarp",
+            "The innermost layer of the pericarp which surrounds a seed in a fruit"
+        ],
+        [
+            "Exocarp",
+            "The outer layer of the pericarp of a fruit"
         ],
         [
             "Facial pair",
             "The pairs of leaves on the upper and lower surfaces in a flattened foliage spray"
         ],
         [
+            "Filament",
+            "The stalk of the anther"
+        ],
+        [
+            "Fleshy/succulent fruits",
+            "Fruits with a fleshy pericarp around their seeds"
+        ],
+        [
+            "Floral cup",
+            "The floral configuration where a structure surrounds the ovary, and the other floral parts (sepals, petals, stamens) are attached to the rim of the floral cup"
+        ],
+        [
+            "Flower",
+            "A modified shoot often arising from axils, consisting of an axis that bears specialized appendages (e.g. sepals, petals, stamens, and pistils)"
+        ],
+        [
             "Foliage spray",
             "A fern-like growth of 2-ranked branchlets composed of pairs of overlapping scale leaves. When foliage is in flattened sprays, the scale leaves are arranged in overlapping pairs on 4 sides"
+        ],
+        [
+            "Follicle",
+            "An elongate dry fruit derived from a single simple ovary that opens on one side"
+        ],
+        [
+            "Fruit",
+            "The seed-bearing structure in angiosperms that is formed from the ovary after flowering"
+        ],
+        [
+            "Glands",
+            "Structures that produce oily or sugary secretions"
         ],
         [
             "Glaucous",
@@ -123,6 +211,14 @@
         [
             "Hairs",
             "Small outgrowths of the epidermis, found on leaves, stems, and branches. Hairs are usually long and narrow, and can be straight, branched, or gland-tipped"
+        ],
+        [
+            "Indehiscent dry fruits",
+            "Dry fruits which do not split open"
+        ],
+        [
+            "Inferior ovary",
+            "The floral configuration where the ovary sits below the other floral parts (sepals, petals, and stamens), which are attached at the tip of the ovary"
         ],
         [
             "Inflorescence",
@@ -169,16 +265,40 @@
             "The smaller blades making up a compound leaf. There are no buds at the base of a leaflet."
         ],
         [
+            "Legume (pod)",
+            "The characteristic flattened two-parted dehiscent dry fruit of the legume family which splits open at sutures along both edges"
+        ],
+        [
             "Lenticels",
             "One of many raised pores in the stem of a woody plant that enable gas exchange between the atmosphere and the twig"
+        ],
+        [
+            "Locule",
+            "A chamber within an ovary, anther, sporangium, or fruit. In ovaries and fruit, each locule usually corresponds to a carpel"
         ],
         [
             "Long shoots",
             "Main shoots that elongate between the nodes, becoming branches and trunks that contribute to the woody framework of a tree"
         ],
         [
+            "Mesocarp",
+            "The middle layer of the pericarp of a fruit, between the endocarp and the exocarp"
+        ],
+        [
             "Midrib / primary vein",
             "The primary, middle vein in a leaf"
+        ],
+        [
+            "Monoecy (adj. monoecious)",
+            "A sexual system in seed plants where separate male and female cones or flowers are present on the same plant"
+        ],
+        [
+            "Multiple fruits",
+            "Clusters of many individual, small, dry or fleshy fruits, each from a separate flower and often in ball-like heads"
+        ],
+        [
+            "Nectaries",
+            "Glands that secrete sugary liquids to attract insect pollinators; often found at the base of the stamens or on the inner rim of the floral cup"
         ],
         [
             "Needle",
@@ -197,8 +317,32 @@
             "The site of leaf attachment, an axillary bud, and potentially a lateral branch"
         ],
         [
+            "Nut",
+            "A fairly large, dry, indehiscent fruit with a thick, bony ovary wall surrounding a single seed"
+        ],
+        [
+            "Nut cup",
+            "A cup-like sheath surrounding or enclosing some nuts, formed from involucral bracts"
+        ],
+        [
+            "Nut husk",
+            "An outer shell in some nuts formed from involucral bracts"
+        ],
+        [
+            "Nutlet",
+            "A small nut"
+        ],
+        [
             "Opposite leaves",
             "A leaf arrangement in which leaves are arranged in pairs, opposite to one another at the same node"
+        ],
+        [
+            "Ovary",
+            "The part of the pistil which holds the ovules. There are three possible positions of the ovary relative to other floral parts"
+        ],
+        [
+            "Ovule",
+            "The structure that gives rise to and contains the female reproductive cells, and which develops into seeds"
         ],
         [
             "Palmate compound leaves",
@@ -211,6 +355,22 @@
         [
             "Panicle",
             "A type of flower cluster in which branched groups of flowers are arranged along the primary axis; i.e., a branched raceme"
+        ],
+        [
+            "Perianth",
+            "The collective name for the calyx and corolla, the non-reproductive parts of the flower"
+        ],
+        [
+            "Pericarp",
+            "The part of the fruit formed from the wall of the ripened ovary"
+        ],
+        [
+            "Petals",
+            "The modified leaves that form an inner whorl surrounding the reproductive parts of flowers"
+        ],
+        [
+            "Petaloid",
+            "An adjective describing undifferentiated tepals when they resemble petals"
         ],
         [
             "Petiole",
@@ -229,12 +389,20 @@
             "A type of leaf venation where the lateral veins are arranged along the midvein"
         ],
         [
+            "Pistil",
+            "The female organs of the flower, each comprised of one or more laterally joined carpels with a single ovary"
+        ],
+        [
             "Pith",
             "A core of tissue inside the twig that is usually solid and continuous, but can be chambered, sectioned, or spongy"
         ],
         [
             "Pollen cone",
             "The male, pollen-producing reproductive structure in conifers"
+        ],
+        [
+            "Pome",
+            "A fleshy fruit from an inferior ovary of (usually) two to five carpels in which the innermost layer of the ovary wall is membranous in texture"
         ],
         [
             "Preformed/early leaves",
@@ -258,11 +426,11 @@
         ],
         [
             "Samara",
-            "A winged nut or achene containing one seed"
+            "A dry, indehiscent, winged fruit or fruit segment containing a single seed and adapted for wind dispersal, composed of a membranous wing and a seeded portion"
         ],
         [
             "Scales",
-            "Small outgrowths of the epidermis, found on leaves, stems, and branches. Scales are flattened and broad, often with a textured or flaky surface"
+            "Small outgrowths of the epidermis, found on leaves, stems, and branches. Scales are flattened and broad,, often with a textured or flaky surface"
         ],
         [
             "Scale leaf",
@@ -275,6 +443,10 @@
         [
             "Seed scale",
             "Single or multiple structures axillary to a bract, protecting a seed"
+        ],
+        [
+            "Sepals",
+            "The modified leaves (usually green) which typically function as protection for the flower in bud and support for the petals when in bloom"
         ],
         [
             "Sessile",
@@ -297,8 +469,24 @@
             "A leaf arrangement in which leaves rotate around the stem, not in the same plane"
         ],
         [
+            "Spur/short shoots",
+            "Shoots that grow from year to year with little internodal elongation between the annual batches of closely spaced leaves"
+        ],
+        [
+            "Stamens",
+            "The male organs of flowers"
+        ],
+        [
+            "Staminodes",
+            "Non-functional stamens; i.e., ones which do not produce viable pollen. Staminodes may resemble stamens or be reduced to stubs"
+        ],
+        [
             "Sterigma",
             "A needle base modified into a woody peg"
+        ],
+        [
+            "Stigma",
+            "A sticky surface of the pistil where pollen is captured. Each branch of the stigma corresponds to a carpel"
         ],
         [
             "Stipular spines",
@@ -321,8 +509,20 @@
             "The breathing pores in the epidermis of all leaves that are used to exchange gases and reduce water loss"
         ],
         [
-            "Spur/short shoots",
-            "Shoots that grow from year to year with little internodal elongation between the annual batches of closely spaced leaves"
+            "Stone",
+            "A hard body found in certain fruits, produced by ossification of the endocarp or lining of the fruit"
+        ],
+        [
+            "Style",
+            "The part of the pistil which connects the stigma and the ovary"
+        ],
+        [
+            "Superior ovary",
+            "The floral configuration where the ovary sits above the other floral parts (sepals, petals, and stamens), which are attached at the base of the ovary"
+        ],
+        [
+            "Tepals",
+            "The collective name for the petals and sepals when they are difficult to distinguish"
         ],
         [
             "Terminal bud",
@@ -343,6 +543,10 @@
         [
             "Umbel",
             "A type of flower cluster in which stalked flowers all originate from the same location and form an umbrella-like top"
+        ],
+        [
+            "Unisexual flowers",
+            "Flowers containing either exclusively male or exclusively female reproductive organs"
         ],
         [
             "Whorled leaves",
