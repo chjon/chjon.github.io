@@ -17,13 +17,20 @@ infobox:
     icon: /assets/web.svg
     icon-size: "16pt"
     descriptor: "Website icon"
-  phone:
-    name: (647) 786 - 9368
-    icon: /assets/phone.svg
-    icon-size: "16pt"
-    descriptor: "Phone icon"
+  # phone:
+  #   name: (647) 786 - 9368
+  #   icon: /assets/phone.svg
+  #   icon-size: "16pt"
+  #   descriptor: "Phone icon"
 experience:
-  - name: Software Developer II
+  - name: Software Engineer II
+    details: Coalition Inc.
+    location: Toronto, ON
+    date: 2025-07 &#x2011;&nbsp;Present
+    stack:
+      - python
+    content: Backend server development for an insurance underwriting platform
+  - name: Software Engineer
     details: Lorica Cybersecurity
     location: Toronto, ON
     date: 2023-09 &#x2011;&nbsp;2025-05
@@ -51,7 +58,7 @@ experience:
       # - css
     content: Empirical CS research in automating the Boolean Satisfiability Problem, advised by Dr. Vijay Ganesh
     content-list:
-      - Developed hypotheses and experiments to correlate solver performance with problem parameters
+      # - Developed hypotheses and experiments to correlate solver performance with problem parameters
       - Led the design and implementation of an advanced class of SAT solvers using Extended Resolution
       - Advised undergraduate students on the design and implementation of parallelization and machine learning techniques for Satisfaction-Driven Clause Learning SAT solvers
       # - Designed and maintained websites for the research group
@@ -104,18 +111,16 @@ experience:
     content-list:
       - Designed a rich presence system to broadcast and log player activity with Redis and DynamoDB
       - Implemented first-party microtransactions for purchasing game items using Nintendo's REST API
-  - name: Software Developer Intern
-    details: Universe Projects Inc.
-    location: Toronto, ON
-    date: 2018-05 &#x2011;&nbsp;2018-08
-    stack:
-      - java
-      - kotlin
-    content: Added features and improved infrastructure for a cross-platform Java video game
-    content-list:
-      - Prototyped game item collection infrastructure and developed particle effects and quest systems 
-      # - Developed a configurable particle effects system and game item collection infrastructure
-      # - Implemented a system for synchronizing game objectives using Google Cloud Datastore
+  # - name: Software Developer Intern
+  #   details: Universe Projects Inc.
+  #   location: Toronto, ON
+  #   date: 2018-05 &#x2011;&nbsp;2018-08
+  #   stack:
+  #     - java
+  #     - kotlin
+  #   content: Added features and improved infrastructure for a cross-platform Java video game
+  #   content-list:
+  #     - Prototyped game item collection infrastructure and developed particle effects and quest systems 
 education:
   - name: Master of Applied Science
     details: Electrical and Computer Engineering
@@ -144,13 +149,13 @@ volunteering:
   date: 2025-04 &#x2011;&nbsp;Present
   stack:
     - typescript
-    - javascript
     - postgresql
   content: Developing an HTTP service and Discord bot to facilitate trip administration and coordination
 publications:
-  # - name: Improving and Understanding the Power of Satisfaction-Driven Clause Learning
-  #   location: Under review
-  #   date: 2025
+  - name: Improving and Understanding the Power of Satisfaction-Driven Clause Learning
+    details: https://jair.org/index.php/jair/article/view/18286/27211
+    location: JAIR 2025
+    date: 2025
   - name: Extended Resolution Clause Learning via Dual Implication Points
     details: https://arxiv.org/abs/2406.14190
     location: arXiv 2024
