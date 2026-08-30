@@ -1,11 +1,14 @@
 {
   "private": true,
   "type": "module",
+  "homepage": "https://jonathanchung.xyz",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "predeploy": "yarn run build",
+    "deploy": "yarn run gh-pages -d build"
   },
   "dependencies": {
     "@react-router/node": "^8",
