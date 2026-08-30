@@ -3,11 +3,8 @@
   "type": "module",
   "homepage": "https://jonathanchung.xyz",
   "scripts": {
-    "build": "react-router build",
     "dev": "react-router dev",
-    "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc",
-    "package": "react-router build && mv ./build/client ./docs && rm -rf ./build && cp -rt ./docs ./assets ./deps/*"
+    "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
     "@react-router/node": "^8",
