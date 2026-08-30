@@ -1,6 +1,6 @@
 #!/bin/sh
 
-react-router build &&
+yarn run react-router build &&
     mv ./build/client ./build_docs &&
     rm -rf ./build &&
     cp -rt ./build_docs ./assets ./deps/*;
