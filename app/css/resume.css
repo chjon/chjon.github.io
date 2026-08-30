@@ -5,13 +5,13 @@
   --pill-color: rgb(230, 250, 230);
   --accent-color: rgb(17, 121, 17);
 
-  --page-margin-size: 0.45in;
-  --left-margin-size: 0.65in;
+  --page-margin-size: 0.46in;
+  --left-margin-size: 0.63in;
 
   /* Text */
   --header-size: 14pt;
   --text-size: 11pt;
-  --line-spacing: 3pt;
+  --line-spacing: 3.5pt;
 
   /* Column separator */
   --separator-gap: 0.2in;
@@ -59,6 +59,7 @@ body {
 /* Fonts */
 h1,
 h2,
+h3,
 a,
 p,
 ul,
@@ -77,6 +78,12 @@ h2 {
   font-size: var(--header-size);
   margin: 0;
   color: var(--accent-color);
+  font-weight: 400;
+}
+h3 {
+  font-size: calc(0.8 * var(--header-size));
+  margin: 0;
+  /* color: var(--accent-color); */
   font-weight: 400;
 }
 a,
@@ -128,12 +135,19 @@ code {
   padding-left: 0.05in;
   padding-right: 0.05in;
 }
+.headline {
+  padding-top: 0.1in;
+  padding-bottom: 0.1in;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 
 /* Content layout */
 section {
   padding-top: 0.1in;
   position: relative;
-  margin-bottom: 0.1in;
+  margin-bottom: 0.15in;
 }
 section h2 {
   padding-left: calc(var(--separator-gap) / 2);
@@ -190,7 +204,7 @@ section h2 {
     justify-content: left;
   }
   .resume-entry-header-left {
-    width: 1in;
+    width: 1.9in;
   }
 }
 

@@ -44,7 +44,7 @@ function InfoBoxEntry(data: InfoBoxEntryParams) {
 }
 
 function ResumeHeader() {
-  return (
+  return <>
     <div id="header">
       <h1>Jonathan Chung</h1>
       <div className="infobox">
@@ -56,7 +56,10 @@ function ResumeHeader() {
         {/* <InfoBoxEntry {...resume_data.infobox.phone} /> */}
       </div>
     </div>
-  );
+    <div className="headline">
+      <h3>{resume_data.headline}</h3>
+    </div>
+  </>
 }
 
 function Markdownify({
@@ -122,8 +125,8 @@ function TechList({ data }: { data: Array<string> }) {
   ));
 }
 
-function ResumeExperienceContent() {
-  return resume_data.experience.map((item) => (
+function ResumeExperienceContent({data}: { data: Array<any> }) {
+  return data.map((item) => (
     <ResumeExperienceEntry
       key={item.name}
       float={item.date}
@@ -167,22 +170,6 @@ function ResumeEducationContent() {
       content={item["content-list"]?.map((bullet) => (
         <Markdownify key={bullet} data={bullet} />
       ))}
-    />
-  ));
-}
-
-function ResumeVolunteeringContent() {
-  return resume_data.volunteering.map((item) => (
-    <ResumeExperienceEntry
-      key={item.name}
-      float={item.date}
-      header-left={
-        <Markdownify
-          data={`**${item.details}**, *${item.name}*, ${item.location}`}
-        />
-      }
-      header-right={<TechList data={item.stack} />}
-      content={<Markdownify data={item.content} />}
     />
   ));
 }
@@ -234,13 +221,15 @@ function ResumeSkillsContent() {
 
 function ResumeSection({
   name,
+  id,
   content,
 }: {
   name: string;
+  id: string;
   content: React.JSX.Element;
 }) {
   return (
-    <section id={name.toLocaleLowerCase()}>
+    <section id={id}>
       <div className="vertical-separator-circle" />
       <div className="vertical-separator" />
       <h2>{name}</h2>
@@ -265,27 +254,39 @@ export default function Resume() {
         <div className="page-content">
           <ResumeHeader />
           <ResumeSection
-            name="Experience"
-            content={<ResumeExperienceContent />}
+            name="Education"
+            id="education"
+            content={<ResumeEducationContent />}
           />
           <ResumeSection
-            name="Education"
-            content={<ResumeEducationContent />}
+            name="Experience"
+            id="experience-1"
+            content={<ResumeExperienceContent data={resume_data.experience1} />}
           />
         </div>
       </div>
       <div className="page">
         <div className="page-content">
           <ResumeSection
-            name="Volunteering"
-            content={<ResumeVolunteeringContent />}
+            name="Experience"
+            id="experience-2"
+            content={<ResumeExperienceContent data={resume_data.experience2} />}
           />
           <ResumeSection
             name="Publications"
+            id="publications"
             content={<ResumePublicationsContent />}
           />
-          <ResumeSection name="Projects" content={<ResumeProjectsContent />} />
-          <ResumeSection name="Skills" content={<ResumeSkillsContent />} />
+          <ResumeSection
+            name="Projects"
+            id="projects"
+            content={<ResumeProjectsContent />}
+          />
+          <ResumeSection
+            name="Skills"
+            id="skills"
+            content={<ResumeSkillsContent />}
+          />
         </div>
         <ResumeFooter />
       </div>

@@ -28,14 +28,31 @@
       "descriptor": "Website icon"
     }
   },
-  "experience": [
+  "headline": "Value-driven Software Engineer changing careers to study Plant Biology",
+  "experience1": [
+    {
+      "name": "Volunteer Software Developer",
+      "details": "Wilderness Union",
+      "location": "Toronto, ON",
+      "date": "2025-04 &#x2011;&nbsp;Present",
+      "stack": ["typescript", "react", "postgresql"],
+      "content": "Building trip administration and communication software for an outdoor adventure company",
+      "content-list": [
+        "Led the development of a tool to facilitate communication to trip attendees via email and Discord"
+      ]
+    },
     {
       "name": "Software Engineer II",
       "details": "Coalition Inc.",
       "location": "Toronto, ON",
       "date": "2025-07 &#x2011;&nbsp;2026-08",
       "stack": ["python", "postgresql"],
-      "content": "Backend server development for an insurance underwriting platform"
+      "content": "Backend server development for a cyber-insurance underwriting workbench platform",
+      "content-list": [
+        "Optimized the data processing pipeline to reduce underwriter wait times by over 95%",
+        "Implemented REST API endpoints to support business needs, including a comments system, presentation of privacy and vulnerability scan discoveries, and AI classifier feedback collection",
+        "Created tools for migrating data from Jira, Salesforce, and the legacy format into the new platform"
+      ]
     },
     {
       "name": "Software Engineer",
@@ -74,7 +91,9 @@
         "Assisted in teaching Rust and CUDA basics and created automated grading scripts for ECE459",
         "Graded assignments and prepared and taught tutorial sessions for 150+ students in ECE208"
       ]
-    },
+    }
+  ],
+  "experience2": [
     {
       "name": "CAD Software Architecture Intern",
       "details": "NVIDIA Corp.",
@@ -111,9 +130,29 @@
         "Designed a rich presence system to broadcast and log player activity with Redis and DynamoDB",
         "Implemented first-party microtransactions for purchasing game items using Nintendo's REST API"
       ]
+    },
+    {
+      "name": "Software Developer Intern",
+      "details": "Universe Projects Inc.",
+      "location": "Toronto, ON",
+      "date": "2018-05 &#x2011;&nbsp;2018-08",
+      "stack": ["java", "kotlin"],
+      "content": "Added features and improved infrastructure for a cross-platform Java video game",
+      "content-list": [
+        "Prototyped game item collection infrastructure and developed particle effects and quest systems"
+      ]
     }
   ],
   "education": [
+    {
+      "name": "Non-degree Student",
+      "details": "Biology",
+      "location": "University of Toronto",
+      "content-list": [
+        "Enrolled in additional biology courses before pursuing graduate school, specializing in botany"
+      ],
+      "date": "2026-09 &#x2011;&nbsp;Present"
+    },
     {
       "name": "Master of Applied Science",
       "details": "Electrical and Computer Engineering",
@@ -137,16 +176,6 @@
         "NSERC Undergraduate Student Research Award"
       ],
       "date": "2017-09 &#x2011;&nbsp;2022-04"
-    }
-  ],
-  "volunteering": [
-    {
-      "name": "Backend Developer",
-      "details": "Wilderness Union",
-      "location": "Toronto, ON",
-      "date": "2025-04 &#x2011;&nbsp;Present",
-      "stack": ["typescript", "react", "postgresql"],
-      "content": "Developing an HTTP service and Discord bot to facilitate trip administration and coordination"
     }
   ],
   "publications": [
@@ -239,7 +268,15 @@
   ],
   "skills": [
     {
-      "name": "Languages",
+      "name": "Office",
+      "stack": ["Google Sheets, Docs, Slides"]
+    },
+    {
+      "name": "Human languages",
+      "stack": ["English", "Cantonese"]
+    },
+    {
+      "name": "Programming languages",
       "stack": ["C/C++", "Python", "TypeScript", "Rust", "CUDA", "Java"]
     },
     {
@@ -258,8 +295,7 @@
         "S3",
         "DynamoDB",
         "PostgreSQL",
-        "gRPC",
-        "GoogleTest",
+        "React",
         "ImGui"
       ]
     }
