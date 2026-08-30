@@ -7,8 +7,7 @@
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "predeploy": "yarn run build",
-    "deploy": "yarn run gh-pages -d build"
+    "package": "react-router build && mv ./build/client ./docs && rm -rf ./build && cp -rt ./docs ./assets ./deps/*"
   },
   "dependencies": {
     "@react-router/node": "^8",
