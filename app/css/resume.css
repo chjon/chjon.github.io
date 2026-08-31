@@ -34,13 +34,14 @@ body {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  align-content: center;
+  align-content: first baseline;
   justify-items: baseline;
+  row-gap: 10pt;
+  column-gap: 60pt;
 }
-@media screen {
+@media (min-width: 8.5in) {
   .content-container {
-    row-gap: 10pt;
-    column-gap: 60pt;
+    align-content: center;
   }
 }
 .page {
