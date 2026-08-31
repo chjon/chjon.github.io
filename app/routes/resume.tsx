@@ -44,22 +44,24 @@ function InfoBoxEntry(data: InfoBoxEntryParams) {
 }
 
 function ResumeHeader() {
-  return <>
-    <div id="header">
-      <h1>Jonathan Chung</h1>
-      <div className="infobox">
-        <InfoBoxEntry {...resume_data.infobox.github} />
-        <InfoBoxEntry {...resume_data.infobox.website} />
+  return (
+    <>
+      <div id="header">
+        <h1>Jonathan Chung</h1>
+        <div className="infobox">
+          <InfoBoxEntry {...resume_data.infobox.github} />
+          <InfoBoxEntry {...resume_data.infobox.website} />
+        </div>
+        <div className="infobox">
+          <InfoBoxEntry {...resume_data.infobox.email} />
+          {/* <InfoBoxEntry {...resume_data.infobox.phone} /> */}
+        </div>
       </div>
-      <div className="infobox">
-        <InfoBoxEntry {...resume_data.infobox.email} />
-        {/* <InfoBoxEntry {...resume_data.infobox.phone} /> */}
+      <div className="headline">
+        <h3>{resume_data.headline}</h3>
       </div>
-    </div>
-    <div className="headline">
-      <h3>{resume_data.headline}</h3>
-    </div>
-  </>
+    </>
+  );
 }
 
 function Markdownify({
@@ -125,7 +127,7 @@ function TechList({ data }: { data: Array<string> }) {
   ));
 }
 
-function ResumeExperienceContent({data}: { data: Array<any> }) {
+function ResumeExperienceContent({ data }: { data: Array<any> }) {
   return data.map((item) => (
     <ResumeExperienceEntry
       key={item.name}
