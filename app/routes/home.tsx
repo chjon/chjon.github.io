@@ -1,8 +1,8 @@
 import type { Route } from "./+types/home";
 import "../css/home.css";
-import { useEffect } from "react";
+import { useRef, useState } from "react";
 
-export function meta({ }: Route.MetaArgs) {
+export function meta({}: Route.MetaArgs) {
   return [
     {
       title: "Jonathan Chung",
@@ -14,47 +14,71 @@ export function meta({ }: Route.MetaArgs) {
   ];
 }
 
-export function Carousel({ interests }: { interests: Array<{ name: string, emoji: string }> }) {
-  return <>
-    <div className="slider">
-      <div className="slides">
-        {
-          interests.map(({ name, emoji }) => {
-            const key = `${name.replaceAll(' ', '-')}`;
-            return <>
-              <div key={key} id={`slide-${key}`}>
-                <p>{name}</p>
-                <p className="slide-emoji">{emoji}</p>
-              </div>
-            </>
-          })
-        }
-      </div>
+export function Carousel({
+  interests,
+}: {
+  interests: Array<{ name: string; emoji: string }>;
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const prevIndex = (activeIndex + interests.length - 1) % interests.length;
+  const nextIndex = (activeIndex + 1) % interests.length;
 
-      {
-        interests.map(({ name }, i) => {
-          const key = `${name.replaceAll(' ', '-')}`;
-          return <a key={`slide-button-${key}`} href={`#slide-${key}`} />
-        })
-      }
-    </div>
-  </>
+  const refs = interests.map((_) => useRef<HTMLDivElement | null>(null));
+
+  const goToIndex = (i: number) => {
+    setActiveIndex(i);
+    refs[i].current?.scrollIntoView();
+  };
+
+  return (
+    <>
+      <div className="slider">
+        <div className="flex justify-center items-center gap-4">
+          <a
+            className="slide-nav"
+            onClick={() => {
+              goToIndex(prevIndex);
+            }}
+          >
+            ◄
+          </a>
+          <div className="slides">
+            {interests.map(({ name, emoji }, i) => {
+              return (
+                <div key={`slide-${i}`} ref={refs[i]}>
+                  <p>{name}</p>
+                  <p className="slide-emoji">{emoji}</p>
+                </div>
+              );
+            })}
+          </div>
+          <a
+            className="slide-nav"
+            onClick={() => {
+              goToIndex(nextIndex);
+            }}
+          >
+            ►
+          </a>
+        </div>
+
+        {interests.map((_, i) => {
+          return (
+            <a
+              key={`slide-button-${i}`}
+              className={`slide-button slide-button-${activeIndex == i ? "active" : "inactive"}`}
+              onClick={() => {
+                goToIndex(i);
+              }}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
 }
 
 export default function Home() {
-  const handleScroll = (event: any) => {
-    console.log(event);
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", (e) => handleScroll(e));
-
-    return () => {
-      // return a cleanup function to unregister our function since it will run multiple times
-      window.removeEventListener("scroll", (e) => handleScroll(e));
-    };
-  }, []);
-
   return (
     <>
       <header className="header">
@@ -90,16 +114,18 @@ export default function Home() {
             I love spending time outdoors! When I'm not studying plants, you
             might find me
           </p>
-          <Carousel interests={[
-            { name: "rock climbing", emoji: "🧗" },
-            { name: "hiking", emoji: "🥾" },
-            { name: "canoeing", emoji: "🛶" },
-            { name: "camping", emoji: "🏕️" },
-            { name: "longboarding", emoji: "🛹" },
-            { name: "running", emoji: "🏃‍♂️‍➡️" },
-            { name: "skating", emoji: "⛸️" },
-            { name: "cross-country skiing", emoji: "⛷️" },
-          ]}/>
+          <Carousel
+            interests={[
+              { name: "rock climbing", emoji: "🧗" },
+              { name: "hiking", emoji: "🥾" },
+              { name: "canoeing", emoji: "🛶" },
+              { name: "camping", emoji: "🏕️" },
+              { name: "longboarding", emoji: "🛹" },
+              { name: "running", emoji: "🏃‍♂️‍➡️" },
+              { name: "skating", emoji: "⛸️" },
+              { name: "cross-country skiing", emoji: "⛷️" },
+            ]}
+          />
         </div>
       </div>
       <br />
