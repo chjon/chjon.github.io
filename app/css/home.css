@@ -60,11 +60,14 @@ body {
 }
 
 .button-bar {
-  padding: 1rem;
+  padding: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
-
 .button {
-  margin: 0.5rem;
   padding: 1rem 2rem;
   color: white;
   background: var(--accent-color);
