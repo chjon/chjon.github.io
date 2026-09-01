@@ -2,7 +2,7 @@ import type { Route } from "./+types/home";
 import "../css/home.css";
 import { useRef, useState } from "react";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     {
       title: "Jonathan Chung",
@@ -46,7 +46,7 @@ export function Carousel({
             {interests.map(({ name, emoji }, i) => {
               return (
                 <div key={`slide-${i}`} ref={refs[i]}>
-                  <p>{name}</p>
+                  <p className="slide-text">{name}</p>
                   <p className="slide-emoji">{emoji}</p>
                 </div>
               );
@@ -78,6 +78,62 @@ export function Carousel({
   );
 }
 
+function BackgroundLeaves() {
+  const leaves = [
+    "/assets/leaves/acer.svg",
+    "/assets/leaves/aesculus.svg",
+    "/assets/leaves/betula.svg",
+    "/assets/leaves/gingko.svg",
+    "/assets/leaves/gymnocladus.svg",
+    "/assets/leaves/juglans.svg",
+    "/assets/leaves/liquidambar.svg",
+    "/assets/leaves/liriodendron.svg",
+    "/assets/leaves/quercus_alba.svg",
+    "/assets/leaves/quercus_rubra.svg",
+    "/assets/leaves/sassafras_mitten.svg",
+    "/assets/leaves/sassafras_single.svg",
+    "/assets/leaves/sassafras_trident.svg",
+    "/assets/leaves/tilia.svg",
+    "/assets/leaves/ulmus.svg",
+  ];
+
+  const tilesWidth = 10;
+  const tilesHeight = 10;
+  // Generate randomized tiling
+  const tiles = [];
+  for (let i = 0; i < tilesHeight; i++) {
+    const row = [];
+    for (let j = 0; j < tilesWidth; j++) {
+      // Get a random index and ensure it is not the same as neighbouring tiles
+      const neighbours = new Set();
+      if (i > 0) {
+        neighbours.add(tiles[i - 1][j]);
+        if (j > 0) neighbours.add(tiles[i - 1][j - 1]);
+        if (j < tilesWidth - 1) neighbours.add(tiles[i - 1][j + 1]);
+      }
+      if (j > 0) neighbours.add(row[j - 1]);
+      let randomIndex = Math.floor(Math.random() * leaves.length);
+      while (neighbours.has(randomIndex))
+        randomIndex = Math.floor(Math.random() * leaves.length);
+      row.push(randomIndex);
+    }
+    tiles.push(row);
+  }
+
+  return <div className="background-tiles">
+    {
+      tiles.map((row, i) => <div key={`background-tiles-${i}`} className="background-tiles-row"> {
+        row.map((leafIndex, j) => <img
+          key={`background-tiles-${i}-${j}`}
+          className="leaf"
+          src={leaves[leafIndex]}
+          style={{rotate: `${Math.random()}turn`}}
+        />)
+      } </div>)
+    }
+  </div>
+}
+
 export default function Home() {
   return (
     <>
@@ -86,6 +142,7 @@ export default function Home() {
       </header>
 
       <div className="body-container">
+        <BackgroundLeaves />
         <div className="card">
           <p>
             I recently quit my job in software engineering to follow my dream of
@@ -128,7 +185,6 @@ export default function Home() {
           />
         </div>
       </div>
-      <br />
     </>
   );
 }

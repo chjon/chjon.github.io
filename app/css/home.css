@@ -4,6 +4,8 @@
   --accent-color: rgb(17, 121, 17);
   --accent-dark-color: rgb(9, 82, 9);
   --background-color: rgb(200, 234, 200);
+  --background-dark-color: rgb(183, 224, 183);
+  --background-leaf-size: 6rem;
   --carousel-width: 10rem;
 }
 
@@ -52,6 +54,7 @@ body {
   padding: 3rem;
   margin: 1rem 0rem;
   max-width: 40rem;
+  z-index: 1;
 }
 .card > p {
   font-size: larger;
@@ -149,8 +152,33 @@ body {
 .slide-button:focus {
   background: #000;
 }
+.slide-text {
+  font-size: large;
+}
 .slide-emoji {
   font-size: 100px;
+}
+
+.background-tiles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: -1;
+}
+.background-tiles-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.leaf {
+  filter: invert(99%) sepia(78%) saturate(446%) hue-rotate(49deg) brightness(92%) contrast(89%);
+  width: var(--background-leaf-size);
+  height: var(--background-leaf-size);
 }
 
 /* Don't need button navigation */
