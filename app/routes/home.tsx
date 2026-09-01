@@ -2,7 +2,7 @@ import type { Route } from "./+types/home";
 import "../css/home.css";
 import { useRef, useState } from "react";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     {
       title: "Jonathan Chung",
@@ -111,6 +111,7 @@ function BackgroundLeaves() {
         if (j > 0) neighbours.add(tiles[i - 1][j - 1]);
         if (j < tilesWidth - 1) neighbours.add(tiles[i - 1][j + 1]);
       }
+      if (i > 1) neighbours.add(tiles[i - 2][j]); // Tiles two rows away are visually close by
       if (j > 0) neighbours.add(row[j - 1]);
       let randomIndex = Math.floor(Math.random() * leaves.length);
       while (neighbours.has(randomIndex))
@@ -120,26 +121,21 @@ function BackgroundLeaves() {
     tiles.push(row);
   }
 
-  return (
-    <div className="background-tiles">
-      {tiles.map((row, i) => (
-        <div key={`background-tiles-${i}`} className="background-tiles-row">
-          {" "}
-          {row.map((leafIndex, j) => (
-            <img
-              key={`background-tiles-${i}-${j}`}
-              className="leaf"
-              src={leaves[leafIndex]}
-              style={{
-                rotate: `${Math.random()}turn`,
-                transform: Math.random() > 0.5 ? "scaleX(-1)" : "1",
-              }}
-            />
-          ))}{" "}
-        </div>
-      ))}
-    </div>
-  );
+  return <div className="background-tiles"> {
+    tiles.map((row, i) => (
+      row.map((leafIndex, j) => (
+        <img
+          key={`background-tiles-${i}-${j}`}
+          className="leaf"
+          src={leaves[leafIndex]}
+          style={{
+            rotate: `${Math.random()}turn`,
+            transform: Math.random() > 0.5 ? "scaleX(-1)" : "1",
+          }}
+        />
+      ))
+    ))
+  } </div>
 }
 
 export default function Home() {
