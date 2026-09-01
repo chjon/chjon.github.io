@@ -2,7 +2,7 @@ import type { Route } from "./+types/home";
 import "../css/home.css";
 import { useRef, useState } from "react";
 
-export function meta({ }: Route.MetaArgs) {
+export function meta({}: Route.MetaArgs) {
   return [
     {
       title: "Jonathan Chung",
@@ -120,18 +120,26 @@ function BackgroundLeaves() {
     tiles.push(row);
   }
 
-  return <div className="background-tiles">
-    {
-      tiles.map((row, i) => <div key={`background-tiles-${i}`} className="background-tiles-row"> {
-        row.map((leafIndex, j) => <img
-          key={`background-tiles-${i}-${j}`}
-          className="leaf"
-          src={leaves[leafIndex]}
-          style={{rotate: `${Math.random()}turn`}}
-        />)
-      } </div>)
-    }
-  </div>
+  return (
+    <div className="background-tiles">
+      {tiles.map((row, i) => (
+        <div key={`background-tiles-${i}`} className="background-tiles-row">
+          {" "}
+          {row.map((leafIndex, j) => (
+            <img
+              key={`background-tiles-${i}-${j}`}
+              className="leaf"
+              src={leaves[leafIndex]}
+              style={{
+                rotate: `${Math.random()}turn`,
+                transform: Math.random() > 0.5 ? "scaleX(-1)" : "1",
+              }}
+            />
+          ))}{" "}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function Home() {

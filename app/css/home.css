@@ -6,6 +6,7 @@
   --background-color: rgb(200, 234, 200);
   --background-dark-color: rgb(183, 224, 183);
   --background-leaf-size: 6rem;
+  --background-leaf-min-spacing: 2rem;
   --carousel-width: 10rem;
 }
 
@@ -169,16 +170,24 @@ body {
   flex-direction: column;
   justify-content: space-between;
   z-index: -1;
+  margin: calc(-1 * var(--background-leaf-min-spacing)) 0;
 }
 .background-tiles-row {
   display: flex;
   width: 100%;
   justify-content: space-between;
+  margin: var(--background-leaf-min-spacing)
+    calc(-1 * var(--background-leaf-min-spacing));
+}
+.background-tiles-row:nth-child(even) {
+  margin-left: 5%;
 }
 .leaf {
-  filter: invert(99%) sepia(78%) saturate(446%) hue-rotate(49deg) brightness(92%) contrast(89%);
+  filter: invert(99%) sepia(78%) saturate(446%) hue-rotate(49deg)
+    brightness(92%) contrast(89%);
   width: var(--background-leaf-size);
   height: var(--background-leaf-size);
+  margin: 0 var(--background-leaf-min-spacing);
 }
 
 /* Don't need button navigation */
