@@ -78,6 +78,7 @@ body {
   color: white;
   background: var(--accent-color);
   border-radius: 2rem;
+  user-select: none;
 }
 .button:hover {
   background: var(--accent-dark-color);
@@ -127,6 +128,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
   cursor: pointer;
 }
 .slide-nav:hover {
@@ -142,6 +144,7 @@ body {
   border-radius: 50%;
   margin: 0 0.5rem 0.5rem 0;
   position: relative;
+  user-select: none;
   cursor: pointer;
 }
 .slide-button-active {
@@ -163,6 +166,7 @@ body {
 }
 .slide-emoji {
   font-size: 100px;
+  user-select: none;
 }
 
 .background-tiles {
@@ -178,6 +182,7 @@ body {
   
   z-index: -1;
   margin-left: 2.5%;
+  user-select: none;
 }
 .background-tiles > .leaf:nth-child(20n+1),
 .background-tiles > .leaf:nth-child(20n+2),
@@ -224,6 +229,7 @@ body {
   width: var(--background-leaf-size);
   height: var(--background-leaf-size);
   margin: 1rem;
+  user-select: none;
   cursor: crosshair;
 }
 .leaf-gallery-item > .leaf-inactive {
