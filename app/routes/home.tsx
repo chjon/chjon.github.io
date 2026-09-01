@@ -1,6 +1,6 @@
 import type { Route } from "./+types/home";
 import "../css/home.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function meta({ }: Route.MetaArgs) {
   return [
@@ -78,38 +78,96 @@ export function Carousel({
   );
 }
 
-function BackgroundLeaves() {
-  const leaves = [
-    "/assets/leaves/acer.svg",
-    "/assets/leaves/aesculus.svg",
-    "/assets/leaves/betula.svg",
-    "/assets/leaves/gingko.svg",
-    "/assets/leaves/gymnocladus.svg",
-    "/assets/leaves/juglans.svg",
-    "/assets/leaves/liquidambar.svg",
-    "/assets/leaves/liriodendron.svg",
-    "/assets/leaves/quercus_alba.svg",
-    "/assets/leaves/quercus_rubra.svg",
-    "/assets/leaves/sassafras_mitten.svg",
-    "/assets/leaves/sassafras_single.svg",
-    "/assets/leaves/sassafras_trident.svg",
-    "/assets/leaves/tilia.svg",
-    "/assets/leaves/ulmus.svg",
-  ];
+const leaves = [
+  {
+    "latin-name": "Acer saccharum",
+    "common-name": "Sugar Maple",
+    "path": "/assets/leaves/acer.svg"
+  },
+  {
+    "latin-name": "Aesculus hippocastanum",
+    "common-name": "Horse Chestnut",
+    "path": "/assets/leaves/aesculus.svg"
+  },
+  {
+    "latin-name": "Belua papyrifera",
+    "common-name": "White Birch",
+    "path": "/assets/leaves/betula.svg"
+  },
+  {
+    "latin-name": "Gingko biloba",
+    "common-name": "Gingko",
+    "path": "/assets/leaves/gingko.svg"
+  },
+  {
+    "latin-name": "Gymnocladus dioicus",
+    "common-name": "Kentucky Coffee Tree",
+    "path": "/assets/leaves/gymnocladus.svg"
+  },
+  {
+    "latin-name": "Juglans nigra",
+    "common-name": "Black Walnut",
+    "path": "/assets/leaves/juglans.svg"
+  },
+  {
+    "latin-name": "Liquidambar styraciflua",
+    "common-name": "Sweetgum",
+    "path": "/assets/leaves/liquidambar.svg"
+  },
+  {
+    "latin-name": "Liriodendron tulipifera",
+    "common-name": "Tulip-tree",
+    "path": "/assets/leaves/liriodendron.svg"
+  },
+  {
+    "latin-name": "Quercus alba",
+    "common-name": "White Oak",
+    "path": "/assets/leaves/quercus_alba.svg"
+  },
+  {
+    "latin-name": "Quercus rubra",
+    "common-name": "Red Oak",
+    "path": "/assets/leaves/quercus_rubra.svg"
+  },
+    {
+    "latin-name": "Sassafras albidum",
+    "common-name": "Sassafras",
+    "path": "/assets/leaves/sassafras_trident.svg"
+  },
+  {
+    "latin-name": "Sassafras albidum",
+    "common-name": "Sassafras",
+    "path": "/assets/leaves/sassafras_mitten.svg"
+  },
+  {
+    "latin-name": "Sassafras albidum",
+    "common-name": "Sassafras",
+    "path": "/assets/leaves/sassafras_single.svg"
+  },
+  {
+    "latin-name": "Tilia americana",
+    "common-name": "American Basswood",
+    "path": "/assets/leaves/tilia.svg"
+  },
+  {
+    "latin-name": "Ulmus americana",
+    "common-name": "American Elm",
+    "path": "/assets/leaves/ulmus.svg"
+  },
+];
 
-  const tilesWidth = 10;
-  const tilesHeight = 10;
+function getRandomizedTiling(width: number, height: number) {
   // Generate randomized tiling
   const tiles = [];
-  for (let i = 0; i < tilesHeight; i++) {
+  for (let i = 0; i < height; i++) {
     const row = [];
-    for (let j = 0; j < tilesWidth; j++) {
+    for (let j = 0; j < width; j++) {
       // Get a random index and ensure it is not the same as neighbouring tiles
       const neighbours = new Set();
       if (i > 0) {
         neighbours.add(tiles[i - 1][j]);
         if (j > 0) neighbours.add(tiles[i - 1][j - 1]);
-        if (j < tilesWidth - 1) neighbours.add(tiles[i - 1][j + 1]);
+        if (j < width - 1) neighbours.add(tiles[i - 1][j + 1]);
       }
       if (i > 1) neighbours.add(tiles[i - 2][j]); // Tiles two rows away are visually close by
       if (j > 0) neighbours.add(row[j - 1]);
@@ -121,16 +179,43 @@ function BackgroundLeaves() {
     tiles.push(row);
   }
 
+  return tiles;
+}
+
+function getRandomizedOrientations(width: number, height: number) {
+  const orientations = [];
+  for (let i = 0; i < width; i++) {
+    const row = [];
+    for (let j = 0; j < height; j++) {
+      row.push(Math.random());
+      orientations.push(row);
+    }
+  }
+
+  return orientations;
+}
+
+function BackgroundLeaves(
+  {
+    tiles,
+    tileOrientations,
+    selectedLeafIndex
+  }: {
+    tiles: Array<Array<number>>
+    tileOrientations: Array<Array<number>>
+    selectedLeafIndex: number
+  }
+) {
   return <div className="background-tiles"> {
     tiles.map((row, i) => (
       row.map((leafIndex, j) => (
         <img
           key={`background-tiles-${i}-${j}`}
-          className="leaf"
-          src={leaves[leafIndex]}
+          className={leafIndex == selectedLeafIndex ? "leaf leaf-selected" : "leaf"}
+          src={leaves[leafIndex].path}
           style={{
-            rotate: `${Math.random()}turn`,
-            transform: Math.random() > 0.5 ? "scaleX(-1)" : "1",
+            rotate: `${2 * tileOrientations[i][j]}turn`,
+            transform: tileOrientations[i][j] > 0.5 ? "scaleX(-1)" : "1",
           }}
         />
       ))
@@ -139,6 +224,17 @@ function BackgroundLeaves() {
 }
 
 export default function Home() {
+  const [selectedLeafIndex, setSelectedLeafIndex] = useState(-1);
+  const [tilesWidth, tilesHeight] = [10, 10];
+  const [tiles, setTiles] = useState<Array<Array<number>>>([]);
+  const [orientations, setOrientations] = useState<Array<Array<number>>>([]);
+  const regenerateBackground = () => {
+    setTiles(getRandomizedTiling(tilesWidth, tilesHeight));
+    setOrientations(getRandomizedOrientations(tilesWidth, tilesHeight));
+  }
+
+  useEffect(regenerateBackground, []);
+
   return (
     <>
       <header className="header">
@@ -146,7 +242,11 @@ export default function Home() {
       </header>
 
       <div className="body-container">
-        <BackgroundLeaves />
+        <BackgroundLeaves
+          selectedLeafIndex={selectedLeafIndex}
+          tiles={tiles}
+          tileOrientations={orientations}
+        />
         <div className="card">
           <p>
             I recently quit my job in software engineering to follow my dream of
@@ -187,6 +287,28 @@ export default function Home() {
               { name: "cross-country skiing", emoji: "⛷️" },
             ]}
           />
+        </div>
+
+        <div className="card">
+          <p>
+            Curious about the leaf silhouettes in the background? Here's what they are:
+          </p>
+          <div className="leaf-gallery">
+            {
+              leaves.map(({ "latin-name": latin, "common-name": common, path }, i) => {
+                return <div className="leaf-gallery-item">
+                  <img
+                    key={latin}
+                    className={`leaf ${i == selectedLeafIndex ? "leaf-active": "leaf-inactive"}`}
+                    src={path}
+                    onClick={() => { setSelectedLeafIndex(i == selectedLeafIndex ? -1 : i) }}
+                  />
+                  <p className="leaf-gallery-item-latin"><i>{latin}</i></p>
+                  <p className="leaf-gallery-item-common">{common}</p>
+                </div>
+              })
+            }
+          </div>
         </div>
       </div>
     </>
