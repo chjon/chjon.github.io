@@ -27,7 +27,10 @@ export function Carousel({
 
   const goToIndex = (i: number) => {
     setActiveIndex(i);
-    refs[i].current?.scrollIntoView();
+    refs[i].current?.scrollIntoView({
+      block: 'nearest',
+      inline: 'nearest',
+    });
   };
 
   return (
@@ -266,8 +269,8 @@ export default function Home() {
           <p>
             I recently quit my job in software engineering to follow my dream of
             studying botany (plant biology). I'm in school now, but I'm open to
-            part-time work! I've only ever worked in software previously, but
-            I'm a quick learner and looking for new experiences.
+            part-time work! I've only worked in software previously, but
+            I'm a quick learner and I'm looking for new experiences.
           </p>
           <div className="button-bar">
             <a className="button" href="/resume/">
@@ -292,10 +295,10 @@ export default function Home() {
           </p>
           <Carousel
             interests={[
-              { name: "rock climbing", emoji: "🧗" },
+              { name: "camping", emoji: "🏕️" },
               { name: "hiking", emoji: "🥾" },
               { name: "canoeing", emoji: "🛶" },
-              { name: "camping", emoji: "🏕️" },
+              { name: "rock climbing", emoji: "🧗" },
               { name: "longboarding", emoji: "🛹" },
               { name: "running", emoji: "🏃‍♂️‍➡️" },
               { name: "skating", emoji: "⛸️" },
