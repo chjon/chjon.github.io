@@ -267,7 +267,7 @@ export default function Home() {
         />
         <div className="card">
           <p>
-            I recently quit my job in software engineering to follow my dream of
+            I recently quit my job in software engineering to pursue my dream of
             studying botany (plant biology). I'm in school now, but I'm open to
             part-time work! I've only worked in software previously, but
             I'm a quick learner and I'm looking for new experiences.
@@ -289,10 +289,8 @@ export default function Home() {
         </div>
 
         <div className="card">
-          <p>
-            I love spending time outdoors! When I'm not studying plants, you
-            might find me
-          </p>
+          <p>I love spending time outdoors!</p>
+          <p>When I'm not studying plants, you might find me</p>
           <Carousel
             interests={[
               { name: "camping", emoji: "🏕️" },
@@ -308,9 +306,8 @@ export default function Home() {
         </div>
 
         <div className="card">
-          <p>
-            Curious about the leaf silhouettes in the background? Here's what they are:
-          </p>
+          <p>Curious about the leaf silhouettes in the background?</p>
+          <p>Here's what they are:</p>
           <div className="leaf-gallery">
             {
               leaves.map(({
@@ -326,13 +323,12 @@ export default function Home() {
                     src={path}
                     onClick={() => { setSelectedLeafIndex(i == selectedLeafIndex ? -1 : i) }}
                   />
-                  <p className="leaf-gallery-item-latin"><i>{latin}</i></p>
-                  <a
-                    className="leaf-gallery-item-common"
-                    href={link}
-                  >
-                    {common}
-                    <img className="link-indicator" src="/assets/link.svg" />
+                  <a className="leaf-gallery-item-label" href={link}>
+                    <p className="leaf-gallery-item-latin"><i>{latin}</i></p>
+                    <p className="leaf-gallery-item-common">
+                      {common}
+                      <img className="link-indicator" src="/assets/link.svg" />
+                    </p>
                   </a>
                 </div>
               })

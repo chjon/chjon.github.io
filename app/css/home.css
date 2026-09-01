@@ -29,6 +29,9 @@
 
 body {
   background: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .body-container {
@@ -36,7 +39,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  max-width: 46rem;
   height: 100%;
   padding: 1rem 0rem;
 }
@@ -54,7 +57,7 @@ body {
 
   padding: 3rem;
   margin: 1rem 0rem;
-  max-width: 40rem;
+  width: 100%;
   z-index: 1;
 }
 .card > p {
@@ -156,7 +159,7 @@ body {
   background: #000;
 }
 .slide-text {
-  font-size: large;
+  font-size: larger;
 }
 .slide-emoji {
   font-size: 100px;
@@ -234,19 +237,18 @@ body {
   filter: invert(16%) sepia(86%) saturate(6717%) hue-rotate(110deg) brightness(99%) contrast(87%);
 }
 .leaf-gallery-item > .leaf-active:hover {
-  filter: invert(16%) sepia(86%) saturate(6717%) hue-rotate(110deg) brightness(99%) contrast(87%);
+  filter: invert(11%) sepia(98%) saturate(3596%) hue-rotate(102deg) brightness(95%) contrast(93%);
 }
 .leaf-gallery-item-latin {
-  background: var(--accent-color);
-  color: white;
+  background: var(--background-color);
+  color: black;
   width: 100%;
   text-align: center;
   padding: 0 0.5rem;
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
 }
 .leaf-gallery-item-common {
-  background: var(--background-color);
+  background: var(--accent-color);
+  color: white;
   width: 100%;
   text-align: center;
   padding: 0 0.5rem;
@@ -257,13 +259,22 @@ body {
   align-items: center;
   gap: 0.3rem;
 }
-.leaf-gallery-item-common:hover {
-  text-decoration-line: underline;
+.leaf-gallery-item-label {
+  width: 100%;
+}
+.leaf-gallery-item-label:hover {
+  .leaf-gallery-item-latin {
+    text-decoration-line: underline;
+  }
+  .leaf-gallery-item-common {
+    text-decoration-line: underline;
+  }
 }
 
 .link-indicator {
   width: 0.8rem;
   height: 0.8rem;
+  filter: invert(1);
 }
 
 /* Don't need button navigation */
