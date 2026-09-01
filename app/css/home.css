@@ -252,6 +252,18 @@ body {
   padding: 0 0.5rem;
   border-bottom-left-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+}
+.leaf-gallery-item-common:hover {
+  text-decoration-line: underline;
+}
+
+.link-indicator {
+  width: 0.8rem;
+  height: 0.8rem;
 }
 
 /* Don't need button navigation */

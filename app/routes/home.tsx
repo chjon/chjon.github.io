@@ -82,77 +82,92 @@ const leaves = [
   {
     "latin-name": "Acer saccharum",
     "common-name": "Sugar Maple",
-    "path": "/assets/leaves/acer.svg"
+    "path": "/assets/leaves/acer.svg",
+    "link": "https://en.wikipedia.org/wiki/Acer_saccharum"
   },
   {
     "latin-name": "Aesculus hippocastanum",
     "common-name": "Horse Chestnut",
-    "path": "/assets/leaves/aesculus.svg"
+    "path": "/assets/leaves/aesculus.svg",
+    "link": "https://en.wikipedia.org/wiki/Aesculus_hippocastanum"
   },
   {
-    "latin-name": "Belua papyrifera",
+    "latin-name": "Betula papyrifera",
     "common-name": "White Birch",
-    "path": "/assets/leaves/betula.svg"
+    "path": "/assets/leaves/betula.svg",
+    "link": "https://en.wikipedia.org/wiki/Betula_papyrifera"
   },
   {
     "latin-name": "Gingko biloba",
     "common-name": "Gingko",
-    "path": "/assets/leaves/gingko.svg"
+    "path": "/assets/leaves/gingko.svg",
+    "link": "https://en.wikipedia.org/wiki/Ginkgo_biloba"
   },
   {
     "latin-name": "Gymnocladus dioicus",
     "common-name": "Kentucky Coffee Tree",
-    "path": "/assets/leaves/gymnocladus.svg"
+    "path": "/assets/leaves/gymnocladus.svg",
+    "link": "https://en.wikipedia.org/wiki/Gymnocladus_dioicus"
   },
   {
     "latin-name": "Juglans nigra",
     "common-name": "Black Walnut",
-    "path": "/assets/leaves/juglans.svg"
+    "path": "/assets/leaves/juglans.svg",
+    "link": "https://en.wikipedia.org/wiki/Juglans_nigra"
   },
   {
     "latin-name": "Liquidambar styraciflua",
     "common-name": "Sweetgum",
-    "path": "/assets/leaves/liquidambar.svg"
+    "path": "/assets/leaves/liquidambar.svg",
+    "link": "https://en.wikipedia.org/wiki/Liquidambar_styraciflua"
   },
   {
     "latin-name": "Liriodendron tulipifera",
     "common-name": "Tulip-tree",
-    "path": "/assets/leaves/liriodendron.svg"
+    "path": "/assets/leaves/liriodendron.svg",
+    "link": "https://en.wikipedia.org/wiki/Liriodendron_tulipifera"
   },
   {
     "latin-name": "Quercus alba",
     "common-name": "White Oak",
-    "path": "/assets/leaves/quercus_alba.svg"
+    "path": "/assets/leaves/quercus_alba.svg",
+    "link": "https://en.wikipedia.org/wiki/Quercus_alba"
   },
   {
     "latin-name": "Quercus rubra",
-    "common-name": "Red Oak",
-    "path": "/assets/leaves/quercus_rubra.svg"
+    "common-name": "Northern Red Oak",
+    "path": "/assets/leaves/quercus_rubra.svg",
+    "link": "https://en.wikipedia.org/wiki/Quercus_rubra"
   },
     {
     "latin-name": "Sassafras albidum",
     "common-name": "Sassafras",
-    "path": "/assets/leaves/sassafras_trident.svg"
+    "path": "/assets/leaves/sassafras_trident.svg",
+    "link": "https://en.wikipedia.org/wiki/Sassafras_albidum"
   },
   {
     "latin-name": "Sassafras albidum",
     "common-name": "Sassafras",
-    "path": "/assets/leaves/sassafras_mitten.svg"
+    "path": "/assets/leaves/sassafras_mitten.svg",
+    "link": "https://en.wikipedia.org/wiki/Sassafras_albidum"
   },
   {
     "latin-name": "Sassafras albidum",
     "common-name": "Sassafras",
-    "path": "/assets/leaves/sassafras_single.svg"
+    "path": "/assets/leaves/sassafras_single.svg",
+    "link": "https://en.wikipedia.org/wiki/Sassafras_albidum"
   },
   {
     "latin-name": "Tilia americana",
     "common-name": "American Basswood",
-    "path": "/assets/leaves/tilia.svg"
+    "path": "/assets/leaves/tilia.svg",
+    "link": "https://en.wikipedia.org/wiki/Tilia_americana"
   },
   {
     "latin-name": "Ulmus americana",
     "common-name": "American Elm",
-    "path": "/assets/leaves/ulmus.svg"
+    "path": "/assets/leaves/ulmus.svg",
+    "link": "https://en.wikipedia.org/wiki/Ulmus_americana"
   },
 ];
 
@@ -295,7 +310,12 @@ export default function Home() {
           </p>
           <div className="leaf-gallery">
             {
-              leaves.map(({ "latin-name": latin, "common-name": common, path }, i) => {
+              leaves.map(({
+                "latin-name": latin,
+                "common-name": common,
+                path,
+                link,
+              }, i) => {
                 return <div className="leaf-gallery-item">
                   <img
                     key={latin}
@@ -304,7 +324,13 @@ export default function Home() {
                     onClick={() => { setSelectedLeafIndex(i == selectedLeafIndex ? -1 : i) }}
                   />
                   <p className="leaf-gallery-item-latin"><i>{latin}</i></p>
-                  <p className="leaf-gallery-item-common">{common}</p>
+                  <a
+                    className="leaf-gallery-item-common"
+                    href={link}
+                  >
+                    {common}
+                    <img className="link-indicator" src="/assets/link.svg" />
+                  </a>
                 </div>
               })
             }
