@@ -3,6 +3,7 @@
 :root {
   --accent-color: rgb(17, 121, 17);
   --background-color: rgb(200, 234, 200);
+  --carousel-width: 10rem;
 }
 
 #greeting {
@@ -71,25 +72,22 @@ body {
 
 /* Slider adapted from https://css-tricks.com/css-only-carousel/ */
 .slider {
-  width: 300px;
+  width: var(--carousel-width);
   text-align: center;
   overflow: hidden;
 }
 
 .slides {
   display: flex;
-  overflow-x: hidden;
+  overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 .slides::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-.slides::-webkit-scrollbar-thumb {
-  background: black;
-  border-radius: 10px;
+  width: 0;
+  height: 0;
 }
 .slides::-webkit-scrollbar-track {
   background: transparent;
@@ -97,9 +95,7 @@ body {
 .slides > div {
   scroll-snap-align: start;
   flex-shrink: 0;
-  width: 300px;
-  /* height: 300px; */
-  margin-right: 50px;
+  width: var(--carousel-width);
   transform-origin: center center;
   transform: scale(1);
   transition: transform 0.5s;
@@ -112,8 +108,8 @@ body {
 }
 .slider > a {
   display: inline-flex;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 0.7rem;
+  height: 0.7rem;
   background: var(--background-color);
   text-decoration: none;
   align-items: center;

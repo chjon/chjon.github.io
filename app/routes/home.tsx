@@ -2,7 +2,7 @@ import type { Route } from "./+types/home";
 import "../css/home.css";
 import { useEffect } from "react";
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     {
       title: "Jonathan Chung",
@@ -12,6 +12,33 @@ export function meta({}: Route.MetaArgs) {
       content: "Jonathan Chung's website",
     },
   ];
+}
+
+export function Carousel({ interests }: { interests: Array<{ name: string, emoji: string }> }) {
+  return <>
+    <div className="slider">
+      <div className="slides">
+        {
+          interests.map(({ name, emoji }) => {
+            const key = `${name.replaceAll(' ', '-')}`;
+            return <>
+              <div key={key} id={`slide-${key}`}>
+                <p>{name}</p>
+                <p className="slide-emoji">{emoji}</p>
+              </div>
+            </>
+          })
+        }
+      </div>
+
+      {
+        interests.map(({ name }, i) => {
+          const key = `${name.replaceAll(' ', '-')}`;
+          return <a key={`slide-button-${key}`} href={`#slide-${key}`} />
+        })
+      }
+    </div>
+  </>
 }
 
 export default function Home() {
@@ -30,8 +57,6 @@ export default function Home() {
 
   return (
     <>
-      {/* <SunsetContainer /> */}
-
       <header className="header">
         <h1 id="greeting">Hi, I'm Jonathan!</h1>
       </header>
@@ -39,7 +64,7 @@ export default function Home() {
       <div className="body-container">
         <div className="card">
           <p>
-            I recently quit my job as a software engineer to chase my dream of
+            I recently quit my job in software engineering to follow my dream of
             studying botany (plant biology). I'm in school now, but I'm open to
             part-time work! I've only ever worked in software previously, but
             I'm a quick learner and looking for new experiences.
@@ -65,51 +90,16 @@ export default function Home() {
             I love spending time outdoors! When I'm not studying plants, you
             might find me
           </p>
-          <div className="slider">
-            <div className="slides">
-              <div id="slide-1">
-                <p>rock climbing</p>
-                <p className="slide-emoji">🧗</p>
-              </div>
-              <div id="slide-2">
-                <p>hiking</p>
-                <p className="slide-emoji">🥾</p>
-              </div>
-              <div id="slide-3">
-                <p>canoeing</p>
-                <p className="slide-emoji">🛶</p>
-              </div>
-              <div id="slide-4">
-                <p>camping</p>
-                <p className="slide-emoji">🏕️</p>
-              </div>
-              <div id="slide-5">
-                <p>longboarding</p>
-                <p className="slide-emoji">🛹</p>
-              </div>
-              <div id="slide-6">
-                <p>running</p>
-                <p className="slide-emoji">🏃‍♂️‍➡️</p>
-              </div>
-              <div id="slide-7">
-                <p>skating</p>
-                <p className="slide-emoji">⛸️</p>
-              </div>
-              <div id="slide-8">
-                <p>cross-country skiing</p>
-                <p className="slide-emoji">⛷️</p>
-              </div>
-            </div>
-
-            <a href="#slide-1">1</a>
-            <a href="#slide-2">2</a>
-            <a href="#slide-3">3</a>
-            <a href="#slide-4">4</a>
-            <a href="#slide-5">5</a>
-            <a href="#slide-6">6</a>
-            <a href="#slide-7">7</a>
-            <a href="#slide-8">8</a>
-          </div>
+          <Carousel interests={[
+            { name: "rock climbing", emoji: "🧗" },
+            { name: "hiking", emoji: "🥾" },
+            { name: "canoeing", emoji: "🛶" },
+            { name: "camping", emoji: "🏕️" },
+            { name: "longboarding", emoji: "🛹" },
+            { name: "running", emoji: "🏃‍♂️‍➡️" },
+            { name: "skating", emoji: "⛸️" },
+            { name: "cross-country skiing", emoji: "⛷️" },
+          ]}/>
         </div>
       </div>
       <br />
