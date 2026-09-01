@@ -53,9 +53,8 @@ body {
   background: white;
 
   border: 1px solid var(--accent-color);
-  border-radius: 3rem;
-
-  padding: 3rem;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
   margin: 1rem 0rem;
   width: 100%;
   z-index: 1;
@@ -220,7 +219,7 @@ body {
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  margin: calc(0.5rem - 1px);
+  margin: calc(0.5rem - 1px) calc(0.25rem - 1px);
   border: 1px solid var(--background-color);
   border-radius: 1rem;
   text-wrap: nowrap;
@@ -281,6 +280,17 @@ body {
   width: 0.8rem;
   height: 0.8rem;
   filter: invert(1);
+}
+
+@media (min-width: 46rem) {
+  .card {
+    border-radius: 3rem;
+    padding: 3rem;
+  }
+
+  .leaf-gallery-item {
+    margin: calc(0.5rem - 1px);;
+  }
 }
 
 /* Don't need button navigation */
