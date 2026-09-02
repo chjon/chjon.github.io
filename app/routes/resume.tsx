@@ -54,7 +54,7 @@ function ResumeHeader() {
         </div>
         <div className="infobox">
           <InfoBoxEntry {...resume_data.infobox.email} />
-          {/* <InfoBoxEntry {...resume_data.infobox.phone} /> */}
+          <InfoBoxEntry {...resume_data.infobox.linkedin} />
         </div>
       </div>
       <div className="headline">
@@ -241,7 +241,7 @@ function ResumeSection({
 }
 
 function ResumeFooter() {
-  const stack = ["html", "css", "markdown", "typescript", "react"];
+  const stack = ["html", "css", "typescript", "react"];
   return (
     <div id="footer">
       <p>This resume was built with {<TechList data={stack} />}</p>

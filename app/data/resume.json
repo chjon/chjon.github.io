@@ -14,6 +14,13 @@
       "iconSize": "16pt",
       "descriptor": "Email icon"
     },
+    "linkedin": {
+      "name": "linkedin.com/in/chjon",
+      "link": "https://www.linkedin.com/in/chjon/",
+      "icon": "/assets/linkedin.svg",
+      "iconSize": "16pt",
+      "descriptor": "LinkedIn icon"
+    },
     "phone": {
       "name": "(647) 786 - 9368",
       "icon": "/assets/phone.svg",
@@ -28,7 +35,7 @@
       "descriptor": "Website icon"
     }
   },
-  "headline": "Value-driven Software Engineer changing careers to study Plant Biology",
+  "headline": "Former Software Engineer changing careers to study Plant Biology",
   "experience1": [
     {
       "name": "Volunteer Software Developer",
