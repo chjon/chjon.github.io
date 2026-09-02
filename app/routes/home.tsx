@@ -142,7 +142,7 @@ const leaves = [
     "path": "/assets/leaves/quercus_rubra.svg",
     "link": "https://en.wikipedia.org/wiki/Quercus_rubra"
   },
-    {
+  {
     "latin-name": "Sassafras albidum",
     "common-name": "Sassafras",
     "path": "/assets/leaves/sassafras_trident.svg",
@@ -201,16 +201,11 @@ function getRandomizedTiling(width: number, height: number) {
 }
 
 function getRandomizedOrientations(width: number, height: number) {
-  const orientations = [];
-  for (let i = 0; i < width; i++) {
-    const row = [];
-    for (let j = 0; j < height; j++) {
-      row.push(Math.random());
-      orientations.push(row);
-    }
-  }
-
-  return orientations;
+  return Array.from({ length: width }, () =>
+    Array.from({ length: height }, () =>
+      Math.random()
+    )
+  );
 }
 
 function BackgroundLeaves(
@@ -316,10 +311,13 @@ export default function Home() {
                 path,
                 link,
               }, i) => {
-                return <div className="leaf-gallery-item">
+                return <div
+                  className="leaf-gallery-item"
+                  key={`leaf-gallery-item-${i}`}
+                >
                   <img
                     key={latin}
-                    className={`leaf ${i == selectedLeafIndex ? "leaf-active": "leaf-inactive"}`}
+                    className={`leaf ${i == selectedLeafIndex ? "leaf-active" : "leaf-inactive"}`}
                     src={path}
                     onClick={() => { setSelectedLeafIndex(i == selectedLeafIndex ? -1 : i) }}
                   />
