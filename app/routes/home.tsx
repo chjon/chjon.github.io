@@ -263,8 +263,8 @@ export default function Home() {
         <div className="card">
           <p>
             I recently quit my job in software engineering to pursue my dream of
-            studying botany (plant biology). I'm in school now, but I'm open to
-            part-time work! I've only worked in software previously, but
+            studying botany (plant biology). I'm in school now and looking for
+            research opportunities! I've only worked in software previously, but
             I'm a quick learner and I'm looking for new experiences.
           </p>
           <div className="button-bar">
