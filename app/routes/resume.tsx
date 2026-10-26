@@ -169,6 +169,11 @@ function ResumeEducationContent() {
           data={`**${item.name}**, *${item.details}*, ${item.location}`}
         />
       }
+      header-right={
+        item.grade
+          ? <TechList data={[item.grade]} />
+          : <></>
+      }
       content={item["content-list"]?.map((bullet) => (
         <Markdownify key={bullet} data={bullet} />
       ))}
@@ -212,13 +217,15 @@ function ResumeProjectsContent() {
 }
 
 function ResumeSkillsContent() {
-  return resume_data.skills.map((item) => (
-    <ResumeExperienceEntry
-      key={item.name}
-      header-left={<Markdownify data={`**${item.name}:**`} />}
-      header-right={<p>{item.stack.join(", ")}</p>}
-    />
-  ));
+  return resume_data.skills
+    .filter((item => item.display))
+    .map((item) => (
+      <ResumeExperienceEntry
+        key={item.name}
+        header-left={<Markdownify data={`**${item.name}:**`} />}
+        header-right={<p>{item.stack.join(", ")}</p>}
+      />
+    ));
 }
 
 function ResumeSection({
@@ -279,11 +286,11 @@ export default function Resume() {
             id="publications"
             content={<ResumePublicationsContent />}
           />
-          <ResumeSection
+          {/* <ResumeSection
             name="Projects"
             id="projects"
             content={<ResumeProjectsContent />}
-          />
+          /> */}
           <ResumeSection
             name="Skills"
             id="skills"
